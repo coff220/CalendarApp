@@ -6,14 +6,47 @@
 //
 
 import UIKit
+import CoreData
+@UIApplicationMain
 
-@main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
-
+    
+    private let notificationManager = NotificationManager()
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        notificationManager.start()
+        let dataBase = DataBase()
+//        let reminder = Reminder(context: dataBase.persistentContainer.viewContext)
+//        reminder.id = "123"
+//        reminder.body = "порор"
+//        reminder.date = Date()
+//        reminder.title = " N1 "
+        
+        // Сохраните контекст, чтобы зафиксировать изменения
+//        do {
+//            try dataBase.persistentContainer.viewContext.save()
+//            print("Объект сохранен успешно!")
+//        } catch {
+//            print("Ошибка сохранения: \(error)")
+//        }
+        
+        // получить контекст
+        
+        var reminders = [Reminder]()
+        let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
+           
+           do {
+               let reminder = try dataBase.persistentContainer.viewContext.fetch(fetchRequest)
+                print(reminder)
+               reminders = reminder
+           } catch {
+               print("Failed to fetch reminder: \(error)")
+           }
+        
+            // удаление
+        
+        dataBase.deleteContext(reminders[0])
+        
         return true
     }
 
@@ -30,7 +63,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
-
-
+    
+    
 }
-

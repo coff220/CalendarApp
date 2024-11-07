@@ -21,8 +21,6 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     
     var presenter: CalendarPresenterProtocol = CalendarPresenter()
     
-    
-    
     func reloadData() {
         dateCollectionView.reloadData()
         monthLabel.text =  presenter.monthYearText()
@@ -40,6 +38,7 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         super.viewDidLoad()
         configure()
         presenter.delegate = self
+        presenter.viewDidLoad()
         dateCollectionView.delegate = self
         dateCollectionView.dataSource = self
     }
@@ -59,9 +58,9 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         
         monthLabel.text = presenter.monthYearText()
         
-        for i in 0..<presenter.weekDays().count {
-         let label = weekDaysStackView.arrangedSubviews[i] as? UILabel
-            label?.text = presenter.weekDays()[i]
+        for iii in 0..<presenter.weekDays().count {
+         let label = weekDaysStackView.arrangedSubviews[iii] as? UILabel
+            label?.text = presenter.weekDays()[iii]
         }
     }
     
@@ -94,26 +93,40 @@ extension CalendarViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! Cell
-        cell.backgroundColor = .lightGray
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? Cell else {
+            return UICollectionViewCell()
+        }
+        let currentDay = presenter.item(at: indexPath.row)
         cell.layer.cornerRadius = 15
+        cell.dayLabel.text = currentDay.title
         
-        for i in 0 ..< (presenter.firstWeekDayOfMonth() - 1) {
-            if indexPath.row == i {
-                cell.dayLabel.text = ""
-            } else {
-                cell.dayLabel.text = String(indexPath.row - presenter.firstWeekDayOfMonth() + 2)
-            }
+//        if currentDay.isToday {
+//            cell.backgroundColor = .systemPink
+//        }
+        if indexPath.row - presenter.firstWeekDayOfMonth() + 1 == presenter.today() - 1 {
+            cell.backgroundColor = .systemPink
+        } else {
+            cell.backgroundColor = .clear
         }
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let vc = storyboard.instantiateViewController(identifier: "NoteViewController") as? NoteViewController else {
+           return 
+        }
+        present(vc, animated: true, completion: nil)
+        vc.dateLabel?.text = "\(presenter.item(at: indexPath.row).title) \(presenter.monthYearText())"
     }
 }
 
 extension CalendarViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return CGSize(width: collectionView.frame.width / 8  , height: collectionView.frame.width / 8)
+        return CGSize(width: collectionView.frame.width / 8, height: collectionView.frame.width / 8)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -124,5 +137,3 @@ extension CalendarViewController: UICollectionViewDelegateFlowLayout {
         return 1
     }
 }
-
-

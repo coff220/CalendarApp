@@ -7,9 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		131B29C52CDBBF9500A21FC6 /* Reminder+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131B29C32CDBBF9500A21FC6 /* Reminder+CoreDataClass.swift */; };
+		131B29C62CDBBF9500A21FC6 /* Reminder+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131B29C42CDBBF9500A21FC6 /* Reminder+CoreDataProperties.swift */; };
 		132A8B152CB44CCD0001DE27 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132A8B142CB44CCC0001DE27 /* Cell.swift */; };
 		132A8B192CB9A1FE0001DE27 /* DateExtantions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132A8B182CB9A1FE0001DE27 /* DateExtantions.swift */; };
 		132A8B1C2CBBD0B70001DE27 /* CalendarPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132A8B1B2CBBD0B70001DE27 /* CalendarPresenter.swift */; };
+		132D48562CCA5E5300890661 /* CalendarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132D48552CCA5E5300890661 /* CalendarModel.swift */; };
+		132D489A2CD160C400890661 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132D48992CD160C400890661 /* NoteViewController.swift */; };
+		132D48A02CD7D7AD00890661 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 132D489E2CD7D7AD00890661 /* Model.xcdatamodeld */; };
+		132D48A32CDA317300890661 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132D48A22CDA317300890661 /* NotificationManager.swift */; };
+		132D48A52CDAAA5D00890661 /* DataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132D48A42CDAAA5D00890661 /* DataBase.swift */; };
 		137983732CB1752800982E7D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137983722CB1752800982E7D /* AppDelegate.swift */; };
 		137983752CB1752800982E7D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137983742CB1752800982E7D /* SceneDelegate.swift */; };
 		137983772CB1752800982E7D /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137983762CB1752800982E7D /* CalendarViewController.swift */; };
@@ -39,9 +46,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		131B29C32CDBBF9500A21FC6 /* Reminder+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Reminder+CoreDataClass.swift"; sourceTree = "<group>"; };
+		131B29C42CDBBF9500A21FC6 /* Reminder+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Reminder+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		132A8B142CB44CCC0001DE27 /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 		132A8B182CB9A1FE0001DE27 /* DateExtantions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtantions.swift; sourceTree = "<group>"; };
 		132A8B1B2CBBD0B70001DE27 /* CalendarPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPresenter.swift; sourceTree = "<group>"; };
+		132D48552CCA5E5300890661 /* CalendarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarModel.swift; sourceTree = "<group>"; };
+		132D48992CD160C400890661 /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
+		132D489F2CD7D7AD00890661 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		132D48A22CDA317300890661 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		132D48A42CDAAA5D00890661 /* DataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBase.swift; sourceTree = "<group>"; };
 		1379836F2CB1752800982E7D /* Calendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		137983722CB1752800982E7D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		137983742CB1752800982E7D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -85,6 +99,7 @@
 		132A8B162CB9A0420001DE27 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				132D48982CD1609300890661 /* NoteViewController */,
 				132A8B1A2CBBD0840001DE27 /* CalendarViewController */,
 			);
 			path = ViewControllers;
@@ -103,13 +118,34 @@
 			children = (
 				137983762CB1752800982E7D /* CalendarViewController.swift */,
 				132A8B1B2CBBD0B70001DE27 /* CalendarPresenter.swift */,
+				132D48552CCA5E5300890661 /* CalendarModel.swift */,
 			);
 			path = CalendarViewController;
+			sourceTree = "<group>";
+		};
+		132D48982CD1609300890661 /* NoteViewController */ = {
+			isa = PBXGroup;
+			children = (
+				132D48992CD160C400890661 /* NoteViewController.swift */,
+			);
+			path = NoteViewController;
+			sourceTree = "<group>";
+		};
+		132D48A12CDA30B100890661 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				132D48A22CDA317300890661 /* NotificationManager.swift */,
+				132D48A42CDAAA5D00890661 /* DataBase.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		137983662CB1752800982E7D = {
 			isa = PBXGroup;
 			children = (
+				131B29C32CDBBF9500A21FC6 /* Reminder+CoreDataClass.swift */,
+				131B29C42CDBBF9500A21FC6 /* Reminder+CoreDataProperties.swift */,
+				132D489E2CD7D7AD00890661 /* Model.xcdatamodeld */,
 				137983712CB1752800982E7D /* Calendar */,
 				137983882CB1752D00982E7D /* CalendarTests */,
 				137983922CB1752D00982E7D /* CalendarUITests */,
@@ -130,6 +166,7 @@
 		137983712CB1752800982E7D /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
+				132D48A12CDA30B100890661 /* Models */,
 				132A8B172CB9A0770001DE27 /* Extentions */,
 				132A8B162CB9A0420001DE27 /* ViewControllers */,
 				137983722CB1752800982E7D /* AppDelegate.swift */,
@@ -316,7 +353,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]\nthen\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif command -v swiftlint >/dev/null 2>&1\nthen\n    swiftlint\nelse\n    echo \"warning: `swiftlint` command not found - See https://github.com/realm/SwiftLint#installation for installation instructions.\"\nfi\n";
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]\nthen\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif command -v swiftlint >/dev/null 2>&1\nthen\n    swiftlint\nelse\n    echo \"warning: swiftlint command not found - See https://github.com/realm/SwiftLint#installation for installation instructions.\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -325,9 +362,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				132D489A2CD160C400890661 /* NoteViewController.swift in Sources */,
+				132D48562CCA5E5300890661 /* CalendarModel.swift in Sources */,
+				132D48A32CDA317300890661 /* NotificationManager.swift in Sources */,
 				132A8B1C2CBBD0B70001DE27 /* CalendarPresenter.swift in Sources */,
 				137983772CB1752800982E7D /* CalendarViewController.swift in Sources */,
 				132A8B152CB44CCD0001DE27 /* Cell.swift in Sources */,
+				132D48A52CDAAA5D00890661 /* DataBase.swift in Sources */,
+				132D48A02CD7D7AD00890661 /* Model.xcdatamodeld in Sources */,
+				131B29C52CDBBF9500A21FC6 /* Reminder+CoreDataClass.swift in Sources */,
+				131B29C62CDBBF9500A21FC6 /* Reminder+CoreDataProperties.swift in Sources */,
 				137983732CB1752800982E7D /* AppDelegate.swift in Sources */,
 				132A8B192CB9A1FE0001DE27 /* DateExtantions.swift in Sources */,
 				137983752CB1752800982E7D /* SceneDelegate.swift in Sources */,
@@ -512,6 +556,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 49FY3UUN9Z;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Calendar/Info.plist;
@@ -540,6 +585,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 49FY3UUN9Z;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Calendar/Info.plist;
@@ -673,6 +719,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		132D489E2CD7D7AD00890661 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				132D489F2CD7D7AD00890661 /* Model.xcdatamodel */,
+			);
+			currentVersion = 132D489F2CD7D7AD00890661 /* Model.xcdatamodel */;
+			name = Model.xcdatamodeld;
+			path = /Users/viacheslav/Documents/CalendarApp/Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 137983672CB1752800982E7D /* Project object */;
 }
