@@ -118,8 +118,11 @@ extension CalendarViewController: UICollectionViewDataSource {
         guard let vc = storyboard.instantiateViewController(identifier: "NoteViewController") as? NoteViewController else {
            return 
         }
+        
+        let selectedDate = presenter.item(at: indexPath.row)
+        vc.update(date: selectedDate.date)
         present(vc, animated: true, completion: nil)
-        vc.dateLabel?.text = "\(presenter.item(at: indexPath.row).title) \(presenter.monthYearText())"
+//        vc.dateLabel?.text = "\(presenter.item(at: indexPath.row).title) \(presenter.monthYearText())"
     }
 }
 

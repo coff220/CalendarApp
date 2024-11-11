@@ -10,23 +10,30 @@ import UserNotifications
 
 class NoteViewController: UIViewController {
 
-    @IBOutlet weak var noteTextField: UITextField!
-    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet private weak var noteTextField: UITextField!
+    @IBOutlet private weak var dateLabel: UILabel!
+    @IBOutlet private weak var noteTextView: UITextView!
     
-    @IBAction func localNotification(_ sender: Any) {
-        scheduleNotifications(inSeconds: 5) { (success) in
-            if success {
-                print("Ok")
-            } else {
-                printContent("failed")
-            }
-        }
+    private var presenter: NotePresenterProtocol = NotePresenter()
+    private var currentDate = Date()
+    
+//    @IBAction private func saveNoteTapped() {
+//        presenter.saveNote(title: noteTextField.text, body: noteTextView.text, date: currentDate)
+//    }
+    
+    @IBAction func saveNoteTapped(_ sender: Any) {
+        presenter.saveNote(title: noteTextField.text, body: noteTextView.text, date: currentDate)
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .lightGray
+        dateLabel.text = " \(currentDate.month) \(currentDate.year) "
         // Do any additional setup after loading the view.
+    }
+    
+    func update(date: Date) {
+        currentDate = date
+        
     }
     
     func scheduleNotifications(inSeconds seconds: TimeInterval, complition: (Bool) -> Void) {

@@ -15,20 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         notificationManager.start()
-        let dataBase = DataBase()
-//        let reminder = Reminder(context: dataBase.persistentContainer.viewContext)
-//        reminder.id = "123"
-//        reminder.body = "порор"
-//        reminder.date = Date()
-//        reminder.title = " N1 "
-        
-        // Сохраните контекст, чтобы зафиксировать изменения
-//        do {
-//            try dataBase.persistentContainer.viewContext.save()
-//            print("Объект сохранен успешно!")
-//        } catch {
-//            print("Ошибка сохранения: \(error)")
-//        }
+        let dataBase = DataBase.share
         
         // получить контекст
         
@@ -42,10 +29,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
            } catch {
                print("Failed to fetch reminder: \(error)")
            }
-        
+        print(reminders)
             // удаление
         
-        dataBase.deleteContext(reminders[0])
+//        dataBase.deleteContext(reminders[0])
         
         return true
     }
@@ -59,10 +46,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        // Called when the user discards a scene session.
-        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
-    
-    
 }
