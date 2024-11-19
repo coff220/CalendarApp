@@ -26,7 +26,7 @@ extension Date {
         return lastComponents.day ?? 0
     }
     
-    var month: String {
+    var currentMonth: String {
         let dateFormater = DateFormatter()
         dateFormater.dateFormat = "MMMM"
         return dateFormater.string(from: self)
@@ -38,7 +38,7 @@ extension Date {
         return dateFormater.string(from: self)
     }
     
-    var monthInt: Int {
+    var numberOfCurrentMonth: Int {
         let components = Calendar.current.dateComponents([.month], from: self)
         return components.month ?? 0
     }
@@ -54,8 +54,8 @@ extension Date {
       }
       
       func toLocalTime() -> Date {
-          let timezone    = TimeZone.current
-          let seconds     = TimeInterval(timezone.secondsFromGMT(for: self))
+          let timezone = TimeZone.current
+          let seconds = TimeInterval(timezone.secondsFromGMT(for: self))
           return Date(timeInterval: seconds, since: self)
       }
 

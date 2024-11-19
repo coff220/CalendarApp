@@ -11,7 +11,7 @@ protocol CalendarPresenterProtocol: AnyObject {
     func nextMonthDidTap()
     func previousMonthDidTap()
     func countItems() -> Int
-    func monthYearText () -> String
+    func monthYearText() -> String
     func weekDays() -> [String?]
     func firstWeekDayOfMonth() -> Int
     func item(at index: Int) -> CalendarDay
@@ -27,9 +27,10 @@ class CalendarPresenter: CalendarPresenterProtocol {
     private let calendar = Calendar.current
     private var dateComponents = DateComponents()
     private let dateFormatter = DateFormatter()
+    private var calendarDay: [CalendarDay] = []
     
     weak var delegate: CalendarViewControllerProtocol?
-    private var calendarDay: [CalendarDay] = []
+    
     
     func nextMonthDidTap() {
         currentDate = Date.nextMonth(after: currentDate)
@@ -50,7 +51,7 @@ class CalendarPresenter: CalendarPresenterProtocol {
     
     // текст для monthLabel
     func monthYearText() -> String {
-        " \(currentDate.month) \(currentDate.year) "
+        " \(currentDate.currentMonth) \(currentDate.year) "
     }
     
     // названия дней недели для weekDaysStackView
@@ -61,7 +62,7 @@ class CalendarPresenter: CalendarPresenterProtocol {
     
     // номер первого дня недели в текущем месяце
     func firstWeekDayOfMonth() -> Int {
-        dateComponents = DateComponents(year: currentDate.year, month: currentDate.monthInt, day: 1)
+        dateComponents = DateComponents(year: currentDate.year, month: currentDate.numberOfCurrentMonth, day: 1)
         if let firstDayOfMonth = calendar.date(from: dateComponents) {
             let dayOfWeek = calendar.component(.weekday, from: firstDayOfMonth)
             return dayOfWeek
@@ -89,6 +90,7 @@ class CalendarPresenter: CalendarPresenterProtocol {
 private extension CalendarPresenter {
     func updateCalendarDays() {
         calendarDay.removeAll()
+        
         if firstWeekDayOfMonth() > 1 {
             for _ in 1...firstWeekDayOfMonth() - 1 {
                 let day = CalendarDay(

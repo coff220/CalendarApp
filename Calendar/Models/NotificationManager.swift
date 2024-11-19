@@ -11,11 +11,30 @@ import UIKit
 
 class NotificationManager: NSObject {
     
-    let center = UNUserNotificationCenter.current()
+    static let shared = NotificationManager()
+    
+    private let center = UNUserNotificationCenter.current()
     
     func start() {
         center.requestAuthorization(options: [.alert, .sound]) { _, _ in }
         center.delegate = self
+    }
+    
+    func sendNonitfication(title: String?, body: String?, date: Date) {
+      let content = UNMutableNotificationContent()
+      content.title = title ?? "event"
+      content.body = body ?? ""
+      content.sound = UNNotificationSound.default
+        
+      let timeInterval = date.timeIntervalSince(Date())
+        print(timeInterval)
+      let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
+        
+      let request = UNNotificationRequest(identifier: "notification", content: content, trigger: trigger)
+      print(timeInterval)
+      center.add(request) { (error) in
+        print(String(describing: error?.localizedDescription))
+      }
     }
 }
 

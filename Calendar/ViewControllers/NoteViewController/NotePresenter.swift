@@ -40,17 +40,7 @@ class NotePresenter: NotePresenterProtocol {
     
     func saveNote(title: String?, body: String?, date: Date) {
         DataBase.share.saveReminder(title: title, body: body, date: date)
-        // сделать пуш
+        NotificationManager().sendNonitfication(title: title, body: body, date: date)
     }
     
 }
-
-// @IBAction func notification(_ sender: Any) {
-//    scheduleNotifications(inSeconds: 5) { (success) in
-//        if success {
-//            print("Ok")
-//        } else {
-//            printContent("failed")
-//        }
-//    }
-// }

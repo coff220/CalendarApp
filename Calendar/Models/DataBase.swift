@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreData
-// Twoja paczka nr 28607931635 zostala przygotowana przez nadawce. Przekieruj ja do automatu DHL BOX lub punktu POP na https://przekieruj.dhlparcel.pl. PIN 917760
 
 class DataBase {
     

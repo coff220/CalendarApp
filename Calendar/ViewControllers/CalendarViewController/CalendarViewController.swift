@@ -58,9 +58,9 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         
         monthLabel.text = presenter.monthYearText()
         
-        for iii in 0..<presenter.weekDays().count {
-         let label = weekDaysStackView.arrangedSubviews[iii] as? UILabel
-            label?.text = presenter.weekDays()[iii]
+        for days in 0..<presenter.weekDays().count {
+         let label = weekDaysStackView.arrangedSubviews[days] as? UILabel
+            label?.text = presenter.weekDays()[days]
         }
     }
     
@@ -97,18 +97,14 @@ extension CalendarViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         let currentDay = presenter.item(at: indexPath.row)
-        cell.layer.cornerRadius = 15
-        cell.dayLabel.text = currentDay.title
+        cell.configureWith(day: currentDay)
         
-//        if currentDay.isToday {
-//            cell.backgroundColor = .systemPink
-//        }
+        
         if indexPath.row - presenter.firstWeekDayOfMonth() + 1 == presenter.today() - 1 {
             cell.backgroundColor = .systemPink
         } else {
             cell.backgroundColor = .clear
         }
-        
         return cell
     }
     
