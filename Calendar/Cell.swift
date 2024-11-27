@@ -12,7 +12,15 @@ import UIKit
     @IBOutlet weak var dayLabel: UILabel!
      
      func configureWith(day: CalendarDay) {
+         
+         layer.borderColor = UIColor.clear.cgColor
+         
          layer.cornerRadius = 15
          dayLabel.text = day.title
+         if day.isActive {
+             layer.borderColor = UIColor.blue.cgColor
+                 layer.borderWidth = 2.0
+                 layer.masksToBounds = true
+         }
      }
 }

@@ -30,8 +30,7 @@ class CalendarPresenter: CalendarPresenterProtocol {
     private var calendarDay: [CalendarDay] = []
     
     weak var delegate: CalendarViewControllerProtocol?
-    
-    
+
     func nextMonthDidTap() {
         currentDate = Date.nextMonth(after: currentDate)
         updateCalendarDays()
@@ -96,7 +95,7 @@ private extension CalendarPresenter {
                 let day = CalendarDay(
                     title: "",
                     isToday: false,
-                    isActive: true,
+                    isActive: false,
                     date: currentDate
                 )
                 calendarDay.append(day)
@@ -108,7 +107,7 @@ private extension CalendarPresenter {
             let day = CalendarDay(
                 title: date.stringDay,
                 isToday: false,
-                isActive: true,
+                isActive: DataBase.share.getReminders(date: date),
                 date: date
             )
             calendarDay.append(day)

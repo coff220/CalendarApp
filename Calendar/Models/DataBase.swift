@@ -39,11 +39,33 @@ class DataBase {
         saveContext()
     }
     
-    func saveReminder (title: String?, body: String?, date: Date) {
+    func saveReminder (title: String?, body: String?, date: Double) {
         let reminder = Reminder(context: persistentContainer.viewContext)
         reminder.title = title
         reminder.body = body
         reminder.date = date
         saveContext()
+    }
+    
+    func getReminders(date: Date) -> Bool {
+        // Получаем контекст
+        let context = persistentContainer.viewContext
+        
+        // Имя сущности
+        let entityName = "Reminder"
+        
+        // Создаем запрос
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: entityName)
+        var results = false
+        fetchRequest.predicate = NSPredicate(format: "date >= %f AND date <= %f", date.intervalStartOfDay(), date.intervalEndOfDay())
+        
+        do {
+            // Выполняем запрос
+            let reminders = try context.fetch(fetchRequest)
+            results = !reminders.isEmpty
+        } catch let error as NSError {
+            print("Ошибка получения данных: \(error), \(error.userInfo)")
+        }
+        return results
     }
 }

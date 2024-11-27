@@ -1,8 +1,8 @@
 //
 //  Reminder+CoreDataClass.swift
-//  Calendar
+//  BroshchersCalendar
 //
-//  Created by Viacheslav on 06/11/2024.
+//  Created by Viacheslav on 22/11/2024.
 //
 //
 
