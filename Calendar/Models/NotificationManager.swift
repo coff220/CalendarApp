@@ -20,18 +20,15 @@ class NotificationManager: NSObject {
         center.delegate = self
     }
     
-    func sendNonitfication(title: String?, body: String?, date: Date) {
+    func sendNonitfication(title: String?, body: String?, date: Double) {
       let content = UNMutableNotificationContent()
       content.title = title ?? "event"
       content.body = body ?? ""
       content.sound = UNNotificationSound.default
         
-      let timeInterval = date.timeIntervalSince(Date())
-        print(timeInterval)
-      let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
+      let trigger = UNTimeIntervalNotificationTrigger(timeInterval: date, repeats: false)
         
       let request = UNNotificationRequest(identifier: "notification", content: content, trigger: trigger)
-      print(timeInterval)
       center.add(request) { (error) in
         print(String(describing: error?.localizedDescription))
       }

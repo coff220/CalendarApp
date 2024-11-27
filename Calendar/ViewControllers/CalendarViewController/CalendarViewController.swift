@@ -28,6 +28,7 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     
     @IBAction func previousButtonAction(_ sender: Any) {
         presenter.previousMonthDidTap()
+        
     }
     
     @IBAction func nextButtonAction(_ sender: Any) {
@@ -54,12 +55,12 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         previousButton.layer.cornerRadius = nextButton.bounds.width / 2
         previousButton.backgroundColor = .lightGray
         previousButton.setTitle("<", for: .normal)
-        previousButton.titleLabel?.font = UIFont.systemFont(ofSize: 70) 
+        previousButton.titleLabel?.font = UIFont.systemFont(ofSize: 70)
         
         monthLabel.text = presenter.monthYearText()
         
         for days in 0..<presenter.weekDays().count {
-         let label = weekDaysStackView.arrangedSubviews[days] as? UILabel
+            let label = weekDaysStackView.arrangedSubviews[days] as? UILabel
             label?.text = presenter.weekDays()[days]
         }
     }
@@ -99,12 +100,25 @@ extension CalendarViewController: UICollectionViewDataSource {
         let currentDay = presenter.item(at: indexPath.row)
         cell.configureWith(day: currentDay)
         
+        cell.backgroundColor = .clear
+        
+//        if currentDay.isActive {
+//            cell.layer.borderColor = UIColor.blue.cgColor
+//                cell.layer.borderWidth = 2.0
+//                cell.layer.masksToBounds = true
+//        }
         
         if indexPath.row - presenter.firstWeekDayOfMonth() + 1 == presenter.today() - 1 {
             cell.backgroundColor = .systemPink
-        } else {
-            cell.backgroundColor = .clear
         }
+        
+        //        if indexPath.row - presenter.firstWeekDayOfMonth() + 1 == presenter.today() - 1 {
+        //            cell.backgroundColor = .systemPink
+        //        } else {
+        //            cell.backgroundColor = .clear
+        //        }
+        //
+        
         return cell
     }
     
@@ -112,13 +126,13 @@ extension CalendarViewController: UICollectionViewDataSource {
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(identifier: "NoteViewController") as? NoteViewController else {
-           return 
+            return
         }
         
         let selectedDate = presenter.item(at: indexPath.row)
         vc.update(date: selectedDate.date)
         present(vc, animated: true, completion: nil)
-//        vc.dateLabel?.text = "\(presenter.item(at: indexPath.row).title) \(presenter.monthYearText())"
+        //        vc.dateLabel?.text = "\(presenter.item(at: indexPath.row).title) \(presenter.monthYearText())"
     }
 }
 

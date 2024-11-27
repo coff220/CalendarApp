@@ -64,6 +64,18 @@ extension Date {
         return nextDay ?? self
     }
     
+    func intervalStartOfDay() -> Double {
+        let interval = Calendar.current.dateInterval(of: .day, for: self)
+        let test: Double = interval?.start.timeIntervalSince1970 ?? 0
+        return test
+    }
+    
+    func intervalEndOfDay() -> Double {
+        let interval = Calendar.current.dateInterval(of: .day, for: self)
+        let test: Double = interval?.end.timeIntervalSince1970 ?? 0
+        return test
+    }
+    
     static func nextMonth(after date: Date) -> Date {
         let nextMonth = Calendar.current.date(byAdding: .month, value: +1, to: date)
         return nextMonth ?? date
