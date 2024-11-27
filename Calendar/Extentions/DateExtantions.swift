@@ -26,22 +26,19 @@ extension Date {
         return lastComponents.day ?? 0
     }
     
-    var firstWeekDayOfMonth: Int {
-        let date = Date()
-        let calendar = Calendar.current
-        // Получаем номер дня недели (от 1 до 7)
-        let weekday = calendar.component(.weekday, from: date)
-        
-        return weekday
-    }
-    
-    var month: String {
+    var currentMonth: String {
         let dateFormater = DateFormatter()
         dateFormater.dateFormat = "MMMM"
         return dateFormater.string(from: self)
     }
     
-    var monthInt: Int {
+    var stringDay: String {
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "d"
+        return dateFormater.string(from: self)
+    }
+    
+    var numberOfCurrentMonth: Int {
         let components = Calendar.current.dateComponents([.month], from: self)
         return components.month ?? 0
     }
@@ -51,14 +48,30 @@ extension Date {
         return components.year ?? 0
     }
     
-    static func nextMonth (after date: Date) -> Date {
+    func startOfMonth() -> Date {
+        let interval = Calendar.current.dateInterval(of: .month, for: self)
+        return (interval?.start.toLocalTime())! // Without toLocalTime it give last months last date
+      }
+      
+      func toLocalTime() -> Date {
+          let timezone = TimeZone.current
+          let seconds = TimeInterval(timezone.secondsFromGMT(for: self))
+          return Date(timeInterval: seconds, since: self)
+      }
+
+    func day(after day: Int) -> Date {
+        let nextDay = Calendar.current.date(byAdding: .day, value: day, to: self)
+        return nextDay ?? self
+    }
+    
+    static func nextMonth(after date: Date) -> Date {
         let nextMonth = Calendar.current.date(byAdding: .month, value: +1, to: date)
         return nextMonth ?? date
     }
     
-    static func previousMonth (before date: Date) -> Date {
+    static func previousMonth(before date: Date) -> Date {
         let previosMonth = Calendar.current.date(byAdding: .month, value: -1, to: date)
         return previosMonth ?? date
     }
 }
-
+    
