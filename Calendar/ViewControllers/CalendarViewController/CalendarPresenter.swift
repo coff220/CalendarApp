@@ -17,6 +17,7 @@ protocol CalendarPresenterProtocol: AnyObject {
     func item(at index: Int) -> CalendarDay
     func viewDidLoad()
     func today() -> Int
+    func updateCurrentMonth()
     
     var delegate: CalendarViewControllerProtocol? { get set }
 }
@@ -33,14 +34,12 @@ class CalendarPresenter: CalendarPresenterProtocol {
 
     func nextMonthDidTap() {
         currentDate = Date.nextMonth(after: currentDate)
-        updateCalendarDays()
-        delegate?.reloadData()
+        updateCurrentMonth()
     }
     
     func previousMonthDidTap() {
         currentDate = Date.previousMonth(before: currentDate)
-        updateCalendarDays()
-        delegate?.reloadData()
+        updateCurrentMonth()
     }
     
     // количество ячеек в CollectionView
@@ -83,6 +82,11 @@ class CalendarPresenter: CalendarPresenterProtocol {
     func today() -> Int {
         let today = calendar.component(.day, from: currentDate)
         return today
+    }
+    
+    func updateCurrentMonth() {
+        updateCalendarDays()
+        delegate?.reloadData()
     }
 }
 

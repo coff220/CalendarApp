@@ -211,6 +211,9 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="D9b-xu-Lgv">
+                                <rect key="frame" x="0.0" y="148" width="393" height="74"/>
+                            </datePicker>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="fdx-vZ-0r7"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -218,11 +221,15 @@
                             <constraint firstItem="fdx-vZ-0r7" firstAttribute="bottom" secondItem="vZF-ew-HtR" secondAttribute="bottom" constant="59" id="0WL-Hc-Ez9"/>
                             <constraint firstItem="vZF-ew-HtR" firstAttribute="centerX" secondItem="93A-0K-zIc" secondAttribute="centerX" id="64q-oC-I00"/>
                             <constraint firstItem="TCd-Rv-Mgd" firstAttribute="top" secondItem="XGh-8a-JbP" secondAttribute="bottom" constant="100" id="BFY-HT-LXm"/>
+                            <constraint firstItem="TCd-Rv-Mgd" firstAttribute="top" secondItem="D9b-xu-Lgv" secondAttribute="bottom" constant="18.329999999999998" id="FMy-G9-8q6"/>
                             <constraint firstItem="TCd-Rv-Mgd" firstAttribute="leading" secondItem="fdx-vZ-0r7" secondAttribute="leading" constant="16" id="N05-vo-bU1"/>
                             <constraint firstItem="fdx-vZ-0r7" firstAttribute="trailing" secondItem="cFX-AO-eDg" secondAttribute="trailing" constant="16" id="Osw-LY-hPT"/>
                             <constraint firstItem="cFX-AO-eDg" firstAttribute="leading" secondItem="fdx-vZ-0r7" secondAttribute="leading" constant="16" id="Qi2-fh-WX1"/>
+                            <constraint firstItem="D9b-xu-Lgv" firstAttribute="trailing" secondItem="fdx-vZ-0r7" secondAttribute="trailing" id="amQ-a6-KDR"/>
                             <constraint firstItem="cFX-AO-eDg" firstAttribute="top" secondItem="TCd-Rv-Mgd" secondAttribute="bottom" constant="50" id="co2-Ot-inb"/>
                             <constraint firstItem="XGh-8a-JbP" firstAttribute="centerX" secondItem="93A-0K-zIc" secondAttribute="centerX" id="mOW-Sz-lwx"/>
+                            <constraint firstItem="D9b-xu-Lgv" firstAttribute="top" secondItem="XGh-8a-JbP" secondAttribute="bottom" constant="7.6699999999999999" id="qPS-lQ-Q2o"/>
+                            <constraint firstItem="D9b-xu-Lgv" firstAttribute="leading" secondItem="fdx-vZ-0r7" secondAttribute="leading" id="suf-7E-KQo"/>
                             <constraint firstItem="fdx-vZ-0r7" firstAttribute="trailing" secondItem="TCd-Rv-Mgd" secondAttribute="trailing" constant="16" id="uMI-mG-ffU"/>
                             <constraint firstItem="XGh-8a-JbP" firstAttribute="top" secondItem="fdx-vZ-0r7" secondAttribute="top" constant="50" id="wsy-XB-Yde"/>
                         </constraints>
@@ -231,6 +238,7 @@
                         <outlet property="dateLabel" destination="XGh-8a-JbP" id="coy-ln-gFO"/>
                         <outlet property="noteTextField" destination="TCd-Rv-Mgd" id="WSy-OC-Rd8"/>
                         <outlet property="noteTextView" destination="cFX-AO-eDg" id="zFM-DX-Ttz"/>
+                        <outlet property="timePicker" destination="D9b-xu-Lgv" id="fLw-Df-Srx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cjF-nc-yzU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

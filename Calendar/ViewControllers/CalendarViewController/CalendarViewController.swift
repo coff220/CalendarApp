@@ -28,7 +28,6 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     
     @IBAction func previousButtonAction(_ sender: Any) {
         presenter.previousMonthDidTap()
-        
     }
     
     @IBAction func nextButtonAction(_ sender: Any) {
@@ -102,22 +101,9 @@ extension CalendarViewController: UICollectionViewDataSource {
         
         cell.backgroundColor = .clear
         
-//        if currentDay.isActive {
-//            cell.layer.borderColor = UIColor.blue.cgColor
-//                cell.layer.borderWidth = 2.0
-//                cell.layer.masksToBounds = true
-//        }
-        
         if indexPath.row - presenter.firstWeekDayOfMonth() + 1 == presenter.today() - 1 {
             cell.backgroundColor = .systemPink
         }
-        
-        //        if indexPath.row - presenter.firstWeekDayOfMonth() + 1 == presenter.today() - 1 {
-        //            cell.backgroundColor = .systemPink
-        //        } else {
-        //            cell.backgroundColor = .clear
-        //        }
-        //
         
         return cell
     }
@@ -131,8 +117,10 @@ extension CalendarViewController: UICollectionViewDataSource {
         
         let selectedDate = presenter.item(at: indexPath.row)
         vc.update(date: selectedDate.date)
+        vc.completion = {
+            self.presenter.updateCurrentMonth()
+        }
         present(vc, animated: true, completion: nil)
-        //        vc.dateLabel?.text = "\(presenter.item(at: indexPath.row).title) \(presenter.monthYearText())"
     }
 }
 

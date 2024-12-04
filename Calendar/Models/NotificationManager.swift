@@ -26,7 +26,17 @@ class NotificationManager: NSObject {
       content.body = body ?? ""
       content.sound = UNNotificationSound.default
         
-      let trigger = UNTimeIntervalNotificationTrigger(timeInterval: date, repeats: false)
+//        var dateComponents = DateComponents()
+//           dateComponents.month = 1  // Январь
+//           dateComponents.day = 1    // 1-е число
+//           dateComponents.hour = 9   // Время: 9:00 утра
+//
+
+//           let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+
+
+        
+     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: date, repeats: false)
         
       let request = UNNotificationRequest(identifier: "notification", content: content, trigger: trigger)
       center.add(request) { (error) in

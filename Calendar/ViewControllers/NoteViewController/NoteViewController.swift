@@ -13,15 +13,20 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     @IBOutlet private weak var noteTextField: UITextField!
     @IBOutlet private weak var dateLabel: UILabel!
     @IBOutlet private weak var noteTextView: UITextView!
+    @IBOutlet weak var timePicker: UIDatePicker!
     
     private var presenter: NotePresenterProtocol = NotePresenter()
-    private var currentDate = Date()
+    private var selectedDate = Date()
+    
+    var completion: (() -> Void)?
     
     @IBAction func saveNoteTapped(_ sender: Any) {
-        let timeInterval = currentDate.timeIntervalSince1970
-        presenter.saveNote(title: noteTextField.text, body: noteTextView.text, date: timeInterval)
-        self.dismiss(animated: true, completion: nil)
+        
+        presenter.saveNote(title: noteTextField.text, body: noteTextView.text, date: selectedDate, time: timePicker.date)
+        completion?()
+        dismiss(animated: true, completion: nil)
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
@@ -29,7 +34,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     
     func configure() {
         view.backgroundColor = .lightGray
-        dateLabel.text = " \(currentDate.stringDay) \(currentDate.currentMonth) \(currentDate.year) "
+        dateLabel.text = " \(selectedDate.stringDay) \(selectedDate.currentMonth) \(selectedDate.year) "
         
         noteTextField.returnKeyType = .next
         noteTextView.returnKeyType = .done
@@ -63,7 +68,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     }
     
     func update(date: Date) {
-        currentDate = date
+        selectedDate = date
     }
     
     func removeNotifications( withIdentifiers idenifiers: [String]) {
