@@ -20,7 +20,7 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     @IBOutlet weak var dateCollectionView: UICollectionView!
     
     var presenter: CalendarPresenterProtocol = CalendarPresenter()
-    
+
     func reloadData() {
         dateCollectionView.reloadData()
         monthLabel.text =  presenter.monthYearText()
@@ -100,8 +100,7 @@ extension CalendarViewController: UICollectionViewDataSource {
         cell.configureWith(day: currentDay)
         
         cell.backgroundColor = .clear
-        
-        if indexPath.row - presenter.firstWeekDayOfMonth() + 1 == presenter.today() - 1 {
+        if currentDay.isToday {
             cell.backgroundColor = .systemPink
         }
         

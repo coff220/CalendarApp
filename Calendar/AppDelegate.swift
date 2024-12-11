@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import FirebaseCore
 @UIApplicationMain
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -34,6 +35,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
 //        dataBase.deleteContext(reminders[0])
         
+        // Подсоеденяем к FireBase
+        FirebaseApp.configure() //
         return true
     }
 

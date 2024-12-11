@@ -91,6 +91,7 @@ class CalendarPresenter: CalendarPresenterProtocol {
 }
 
 private extension CalendarPresenter {
+    
     func updateCalendarDays() {
         calendarDay.removeAll()
         
@@ -110,7 +111,7 @@ private extension CalendarPresenter {
             let date = currentDate.startOfMonth().day(after: i)
             let day = CalendarDay(
                 title: date.stringDay,
-                isToday: false,
+                isToday: Date().isDateToday(date: date),
                 isActive: DataBase.share.getReminders(date: date),
                 date: date
             )

@@ -20,23 +20,27 @@ class NotificationManager: NSObject {
         center.delegate = self
     }
     
-    func sendNonitfication(title: String?, body: String?, date: Double) {
-      let content = UNMutableNotificationContent()
-      content.title = title ?? "event"
-      content.body = body ?? ""
-      content.sound = UNNotificationSound.default
+    func sendNonitfication(title: String?, body: String?, date: Date, time: Date) {
+        let content = UNMutableNotificationContent()
+        content.title = title ?? "event"
+        content.body = body ?? ""
+        content.sound = UNNotificationSound.default
         
-//        var dateComponents = DateComponents()
-//           dateComponents.month = 1  // Январь
-//           dateComponents.day = 1    // 1-е число
-//           dateComponents.hour = 9   // Время: 9:00 утра
-//
-
-//           let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-
-
+        let calendar = Calendar.current
+        let month = calendar.component(.month, from: date)
+        let day = calendar.component(.day, from: date)
+        let hour = calendar.component(.hour, from: time)
+        let minutes = calendar.component(.minute, from: time)
         
-     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: date, repeats: false)
+        var dateComponents = Calendar.current.dateComponents([.month, .day], from: date)
+        dateComponents.month = month
+        dateComponents.day = day
+        dateComponents.hour = hour
+        dateComponents.minute = minutes
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        
+ //    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: date, repeats: false)
         
       let request = UNNotificationRequest(identifier: "notification", content: content, trigger: trigger)
       center.add(request) { (error) in

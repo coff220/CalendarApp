@@ -76,6 +76,11 @@ extension Date {
         return test
     }
     
+    func isDateToday(date: Date) -> Bool {
+        let calendar = Calendar.current
+        return calendar.isDateInToday(date)
+    }
+    
     static func nextMonth(after date: Date) -> Date {
         let nextMonth = Calendar.current.date(byAdding: .month, value: +1, to: date)
         return nextMonth ?? date

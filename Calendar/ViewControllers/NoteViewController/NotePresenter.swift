@@ -39,17 +39,17 @@ class NotePresenter: NotePresenterProtocol {
             return
         }
         
-        var timeInterval: Double = 0
-        if Int(components.hour!) <= 12 {
-            timeInterval =
-            date.timeIntervalSince1970 + Double(hours * 3600) + Double(minutes * 60) - Date().timeIntervalSince1970 - Double(timeZoneHour * 3600)
-        } else {
-            timeInterval =
-            date.timeIntervalSince1970 + Double(hours * 3600) + Double(minutes * 60) - Date().timeIntervalSince1970 - Double((timeZoneHour - 24) * 3600)
-        }
+//        var timeInterval: Double = 0
+//        if Int(components.hour!) <= 12 {
+//            timeInterval =
+//            date.timeIntervalSince1970 + Double(hours * 3600) + Double(minutes * 60) - Date().timeIntervalSince1970 - Double(timeZoneHour * 3600)
+//        } else {
+//            timeInterval =
+//            date.timeIntervalSince1970 + Double(hours * 3600) + Double(minutes * 60) - Date().timeIntervalSince1970 - Double((timeZoneHour - 24) * 3600)
+//        }
         print(" \(components)")
         
         DataBase.share.saveReminder(title: title, body: body, date: date.timeIntervalSince1970)
-        NotificationManager().sendNonitfication(title: title, body: body, date: timeInterval)        
+        NotificationManager().sendNonitfication(title: title, body: body, date: date, time: time)
     }
 }
