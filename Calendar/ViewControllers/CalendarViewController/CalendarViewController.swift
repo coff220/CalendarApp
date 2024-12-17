@@ -66,7 +66,7 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     
     func backgroundImage() {
         // Устанавливаем картинку из assets на фон
-        if let backgroundImage = UIImage(named: "blackWhite") {
+        if let backgroundImage = UIImage(named: "darkBG") {
             let backgroundImageView = UIImageView(frame: view.bounds)
             backgroundImageView.image = backgroundImage
             backgroundImageView.contentMode = .scaleAspectFill // Опционально: чтобы изображение заполнило весь экран

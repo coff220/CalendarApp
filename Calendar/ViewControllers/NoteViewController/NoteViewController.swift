@@ -7,6 +7,7 @@
 
 import UIKit
 import UserNotifications
+import FirebaseAnalytics
 
 class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
 
@@ -21,6 +22,11 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     var completion: (() -> Void)?
     
     @IBAction func saveNoteTapped(_ sender: Any) {
+        
+        Analytics.logEvent("button_click", parameters: [
+                "button_name": "example_button",
+                "screen": "main_screen"
+            ])
         
         presenter.saveNote(title: noteTextField.text, body: noteTextView.text, date: selectedDate, time: timePicker.date)
         completion?()

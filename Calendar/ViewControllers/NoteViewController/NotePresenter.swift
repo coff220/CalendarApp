@@ -24,8 +24,13 @@ class NotePresenter: NotePresenterProtocol {
         return container
     }()
     
+    // для проверки crashmatic
+    func crashApp() {
+        fatalError("Приложение упало намеренно для тестирования.")
+    }
+    
     func saveNote(title: String?, body: String?, date: Date, time: Date) {
-        
+        // crashApp()
         var calendar = Calendar.current
         let currentTimeZone = TimeZone.current
         calendar.timeZone = currentTimeZone // calendar.timeZone = .current
