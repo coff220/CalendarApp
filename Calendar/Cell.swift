@@ -15,10 +15,10 @@ import UIKit
          
          layer.borderColor = UIColor.clear.cgColor
          
-         layer.cornerRadius = 15
+         layer.cornerRadius = 4
          dayLabel.text = day.title
          if day.isActive {
-             layer.borderColor = UIColor.blue.cgColor
+             layer.borderColor = UIColor.mainPurple.cgColor
                  layer.borderWidth = 2.0
                  layer.masksToBounds = true
          }

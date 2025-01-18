@@ -36,6 +36,7 @@ class NotePresenter: NotePresenterProtocol {
         calendar.timeZone = currentTimeZone // calendar.timeZone = .current
         let minutes = calendar.component(.minute, from: time)
         let hours = calendar.component(.hour, from: time)
+        var fullInterval = date.timeIntervalSince1970 + Double(hours * 3600) + Double(minutes * 60)
         
         let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
         
@@ -54,7 +55,7 @@ class NotePresenter: NotePresenterProtocol {
 //        }
         print(" \(components)")
         
-        DataBase.share.saveReminder(title: title, body: body, date: date.timeIntervalSince1970)
+        DataBase.share.saveReminder(title: title, body: body, date: fullInterval)
         NotificationManager().sendNonitfication(title: title, body: body, date: date, time: time)
     }
 }

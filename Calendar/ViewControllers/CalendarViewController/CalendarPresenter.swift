@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import UIKit
 
 protocol CalendarPresenterProtocol: AnyObject {
     func nextMonthDidTap()
     func previousMonthDidTap()
+    func todayDidTap()
     func countItems() -> Int
     func monthYearText() -> String
     func weekDays() -> [String?]
@@ -23,7 +25,7 @@ protocol CalendarPresenterProtocol: AnyObject {
 }
 
 class CalendarPresenter: CalendarPresenterProtocol {
-    
+
     private var currentDate = Date()
     private let calendar = Calendar.current
     private var dateComponents = DateComponents()
@@ -39,6 +41,11 @@ class CalendarPresenter: CalendarPresenterProtocol {
     
     func previousMonthDidTap() {
         currentDate = Date.previousMonth(before: currentDate)
+        updateCurrentMonth()
+    }
+    
+    func todayDidTap() {
+        currentDate = Date()
         updateCurrentMonth()
     }
     

@@ -81,6 +81,18 @@ extension Date {
         return calendar.isDateInToday(date)
     }
     
+//    func timeToSeconds(date: Date) -> Int {
+//        // Получаем текущий календарь
+//        let calendar = Calendar.current
+//
+//        // Извлечение часов и минут
+//        let hours = calendar.component(.hour, from: date)
+//        let minutes = calendar.component(.minute, from: date)
+//        
+//        let seconds = (hours * 3600) + (minutes * 60)
+//        return seconds
+//    }
+    
     static func nextMonth(after date: Date) -> Date {
         let nextMonth = Calendar.current.date(byAdding: .month, value: +1, to: date)
         return nextMonth ?? date
