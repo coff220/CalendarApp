@@ -28,7 +28,7 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         eventsTableView.reloadData()
         dateCollectionView.reloadData()
         monthLabel.text =  presenter.monthYearText()
-      //  presenter.updateCurrentMonth()
+        //  presenter.updateCurrentMonth()
     }
     
     @IBAction func todayButtonAction(_ sender: Any) {
@@ -121,7 +121,7 @@ extension CalendarViewController: UICollectionViewDataSource {
         
         cell.backgroundColor = .clear
         if currentDay.isToday {
-            cell.backgroundColor = .mainPurple
+            cell.cellImageView.backgroundColor = .mainPurple
         }
         
         return cell
@@ -173,12 +173,11 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
             fatalError("Не удалось извлечь кастомную ячейку")
         }
         cell.titleLabel.text = DataBase.share.fetchTitles()[indexPath.row] // Текст из массива
-        
         let selectedDate = DataBase.share.fetchDate()[indexPath.row]
         
         // Преобразование TimeInterval в Date
         let date = Date(timeIntervalSince1970: selectedDate)
-
+        
         // Форматируем дату для отображения
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
@@ -195,7 +194,7 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         
         // Преобразование TimeInterval в Date
         let date = Date(timeIntervalSince1970: selectedDate)
-
+        
         // Форматируем дату для отображения
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
@@ -205,14 +204,14 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         // получить reminders
         var reminders = [Reminder]()
         let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
-           
-           do {
-               let reminder = try DataBase.share.persistentContainer.viewContext.fetch(fetchRequest)
-                print(reminder)
-               reminders = reminder
-           } catch {
-               print("Failed to fetch reminder: \(error)")
-           }
+        
+        do {
+            let reminder = try DataBase.share.persistentContainer.viewContext.fetch(fetchRequest)
+            print(reminder)
+            reminders = reminder
+        } catch {
+            print("Failed to fetch reminder: \(error)")
+        }
         
         // Инициализируем SecondViewController
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -227,5 +226,15 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
             // Переход на второй экран через push
             navigationController?.pushViewController(eventVC, animated: true)
         }
+    }
+    
+    // Высота ячейки
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        50
+    }
+    
+    // Высота промежутка между ячейками
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 12
     }
 }

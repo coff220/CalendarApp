@@ -21,6 +21,8 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var timeTextField: UITextField!
     
+    let placeholderLabel = UILabel()
+    
     private let datePicker = UIDatePicker()
     private let timePicker = UIDatePicker()
     
@@ -116,6 +118,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         eventSegmentControl.backgroundColor = .fills
         eventSegmentControl.selectedSegmentTintColor = .mainPurple // Устанавливаем цвет выбранного сегмента
         eventSegmentControl.layer.borderWidth = 1
+        eventSegmentControl.layer.cornerRadius = 8
         eventSegmentControl.layer.borderColor = UIColor.border.cgColor
     }
     
@@ -124,13 +127,31 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         noteTextField.backgroundColor = .fills
         noteTextField.layer.borderColor = UIColor.border.cgColor
         noteTextField.layer.borderWidth = 1
+        noteTextField.layer.cornerRadius = 8
     }
     
     func setupNoteTextView() {
         noteTextView.backgroundColor = .fills
         noteTextView.layer.borderColor = UIColor.border.cgColor
         noteTextView.layer.borderWidth = 1
+        noteTextView.layer.cornerRadius = 8
+        
+        // Настройка плейсхолдера
+        placeholderLabel.text = "Discription (Optional)"
+        placeholderLabel.font = UIFont.systemFont(ofSize: 16)
+        placeholderLabel.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
+        placeholderLabel.frame.origin = CGPoint(x: 5, y: 8)
+        placeholderLabel.sizeToFit()
+        
+        // Добавление плейсхолдера в UITextView
+        noteTextView.addSubview(placeholderLabel)
+        placeholderLabel.isHidden = !noteTextView.text.isEmpty
     }
+    
+    // MARK: - UITextViewDelegate
+    func textViewDidChange(_ textView: UITextView) {
+            placeholderLabel.isHidden = !textView.text.isEmpty
+        }
     
     func setupTimeTextField() {
         timeTextField.backgroundColor = .fills
@@ -138,6 +159,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         timePicker.preferredDatePickerStyle = .wheels
         // Устанавливаем DatePicker как inputView для TextField
         timeTextField.inputView = timePicker
+        timeTextField.layer.cornerRadius = 8
         
         // Устанавливаем время по умолчанию (10:00)
         let calendar = Calendar.current
@@ -187,6 +209,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     
     func setupDateTextField() {
         dateTextField.backgroundColor = .fills
+        dateTextField.layer.cornerRadius = 8
         // Устанавливаем режим для выбора только даты
         datePicker.datePickerMode = .date
         
@@ -266,6 +289,7 @@ extension NoteViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     func setupYearlyTextField() {
         yearlyTextField.backgroundColor = .fills
+        yearlyTextField.layer.cornerRadius = 8
         // Настройка UIPickerView
         RepeatPickerView.delegate = self
         RepeatPickerView.dataSource = self

@@ -45,6 +45,7 @@ class DataBase {
         reminder.title = title
         reminder.body = body
         reminder.date = date
+        reminder.id = UUID().uuidString  //создаёт уникальный ID
         saveContext()
     }
     

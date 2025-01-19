@@ -2,7 +2,7 @@
 //  Reminder+CoreDataProperties.swift
 //  BroshchersCalendar
 //
-//  Created by Viacheslav on 22/11/2024.
+//  Created by Viacheslav on 18/01/2025.
 //
 //
 
@@ -19,9 +19,9 @@ extension Reminder {
     @NSManaged public var date: Double
     @NSManaged public var id: String?
     @NSManaged public var title: String?
+    @NSManaged public var type: Int64
 
 }
 
-extension Reminder : Identifiable {
-
+extension Reminder: Identifiable {
 }

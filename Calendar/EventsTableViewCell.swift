@@ -16,6 +16,8 @@ class EventsTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         backgroundColor = .clear
+        titleLabel.textColor = .mainDigit
+        dateLabel.textColor = .cellDate
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

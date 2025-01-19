@@ -7,20 +7,24 @@
 
 import UIKit
 
- class Cell: UICollectionViewCell {
+class Cell: UICollectionViewCell {
     
     @IBOutlet weak var dayLabel: UILabel!
-     
-     func configureWith(day: CalendarDay) {
-         
-         layer.borderColor = UIColor.clear.cgColor
-         
-         layer.cornerRadius = 4
-         dayLabel.text = day.title
-         if day.isActive {
-             layer.borderColor = UIColor.mainPurple.cgColor
-                 layer.borderWidth = 2.0
-                 layer.masksToBounds = true
-         }
-     }
+  
+    @IBOutlet weak var cellImageView: UIImageView!
+    
+    func configureWith(day: CalendarDay) {
+        cellImageView.layer.borderColor = UIColor.clear.cgColor
+        
+        cellImageView.layer.cornerRadius = 4
+        dayLabel.text = day.title
+        if day.isActive {
+            cellImageView.layer.borderColor = UIColor.mainPurple.cgColor
+            cellImageView.layer.borderWidth = 2.0
+            cellImageView.layer.masksToBounds = true
+        }
+        
+        // Включение отображения маски по границам
+        cellImageView.clipsToBounds = true
+    }
 }

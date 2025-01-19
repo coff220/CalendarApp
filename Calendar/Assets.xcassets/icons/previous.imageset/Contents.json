@@ -1,7 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Vector.pdf",
+      "filename" : "arrow-left.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "arrow-left 1.pdf",
       "idiom" : "universal"
     }
   ],

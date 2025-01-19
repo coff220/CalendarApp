@@ -31,10 +31,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rOU-Wj-nkn">
-                        <rect key="frame" x="44" y="12" width="42.333333333333343" height="12"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="12" id="Chc-PN-rBJ"/>
-                        </constraints>
+                        <rect key="frame" x="44" y="7.9999999999999982" width="42.333333333333343" height="20.333333333333329"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -52,7 +49,7 @@
                     <constraint firstItem="Z7Z-yC-9B0" firstAttribute="leading" secondItem="agq-V0-YEb" secondAttribute="trailing" constant="12" id="4ux-Zd-5aN"/>
                     <constraint firstItem="rOU-Wj-nkn" firstAttribute="leading" secondItem="agq-V0-YEb" secondAttribute="trailing" constant="12" id="5v6-9G-eCI"/>
                     <constraint firstAttribute="bottom" secondItem="1Fs-8P-mY7" secondAttribute="bottom" constant="13" id="Jj3-oZ-u1o"/>
-                    <constraint firstItem="rOU-Wj-nkn" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="PSO-KK-Vcx"/>
+                    <constraint firstItem="rOU-Wj-nkn" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="PSO-KK-Vcx"/>
                     <constraint firstItem="1Fs-8P-mY7" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="13" id="RNr-vo-YuQ"/>
                     <constraint firstAttribute="bottom" secondItem="agq-V0-YEb" secondAttribute="bottom" constant="9" id="Xnb-Pz-4ic"/>
                     <constraint firstAttribute="bottom" secondItem="Z7Z-yC-9B0" secondAttribute="bottom" constant="8" id="rIf-Y5-rFy"/>
@@ -69,7 +66,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="Drill-in" width="7" height="12"/>
+        <image name="Drill-in" width="24" height="24"/>
         <image name="cake" width="16" height="16"/>
     </resources>
 </document>
