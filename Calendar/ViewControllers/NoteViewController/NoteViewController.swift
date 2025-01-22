@@ -43,10 +43,21 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
             "screen": "main_screen"
         ])
         
-        presenter.saveNote(title: noteTextField.text, body: noteTextView.text, date: datePicker.date, time: timePicker.date)
-//        presenter.saveNote(title: noteTextField.text, body: noteTextView.text, date: selectedDate, time: timePicker.date)
-        completion?()
-        dismiss(animated: true, completion: nil)
+        if let text = noteTextField.text, text.isEmpty {
+                    // Если пусто, подсвечиваем красным
+            noteTextField.layer.borderColor = UIColor.red.cgColor
+            // Через 1 секунду возвращаем исходные значения бордера
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                UIView.animate(withDuration: 0.3) { // Анимация для плавного возврата
+                    self.noteTextField.layer.borderColor = UIColor.border.cgColor
+                }
+            }
+        } else {
+            presenter.saveNote(title: noteTextField.text, body: noteTextView.text, date: datePicker.date, time: timePicker.date)
+            //        presenter.saveNote(title: noteTextField.text, body: noteTextView.text, date: selectedDate, time: timePicker.date)
+            completion?()
+            dismiss(animated: true, completion: nil)
+        }
     }
     
     override func viewDidLoad() {
@@ -66,7 +77,8 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     }
     
     func configure() {
-        headLabel.text = "Add Event" // " \(selectedDate.stringDay) \(selectedDate.currentMonth) \(selectedDate.year) "
+        headLabel.text = "Add Event"
+        headLabel.font = UIFont(name: "VarelaRound-Regular", size: 17)
         noteTextField.returnKeyType = .next
         noteTextView.returnKeyType = .done
         
@@ -128,6 +140,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         noteTextField.layer.borderColor = UIColor.border.cgColor
         noteTextField.layer.borderWidth = 1
         noteTextField.layer.cornerRadius = 8
+        noteTextField.font = UIFont(name: "VarelaRound-Regular", size: 17)
     }
     
     func setupNoteTextView() {
@@ -135,10 +148,11 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         noteTextView.layer.borderColor = UIColor.border.cgColor
         noteTextView.layer.borderWidth = 1
         noteTextView.layer.cornerRadius = 8
+        noteTextView.font = UIFont(name: "VarelaRound-Regular", size: 17)
         
         // Настройка плейсхолдера
         placeholderLabel.text = "Discription (Optional)"
-        placeholderLabel.font = UIFont.systemFont(ofSize: 16)
+        placeholderLabel.font = UIFont(name: "VarelaRound-Regular", size: 17)
         placeholderLabel.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
         placeholderLabel.frame.origin = CGPoint(x: 5, y: 8)
         placeholderLabel.sizeToFit()
@@ -155,6 +169,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     
     func setupTimeTextField() {
         timeTextField.backgroundColor = .fills
+        timeTextField.font = UIFont(name: "VarelaRound-Regular", size: 17)
         timePicker.datePickerMode = .time
         timePicker.preferredDatePickerStyle = .wheels
         // Устанавливаем DatePicker как inputView для TextField
@@ -225,6 +240,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         formatter.timeStyle = .none
         formatter.dateStyle = .long
         dateTextField.text = formatter.string(from: dafaultDate)
+        dateTextField.font = UIFont(name: "VarelaRound-Regular", size: 17)
                 
         // Устанавливаем DatePicker как inputView для TextField
         dateTextField.inputView = datePicker
@@ -290,6 +306,7 @@ extension NoteViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func setupYearlyTextField() {
         yearlyTextField.backgroundColor = .fills
         yearlyTextField.layer.cornerRadius = 8
+        yearlyTextField.font = UIFont(name: "VarelaRound-Regular", size: 17)
         // Настройка UIPickerView
         RepeatPickerView.delegate = self
         RepeatPickerView.dataSource = self

@@ -17,7 +17,11 @@ class EventsTableViewCell: UITableViewCell {
         super.awakeFromNib()
         backgroundColor = .clear
         titleLabel.textColor = .mainDigit
+        titleLabel.font = UIFont(name: "VarelaRound-Regular", size: 17)
         dateLabel.textColor = .cellDate
+        dateLabel.font = UIFont(name: "VarelaRound-Regular", size: 15)
+        
+        eventImage.setImageColor(color: .mainPurple)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

@@ -12,6 +12,7 @@ class EventDetailsViewController: UIViewController {
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var trashButton: UIButton!
     
+    @IBOutlet weak var eventDetaleLabel: UILabel!
     @IBOutlet weak var discriptionLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
@@ -63,6 +64,12 @@ class EventDetailsViewController: UIViewController {
         nameLabel.textColor = .mainDigit
         dateLabel.textColor = .mainDigit
         discriptionLabel.textColor = .mainDigit
+        eventDetaleLabel.textColor = .mainDigit
+        
+        nameLabel.font = UIFont(name: "VarelaRound-Regular", size: 27)
+        dateLabel.font = UIFont(name: "VarelaRound-Regular", size: 17)
+        discriptionLabel.font = UIFont(name: "VarelaRound-Regular", size: 17)
+        eventDetaleLabel.font = UIFont(name: "VarelaRound-Regular", size: 21)
     }
     
     func backgroundImage() {

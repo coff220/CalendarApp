@@ -22,30 +22,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         var reminders = [Reminder]()
         let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
-           
-           do {
-               let reminder = try dataBase.persistentContainer.viewContext.fetch(fetchRequest)
-                print(reminder)
-               reminders = reminder
-           } catch {
-               print("Failed to fetch reminder: \(error)")
-           }
-        print(reminders)
-            // удаление
         
-//        dataBase.deleteContext(reminders[0])
+        do {
+            let reminder = try dataBase.persistentContainer.viewContext.fetch(fetchRequest)
+            print(reminder)
+            reminders = reminder
+        } catch {
+            print("Failed to fetch reminder: \(error)")
+        }
+        print(reminders)
+        
+        // Устанавливаем глобальный цвет кнопок в UINavigationBar
+        UINavigationBar.appearance().tintColor = .mainPurple
         
         // Подсоеденяем к FireBase
         FirebaseApp.configure() //
         return true
     }
-
+    
     // MARK: UISceneSession Lifecycle
-
+    
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
-
+    
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
     }
 }

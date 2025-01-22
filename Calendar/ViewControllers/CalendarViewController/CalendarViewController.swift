@@ -69,12 +69,14 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         
         monthLabel.text = presenter.monthYearText()
         monthLabel.textColor = .mainDigit
+        monthLabel.font = UIFont(name: "VarelaRound-Regular", size: 25)
         
         NoEventsImageView.image = UIImage(named: "NoEvents")
         
         for days in 0..<presenter.weekDays().count {
             let label = weekDaysStackView.arrangedSubviews[days] as? UILabel
             label?.text = presenter.weekDays()[days]
+            label?.font = UIFont(name: "VarelaRound-Regular", size: 17)
         }
         
         // Изменяем цвет текста всех UILabel внутри stackView
@@ -119,10 +121,6 @@ extension CalendarViewController: UICollectionViewDataSource {
         let currentDay = presenter.item(at: indexPath.row)
         cell.configureWith(day: currentDay)
         
-        cell.backgroundColor = .clear
-        if currentDay.isToday {
-            cell.cellImageView.backgroundColor = .mainPurple
-        }
         
         return cell
     }

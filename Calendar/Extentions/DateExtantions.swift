@@ -81,6 +81,12 @@ extension Date {
         return calendar.isDateInToday(date)
     }
     
+        // Проверяет, является ли текущая дата выходным днём.
+        func isWeekend() -> Bool {
+            let calendar = Calendar.current
+            return calendar.isDateInWeekend(self)
+    }
+    
 //    func timeToSeconds(date: Date) -> Int {
 //        // Получаем текущий календарь
 //        let calendar = Calendar.current
