@@ -24,13 +24,6 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     
     var presenter: CalendarPresenterProtocol = CalendarPresenter()
     
-    let typeEventImages = [
-            UIImage(named: "cake"), // Картинка для 0-го сегмента
-            UIImage(named: "star"), // Картинка для 1-го сегмента
-            UIImage(named: "heart"), // Картинка для 2-го сегмента
-            UIImage(named: "danger")  // Картинка для 3-го сегмента
-        ]
-    
     func reloadData() {
         eventsTableView.reloadData()
         dateCollectionView.reloadData()
@@ -168,6 +161,7 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             NoEventsImageView.isHidden = false
         }
+        tableView.separatorStyle = .none  // убрать сеператоры между ячейками
         return DataBase.share.fetchTitles().count
     }
     
@@ -175,7 +169,7 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "EventsTableViewCell", for: indexPath) as? EventsTableViewCell else {
             fatalError("Не удалось извлечь кастомную ячейку")
         }
-        cell.eventImage.image = typeEventImages[Int(DataBase.share.fetchType()[indexPath.row])]
+        cell.eventImage.image = EventType(rawValue: Int(DataBase.share.fetchType()[indexPath.row]))?.image
         cell.eventImage.setImageColor(color: .mainPurple)
         
         cell.titleLabel.text = DataBase.share.fetchTitles()[indexPath.row] // Текст из массива
@@ -241,13 +235,6 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
     
     // Высота ячейки
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        50
+        62
     }
-    
-    // Высота промежутка между ячейками
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 12
-    }
-    
-    
 }
