@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 
 protocol NotePresenterProtocol: AnyObject {
-    func saveNote(title: String?, body: String?, date: Date, time: Date)
+    func saveNote(title: String?, body: String?, date: Date, time: Date, type: Int64)
 }
 
 class NotePresenter: NotePresenterProtocol {
@@ -29,7 +29,7 @@ class NotePresenter: NotePresenterProtocol {
         fatalError("Приложение упало намеренно для тестирования.")
     }
     
-    func saveNote(title: String?, body: String?, date: Date, time: Date) {
+    func saveNote(title: String?, body: String?, date: Date, time: Date, type: Int64) {
         // crashApp()
         var calendar = Calendar.current
         let currentTimeZone = TimeZone.current
@@ -42,7 +42,7 @@ class NotePresenter: NotePresenterProtocol {
 
         print(" \(components)")
         
-        DataBase.share.saveReminder(title: title, body: body, date: fullInterval)
+        DataBase.share.saveReminder(title: title, body: body, date: fullInterval, type: type)
         NotificationManager().sendNonitfication(title: title, body: body, date: date, time: time)
     }
 }

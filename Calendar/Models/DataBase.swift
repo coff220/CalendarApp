@@ -40,12 +40,13 @@ class DataBase {
         saveContext()
     }
     
-    func saveReminder (title: String?, body: String?, date: Double) {
+    func saveReminder (title: String?, body: String?, date: Double, type: Int64) {
         let reminder = Reminder(context: persistentContainer.viewContext)
         reminder.title = title
         reminder.body = body
         reminder.date = date
-        reminder.id = UUID().uuidString  //создаёт уникальный ID
+        reminder.id = UUID().uuidString  // создаёт уникальный ID
+        reminder.type = type
         saveContext()
     }
     
@@ -125,6 +126,26 @@ class DataBase {
             // Извлекаем массив дат
             let reminderDates = dates.compactMap { $0.value(forKey: "date") as? Double }
             return reminderDates
+        } catch let error as NSError {
+            print("Не удалось извлечь данные. Ошибка: \(error), \(error.userInfo)")
+            return []
+        }
+    }
+    
+    func fetchType() -> [Int64] {
+        // Получаем ссылку на контекст Core Data
+        let context = persistentContainer.viewContext
+        
+        // Создаём запрос для сущности "Reminder"
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Reminder")
+        
+        // Выполняем запрос
+        do {
+            let types = try context.fetch(fetchRequest)
+            
+            // Извлекаем массив дат
+            let reminderTypes = types.compactMap { $0.value(forKey: "type") as? Int64 }
+            return reminderTypes
         } catch let error as NSError {
             print("Не удалось извлечь данные. Ошибка: \(error), \(error.userInfo)")
             return []

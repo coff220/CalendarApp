@@ -24,13 +24,11 @@ class SettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        overrideUserInterfaceStyle = .dark
         // Установка фонового изображения
                 let backgroundImage = UIImageView(frame: UIScreen.main.bounds)
                 backgroundImage.image = UIImage(named: "eventBG") // Ваше изображение
                 backgroundImage.contentMode = .scaleAspectFill
                 view.insertSubview(backgroundImage, at: 0) // Добавляем на задний план
-        
     
     }
     

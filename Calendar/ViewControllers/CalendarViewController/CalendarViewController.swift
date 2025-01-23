@@ -24,6 +24,13 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     
     var presenter: CalendarPresenterProtocol = CalendarPresenter()
     
+    let typeEventImages = [
+            UIImage(named: "cake"), // Картинка для 0-го сегмента
+            UIImage(named: "star"), // Картинка для 1-го сегмента
+            UIImage(named: "heart"), // Картинка для 2-го сегмента
+            UIImage(named: "danger")  // Картинка для 3-го сегмента
+        ]
+    
     func reloadData() {
         eventsTableView.reloadData()
         dateCollectionView.reloadData()
@@ -53,7 +60,6 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         eventsTableView.dataSource = self
         eventsTableView.delegate = self
         eventsTableView.register(UINib(nibName: "EventsTableViewCell", bundle: nil), forCellReuseIdentifier: "EventsTableViewCell")
-        overrideUserInterfaceStyle = .dark // Включить тёмную тему
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -121,7 +127,6 @@ extension CalendarViewController: UICollectionViewDataSource {
         let currentDay = presenter.item(at: indexPath.row)
         cell.configureWith(day: currentDay)
         
-        
         return cell
     }
     
@@ -170,6 +175,9 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "EventsTableViewCell", for: indexPath) as? EventsTableViewCell else {
             fatalError("Не удалось извлечь кастомную ячейку")
         }
+        cell.eventImage.image = typeEventImages[Int(DataBase.share.fetchType()[indexPath.row])]
+        cell.eventImage.setImageColor(color: .mainPurple)
+        
         cell.titleLabel.text = DataBase.share.fetchTitles()[indexPath.row] // Текст из массива
         let selectedDate = DataBase.share.fetchDate()[indexPath.row]
         
@@ -182,6 +190,7 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         dateFormatter.timeStyle = .medium
         dateFormatter.locale = Locale.current
         cell.dateLabel.text = dateFormatter.string(from: date)
+        
         return cell
     }
     
@@ -221,6 +230,10 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
             eventVC.date = dateFormatter.string(from: date)
             eventVC.reminder = reminders[indexPath.row]
             
+            eventVC.completion = {
+                self.presenter.updateCurrentMonth()
+            }
+            
             // Переход на второй экран через push
             navigationController?.pushViewController(eventVC, animated: true)
         }
@@ -235,4 +248,6 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 12
     }
+    
+    
 }

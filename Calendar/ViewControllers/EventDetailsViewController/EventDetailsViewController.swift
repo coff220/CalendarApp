@@ -17,8 +17,11 @@ class EventDetailsViewController: UIViewController {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     
+    var completion: (() -> Void)?
+    
     @IBAction func deleteAction(_ sender: Any) {
         DataBase.share.deleteContext(reminder)
+        completion?()
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -41,7 +44,6 @@ class EventDetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        overrideUserInterfaceStyle = .dark // Включить тёмную тему
         backgroundImage()
         configure()
         

@@ -46,15 +46,8 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         if let text = noteTextField.text, text.isEmpty {
                     // Если пусто, подсвечиваем красным
             noteTextField.layer.borderColor = UIColor.red.cgColor
-            // Через 1 секунду возвращаем исходные значения бордера
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                UIView.animate(withDuration: 0.3) { // Анимация для плавного возврата
-                    self.noteTextField.layer.borderColor = UIColor.border.cgColor
-                }
-            }
         } else {
-            presenter.saveNote(title: noteTextField.text, body: noteTextView.text, date: datePicker.date, time: timePicker.date)
-            //        presenter.saveNote(title: noteTextField.text, body: noteTextView.text, date: selectedDate, time: timePicker.date)
+            presenter.saveNote(title: noteTextField.text, body: noteTextView.text, date: datePicker.date, time: timePicker.date, type: Int64(eventSegmentControl.selectedSegmentIndex))
             completion?()
             dismiss(animated: true, completion: nil)
         }
@@ -62,7 +55,6 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        overrideUserInterfaceStyle = .dark // Включить тёмную тему
         
         setupYearlyTextField()
         setupTimeTextField()
@@ -141,7 +133,24 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         noteTextField.layer.borderWidth = 1
         noteTextField.layer.cornerRadius = 8
         noteTextField.font = UIFont(name: "VarelaRound-Regular", size: 17)
+        
+        // Добавляем обработчик события при изменении текста
+        noteTextField.addTarget(self, action: #selector(textFieldTextChanged), for: .editingChanged)
     }
+    
+    @objc func textFieldTextChanged(_ textField: UITextField) {
+            // Проверяем, введён ли хотя бы один символ
+            if let text = textField.text, !text.isEmpty {
+                textField.layer.borderWidth = 1
+                textField.layer.borderColor = UIColor.border.cgColor // Изменяем цвет бордера
+                
+            }
+        }
+    
+//    // Метод делегата: вызывается, когда начинается редактирование
+//        func textFieldDidBeginEditing(_ textField: UITextField) {
+//            textField.layer.borderColor = UIColor.blue.cgColor // Меняем цвет бордера
+//        }
     
     func setupNoteTextView() {
         noteTextView.backgroundColor = .fills

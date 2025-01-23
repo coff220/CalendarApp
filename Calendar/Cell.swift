@@ -26,6 +26,15 @@ class Cell: UICollectionViewCell {
     
         dayLabel.font = UIFont(name: "VarelaRound-Regular", size: 17)
         
+        dayLabel.textColor = .mainDigit
+        if day.date.isWeekend() {
+            if !day.isToday {
+                dayLabel.textColor = .mainPurple
+            } else {
+                dayLabel.textColor = .mainDigit
+            }
+        }
+        
         cellImageView.backgroundColor = .clear
         if day.isToday {
             cellImageView.backgroundColor = .mainPurple
