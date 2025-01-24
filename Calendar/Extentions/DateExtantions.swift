@@ -51,14 +51,14 @@ extension Date {
     func startOfMonth() -> Date {
         let interval = Calendar.current.dateInterval(of: .month, for: self)
         return (interval?.start.toLocalTime())! // Without toLocalTime it give last months last date
-      }
-      
-      func toLocalTime() -> Date {
-          let timezone = TimeZone.current
-          let seconds = TimeInterval(timezone.secondsFromGMT(for: self))
-          return Date(timeInterval: seconds, since: self)
-      }
-
+    }
+    
+    func toLocalTime() -> Date {
+        let timezone = TimeZone.current
+        let seconds = TimeInterval(timezone.secondsFromGMT(for: self))
+        return Date(timeInterval: seconds, since: self)
+    }
+    
     func day(after day: Int) -> Date {
         let nextDay = Calendar.current.date(byAdding: .day, value: day, to: self)
         return nextDay ?? self
@@ -81,23 +81,23 @@ extension Date {
         return calendar.isDateInToday(date)
     }
     
-        // Проверяет, является ли текущая дата выходным днём.
-        func isWeekend() -> Bool {
-            let calendar = Calendar.current
-            return calendar.isDateInWeekend(self)
+    // Проверяет, является ли текущая дата выходным днём.
+    func isWeekend() -> Bool {
+        let calendar = Calendar.current
+        return calendar.isDateInWeekend(self)
     }
     
-//    func timeToSeconds(date: Date) -> Int {
-//        // Получаем текущий календарь
-//        let calendar = Calendar.current
-//
-//        // Извлечение часов и минут
-//        let hours = calendar.component(.hour, from: date)
-//        let minutes = calendar.component(.minute, from: date)
-//        
-//        let seconds = (hours * 3600) + (minutes * 60)
-//        return seconds
-//    }
+    //    func timeToSeconds(date: Date) -> Int {
+    //        // Получаем текущий календарь
+    //        let calendar = Calendar.current
+    //
+    //        // Извлечение часов и минут
+    //        let hours = calendar.component(.hour, from: date)
+    //        let minutes = calendar.component(.minute, from: date)
+    //
+    //        let seconds = (hours * 3600) + (minutes * 60)
+    //        return seconds
+    //    }
     
     static func nextMonth(after date: Date) -> Date {
         let nextMonth = Calendar.current.date(byAdding: .month, value: +1, to: date)
@@ -109,4 +109,4 @@ extension Date {
         return previosMonth ?? date
     }
 }
-    
+

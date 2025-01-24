@@ -21,6 +21,7 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     @IBOutlet weak var dateCollectionView: UICollectionView!
     @IBOutlet weak var NoEventsImageView: UIImageView!
     @IBOutlet weak var eventsTableView: UITableView!
+    @IBOutlet weak var eventsLabel: UILabel!
     
     var presenter: CalendarPresenterProtocol = CalendarPresenter()
     
@@ -69,6 +70,10 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         monthLabel.text = presenter.monthYearText()
         monthLabel.textColor = .mainDigit
         monthLabel.font = UIFont(name: "VarelaRound-Regular", size: 25)
+        
+        eventsLabel.textColor = .mainDigit
+        eventsLabel.font = UIFont(name: "VarelaRound-Regular", size: 21)
+        eventsLabel.text = "Events"
         
         NoEventsImageView.image = UIImage(named: "NoEvents")
         
