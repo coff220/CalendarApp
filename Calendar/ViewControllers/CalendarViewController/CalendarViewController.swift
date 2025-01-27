@@ -125,7 +125,7 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     }
     
     func weekDaysStackViewSetup() {
-        if presenter.weekBeginSunday {
+        if presenter.isSundayFirstDayOfWeek() {
             firstWeekDayLabel.textColor = .mainPurple
             seventhWeekDayLabel.textColor = .mainPurple
         } else {

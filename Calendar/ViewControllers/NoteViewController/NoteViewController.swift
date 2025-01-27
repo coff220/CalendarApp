@@ -20,6 +20,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var timeTextField: UITextField!
+    @IBOutlet weak var grabberView: UIView!
     
     let placeholderLabel = UILabel()
     
@@ -79,6 +80,8 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         
         noteTextField.tag = 1
         noteTextView.tag = 2
+        
+        grabberView.layer.cornerRadius = 2.5
     }
     
     func backgroundImage() {

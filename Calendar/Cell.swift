@@ -20,7 +20,7 @@ class Cell: UICollectionViewCell {
         dayLabel.text = day.title
         if day.isActive {
             cellImageView.layer.borderColor = UIColor.mainPurple.cgColor
-            cellImageView.layer.borderWidth = 2.0
+            cellImageView.layer.borderWidth = 1.0
             cellImageView.layer.masksToBounds = true
         }
     

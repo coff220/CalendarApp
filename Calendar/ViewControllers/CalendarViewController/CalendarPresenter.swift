@@ -20,8 +20,8 @@ protocol CalendarPresenterProtocol: AnyObject {
     func viewDidLoad()
     func today() -> Int
     func updateCurrentMonth()
+    func isSundayFirstDayOfWeek() -> Bool
     
-    var weekBeginSunday: Bool { get }
     var delegate: CalendarViewControllerProtocol? { get set }
 }
 
@@ -33,8 +33,21 @@ class CalendarPresenter: CalendarPresenterProtocol {
     private let dateFormatter = DateFormatter()
     private var calendarDay: [CalendarDay] = []
     
-    var weekBeginSunday = false // начало недели с воскресенья
-    
+    func isSundayFirstDayOfWeek() -> Bool {
+        let firstWeekday = calendar.firstWeekday
+        switch firstWeekday {
+        case 1:
+            print("Sunday is the first day of the week.")
+            return true
+        case 2:
+            print("Monday is the first day of the week.")
+            return false
+        default:
+            // In some locales it can be something else (e.g., Saturday = 7, etc.)
+            print("The first day of the week is neither Sunday nor Monday. It's day number \(firstWeekday) in this locale.")
+            return true
+        }
+    }
     weak var delegate: CalendarViewControllerProtocol?
     
     func nextMonthDidTap() {
@@ -64,21 +77,23 @@ class CalendarPresenter: CalendarPresenterProtocol {
     
     // названия дней недели для weekDaysStackView
     func weekDays() -> [String?] {
-//        var calendar = Calendar.current
-//        if weekBeginSunday {
-//            calendar.firstWeekday = 1 // 1 = Воскресенье, 2 = Понедельник
-//            dateFormatter.calendar = calendar
-//        } else {
-//            dateFormatter.locale = Locale(identifier: "ru_RU") // Русская локаль
-//            calendar.firstWeekday = 2
-//            dateFormatter.calendar = calendar
-//        }
+        // Get the standard localized weekday symbols
+        let symbols = calendar.shortWeekdaySymbols
         
-        var shortWeekdays = dateFormatter.shortWeekdaySymbols
-        if !weekBeginSunday {
-            shortWeekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-        }
-        return shortWeekdays ?? ["1", "2", "3", "4", "5", "6", "7"]
+        // "weekdaySymbols" is typically indexed with Sunday=0, Monday=1, etc.
+        // But "calendar.firstWeekday" is typically 1 for Sunday, 2 for Monday, etc.
+        // We can align these indices by shifting the array.
+        
+        // firstWeekday is 1-based; convert to 0-based by subtracting 1
+        let firstWeekdayIndex = calendar.firstWeekday - 1
+        
+        // Separate the array into two slices and re-append
+        let firstSlice = symbols[firstWeekdayIndex..<symbols.count]
+        let secondSlice = symbols[0..<firstWeekdayIndex]
+        
+        // Combine into the final array
+        return Array(firstSlice) + Array(secondSlice)
+        
     }
     
     // номер первого дня недели в текущем месяце [первый день недели воскресенье, первый день недели понедельник]
@@ -94,7 +109,7 @@ class CalendarPresenter: CalendarPresenterProtocol {
                 dayOfWeakMonday = dayOfWeekSunday - 1
             }
             
-            if weekBeginSunday {
+            if isSundayFirstDayOfWeek() {
                 return dayOfWeekSunday
             } else {
                 return dayOfWeakMonday
