@@ -21,19 +21,22 @@ protocol CalendarPresenterProtocol: AnyObject {
     func today() -> Int
     func updateCurrentMonth()
     
+    var weekBeginSunday: Bool { get }
     var delegate: CalendarViewControllerProtocol? { get set }
 }
 
 class CalendarPresenter: CalendarPresenterProtocol {
-
+    
     private var currentDate = Date()
     private let calendar = Calendar.current
     private var dateComponents = DateComponents()
     private let dateFormatter = DateFormatter()
     private var calendarDay: [CalendarDay] = []
     
+    var weekBeginSunday = false // начало недели с воскресенья
+    
     weak var delegate: CalendarViewControllerProtocol?
-
+    
     func nextMonthDidTap() {
         currentDate = Date.nextMonth(after: currentDate)
         updateCurrentMonth()
@@ -61,16 +64,42 @@ class CalendarPresenter: CalendarPresenterProtocol {
     
     // названия дней недели для weekDaysStackView
     func weekDays() -> [String?] {
-        let shortWeekdays = dateFormatter.shortWeekdaySymbols
+//        var calendar = Calendar.current
+//        if weekBeginSunday {
+//            calendar.firstWeekday = 1 // 1 = Воскресенье, 2 = Понедельник
+//            dateFormatter.calendar = calendar
+//        } else {
+//            dateFormatter.locale = Locale(identifier: "ru_RU") // Русская локаль
+//            calendar.firstWeekday = 2
+//            dateFormatter.calendar = calendar
+//        }
+        
+        var shortWeekdays = dateFormatter.shortWeekdaySymbols
+        if !weekBeginSunday {
+            shortWeekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+        }
         return shortWeekdays ?? ["1", "2", "3", "4", "5", "6", "7"]
     }
     
-    // номер первого дня недели в текущем месяце
+    // номер первого дня недели в текущем месяце [первый день недели воскресенье, первый день недели понедельник]
     func firstWeekDayOfMonth() -> Int {
         dateComponents = DateComponents(year: currentDate.year, month: currentDate.numberOfCurrentMonth, day: 1)
         if let firstDayOfMonth = calendar.date(from: dateComponents) {
-            let dayOfWeek = calendar.component(.weekday, from: firstDayOfMonth)
-            return dayOfWeek
+            let dayOfWeekSunday = calendar.component(.weekday, from: firstDayOfMonth)
+            
+            var dayOfWeakMonday: Int
+            if dayOfWeekSunday == 1 {
+                dayOfWeakMonday = 7
+            } else {
+                dayOfWeakMonday = dayOfWeekSunday - 1
+            }
+            
+            if weekBeginSunday {
+                return dayOfWeekSunday
+            } else {
+                return dayOfWeakMonday
+            }
+            
         } else {
             return 1
         }

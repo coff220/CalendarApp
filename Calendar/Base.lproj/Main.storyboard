@@ -259,9 +259,16 @@
                         <outlet property="dateCollectionView" destination="5he-cw-gbZ" id="rzJ-Md-TPt"/>
                         <outlet property="eventsLabel" destination="ou6-br-8Iu" id="xtd-uk-tzs"/>
                         <outlet property="eventsTableView" destination="Xov-KF-vAP" id="x0D-56-thu"/>
+                        <outlet property="fifthWeekDayLabel" destination="cIf-0g-5t1" id="g7L-yj-WvT"/>
+                        <outlet property="firstWeekDayLabel" destination="ug0-eR-1N8" id="r7y-7j-ygC"/>
+                        <outlet property="fourthWeekDayLabel" destination="eht-aR-hm6" id="ngN-IK-rJ8"/>
                         <outlet property="monthLabel" destination="L0e-Xb-qV1" id="Bns-GO-YC4"/>
                         <outlet property="nextButton" destination="wch-g5-lGn" id="h5E-GH-dxh"/>
                         <outlet property="previousButton" destination="ZjU-tB-I9P" id="qMs-zU-mUf"/>
+                        <outlet property="secondWeekDayLabel" destination="M9z-TG-0Gj" id="Men-uq-TFY"/>
+                        <outlet property="seventhWeekDayLabel" destination="yAK-eF-p5e" id="0mF-v9-359"/>
+                        <outlet property="sixthWeekDayLabel" destination="7OR-UQ-AVz" id="LGt-Fl-46r"/>
+                        <outlet property="thirdWeekDayLabel" destination="DX8-Fq-eu7" id="qrL-xq-Xpq"/>
                         <outlet property="weekDaysStackView" destination="yUg-PO-z8Z" id="7Xc-Sa-B3g"/>
                     </connections>
                 </viewController>
@@ -284,7 +291,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vZF-ew-HtR">
-                                <rect key="frame" x="16" y="462" width="370" height="50"/>
+                                <rect key="frame" x="16" y="463.33333333333331" width="370" height="49.999999999999943"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="mGN-Vt-Vyn"/>
                                 </constraints>
@@ -295,12 +302,12 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TCd-Rv-Mgd">
-                                <rect key="frame" x="16" y="309" width="370" height="34"/>
+                                <rect key="frame" x="16" y="310.33333333333331" width="370" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="cFX-AO-eDg">
-                                <rect key="frame" x="16" y="367" width="370" height="71"/>
+                                <rect key="frame" x="16" y="368.33333333333331" width="370" height="71"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="71" id="KUF-ih-aPG"/>
                                 </constraints>
@@ -309,7 +316,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Yearly" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vwP-e2-Y5r">
-                                <rect key="frame" x="209" y="245" width="177" height="40"/>
+                                <rect key="frame" x="209" y="246.33333333333337" width="177" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Twm-k0-3rt"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="177" id="qKj-Ic-XM1"/>
@@ -318,7 +325,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5xz-fg-PUd">
-                                <rect key="frame" x="16" y="245" width="177" height="40"/>
+                                <rect key="frame" x="16" y="246.33333333333337" width="177" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="177" id="Il4-DV-YKd"/>
                                     <constraint firstAttribute="height" constant="40" id="LMC-es-xDv"/>
@@ -327,7 +334,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AVu-24-4XB">
-                                <rect key="frame" x="16" y="181" width="370" height="40"/>
+                                <rect key="frame" x="16" y="182.33333333333334" width="370" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="wSP-P8-YfP"/>
                                 </constraints>
@@ -335,7 +342,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="axC-MY-K1x">
-                                <rect key="frame" x="16" y="125" width="370" height="33"/>
+                                <rect key="frame" x="16" y="126.33333333333331" width="370" height="33"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="32" id="deF-Jq-tpd"/>
                                 </constraints>
@@ -347,7 +354,7 @@
                                 </segments>
                             </segmentedControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ffa-ge-f8L">
-                                <rect key="frame" x="16" y="100" width="370" height="1"/>
+                                <rect key="frame" x="16" y="101.33333333333333" width="370" height="1"/>
                                 <color key="backgroundColor" red="0.25490196078431371" green="0.16470588235294117" blue="0.41568627450980389" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="T8V-Zz-b7m"/>
@@ -357,7 +364,7 @@
                         <viewLayoutGuide key="safeArea" id="fdx-vZ-0r7"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="fdx-vZ-0r7" firstAttribute="bottom" secondItem="vZF-ew-HtR" secondAttribute="bottom" constant="306" id="0WL-Hc-Ez9"/>
+                            <constraint firstItem="ffa-ge-f8L" firstAttribute="top" secondItem="XGh-8a-JbP" secondAttribute="bottom" constant="11" id="053-eQ-Is5"/>
                             <constraint firstItem="cFX-AO-eDg" firstAttribute="top" secondItem="TCd-Rv-Mgd" secondAttribute="bottom" constant="24" id="32Q-be-EyZ"/>
                             <constraint firstItem="vZF-ew-HtR" firstAttribute="centerX" secondItem="93A-0K-zIc" secondAttribute="centerX" id="64q-oC-I00"/>
                             <constraint firstItem="AVu-24-4XB" firstAttribute="top" secondItem="axC-MY-K1x" secondAttribute="bottom" constant="24" id="ADd-Xq-Y4e"/>

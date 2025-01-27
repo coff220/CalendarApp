@@ -23,6 +23,14 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     @IBOutlet weak var eventsTableView: UITableView!
     @IBOutlet weak var eventsLabel: UILabel!
     
+    @IBOutlet weak var secondWeekDayLabel: UILabel!
+    @IBOutlet weak var firstWeekDayLabel: UILabel!
+    @IBOutlet weak var thirdWeekDayLabel: UILabel!
+    @IBOutlet weak var fourthWeekDayLabel: UILabel!
+    @IBOutlet weak var fifthWeekDayLabel: UILabel!
+    @IBOutlet weak var sixthWeekDayLabel: UILabel!
+    @IBOutlet weak var seventhWeekDayLabel: UILabel!
+    
     var presenter: CalendarPresenterProtocol = CalendarPresenter()
     
     func reloadData() {
@@ -63,6 +71,8 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     
     func configure () {
         backgroundImage()
+        eventsLabel.isHidden = true
+        
         dateCollectionView.backgroundColor = .clear
         nextButton.backgroundColor = .clear
         previousButton.backgroundColor = .clear
@@ -78,6 +88,7 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         NoEventsImageView.image = UIImage(named: "NoEvents")
         
         for days in 0..<presenter.weekDays().count {
+            print(presenter.weekDays())
             let label = weekDaysStackView.arrangedSubviews[days] as? UILabel
             label?.text = presenter.weekDays()[days]
             label?.font = UIFont(name: "VarelaRound-Regular", size: 17)
@@ -87,6 +98,7 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         for case let label as UILabel in weekDaysStackView.arrangedSubviews {
             label.textColor = .mainDigit
         }
+        weekDaysStackViewSetup()
         
     }
     
@@ -109,6 +121,16 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
                 backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             ])
+        }
+    }
+    
+    func weekDaysStackViewSetup() {
+        if presenter.weekBeginSunday {
+            firstWeekDayLabel.textColor = .mainPurple
+            seventhWeekDayLabel.textColor = .mainPurple
+        } else {
+            sixthWeekDayLabel.textColor = .mainPurple
+            seventhWeekDayLabel.textColor = .mainPurple
         }
     }
 }
@@ -163,6 +185,7 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if !DataBase.share.fetchTitles().isEmpty {
             NoEventsImageView.isHidden = true
+            eventsLabel.isHidden = false
         } else {
             NoEventsImageView.isHidden = false
         }
