@@ -246,6 +246,7 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         // Инициализируем SecondViewController
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let eventVC = storyboard.instantiateViewController(withIdentifier: "EventDetailsViewController") as? EventDetailsViewController {
+            eventVC.hidesBottomBarWhenPushed = true  // убрать Таб Бар с экрана
             
             // Передаем данные во второй экран
             eventVC.name = selectedName

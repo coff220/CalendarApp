@@ -346,6 +346,15 @@ extension NoteViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         yearlyTextField.inputAccessoryView = toolbar
     }
     
+//    // Запрещаем ввод с клавиатуры
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        // Запрещаем ввод текста только в yearlyTextField
+//        if textField == yearlyTextField {
+//            return false
+//        }
+//        return true  // Разрешаем ввод в других полях
+//    }
+    
     // Обработка выбора
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         yearlyTextField.text = options[row]

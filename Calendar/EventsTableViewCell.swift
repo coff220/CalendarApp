@@ -21,6 +21,8 @@ class EventsTableViewCell: UITableViewCell {
         dateLabel.textColor = .cellDate
         dateLabel.font = UIFont(name: "VarelaRound-Regular", size: 15)
         
+        selectionStyle = .none // чтоб не подсвечивалась при нажатии
+        
         eventImage.setImageColor(color: .mainPurple)
     }
 

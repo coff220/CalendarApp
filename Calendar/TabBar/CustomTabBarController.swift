@@ -27,7 +27,6 @@ class CustomTabBarController: UITabBarController {
       // swiftlint:disable:next force_cast
         let newPostVC = self.storyboard?.instantiateViewController(withIdentifier: "NoteViewController") as! UINavigationController
         
-        
         // Create TabBar items
         homeNav.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "home"), selectedImage: UIImage(named: "homeSelected"))
         
@@ -35,11 +34,9 @@ class CustomTabBarController: UITabBarController {
         
         newPostVC.tabBarItem = UITabBarItem(title: nil, image: nil, selectedImage: nil)
         
-        
         // Assign viewControllers to tabBarController
         let viewControllers = [homeNav, newPostVC, settingsNav]
         self.setViewControllers(viewControllers, animated: false)
-        
         
         guard let tabBar = self.tabBar as? CustomTabBar else { return }
         
