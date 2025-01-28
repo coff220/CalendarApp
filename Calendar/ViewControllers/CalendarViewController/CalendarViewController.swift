@@ -220,6 +220,7 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         let selectedName = DataBase.share.fetchTitles()[indexPath.row]
         let selectedDiscription = DataBase.share.fetchBodyes()[indexPath.row]
         let selectedDate = DataBase.share.fetchDate()[indexPath.row]
+        let selectTypeImage = DataBase.share.fetchType()[indexPath.row]
         
         // Преобразование TimeInterval в Date
         let date = Date(timeIntervalSince1970: selectedDate)
@@ -250,6 +251,7 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
             eventVC.name = selectedName
             eventVC.descriptionText = selectedDiscription
             eventVC.date = dateFormatter.string(from: date)
+            eventVC.type = selectTypeImage
             eventVC.reminder = reminders[indexPath.row]
             
             eventVC.completion = {

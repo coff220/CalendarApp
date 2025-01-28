@@ -12,6 +12,7 @@ class EventDetailsViewController: UIViewController {
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var trashButton: UIButton!
     
+    @IBOutlet weak var typeImageView: UIImageView!
     @IBOutlet weak var eventDetaleLabel: UILabel!
     @IBOutlet weak var discriptionLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
@@ -41,6 +42,7 @@ class EventDetailsViewController: UIViewController {
     var date: String?
     var name: String?
     var reminder = Reminder()
+    var type: Int64 = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +52,7 @@ class EventDetailsViewController: UIViewController {
         discriptionLabel.text = descriptionText
         dateLabel.text = date
         nameLabel.text = name
+        typeImageView.image = EventType(rawValue: Int(type))?.image
     }
     
     func configure() {
