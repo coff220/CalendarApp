@@ -55,6 +55,7 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
+        swipe()
         presenter.delegate = self
         presenter.viewDidLoad()
         dateCollectionView.delegate = self
@@ -62,6 +63,16 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         eventsTableView.dataSource = self
         eventsTableView.delegate = self
         eventsTableView.register(UINib(nibName: "EventsTableViewCell", bundle: nil), forCellReuseIdentifier: "EventsTableViewCell")
+        
+        // Подписываемся на уведомление смены дня
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshForNewDay), name: NSNotification.Name.NSCalendarDayChanged, object: nil)
+    }
+    @objc func refreshForNewDay() {
+        print("Day changed!")
+        dateCollectionView.reloadData() // Обновляем коллекцию
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self) // Удаляем наблюдателя
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -102,6 +113,38 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         
     }
     
+    func swipe() {
+        // Добавляем жесты свайпа для collectionView
+            let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+            swipeLeft.direction = .left
+        dateCollectionView.addGestureRecognizer(swipeLeft)
+
+            let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+            swipeRight.direction = .right
+        dateCollectionView.addGestureRecognizer(swipeRight)
+    }
+    
+    // Обработчик свайпов с анимацией
+    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+        let transitionOptions: UIView.AnimationOptions = .transitionCrossDissolve
+        UIView.transition(with: dateCollectionView, duration: 0.5, options: transitionOptions, animations: {
+            if gesture.direction == .left {
+                self.presenter.nextMonthDidTap()
+            } else if gesture.direction == .right {
+                self.presenter.previousMonthDidTap()
+            }
+        }, completion: nil)
+    }
+    
+//    // Обработчик свайпов
+//    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+//        if gesture.direction == .left {
+//            presenter.nextMonthDidTap()
+//        } else if gesture.direction == .right {
+//            presenter.previousMonthDidTap()
+//        }
+//    }
+    
     func backgroundImage() {
         // Устанавливаем картинку из assets на фон
         if let backgroundImage = UIImage(named: "darkBG") {
@@ -122,6 +165,19 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
                 backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             ])
         }
+    }
+    
+    func show() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let navigation = storyboard.instantiateViewController(identifier: "NoteViewController") as? UINavigationController,
+        let vc = navigation.viewControllers.first as? NoteViewController else {
+            return
+        }
+        
+        vc.completion = {
+            self.presenter.updateCurrentMonth()
+        }
+        present(navigation, animated: true, completion: nil)
     }
     
     func weekDaysStackViewSetup() {
@@ -153,16 +209,19 @@ extension CalendarViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let vc = storyboard.instantiateViewController(identifier: "NoteViewController") as? NoteViewController else {
+        guard let navigation = storyboard.instantiateViewController(identifier: "NoteViewController") as? UINavigationController,
+        let vc = navigation.viewControllers.first as? NoteViewController else {
             return
         }
         
         let selectedDate = presenter.item(at: indexPath.row)
+//        let startOfDay = Calendar.current.startOfDay(for: selectedDate.date)
+//        vc.update(date: startOfDay)
         vc.update(date: selectedDate.date)
         vc.completion = {
             self.presenter.updateCurrentMonth()
         }
-        present(vc, animated: true, completion: nil)
+        present(navigation, animated: true, completion: nil)
     }
 }
 

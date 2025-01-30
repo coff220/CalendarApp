@@ -46,10 +46,7 @@ class CustomTabBarController: UITabBarController {
     }
     
     func routeToCreateNewAd() {
-      // swiftlint:disable:next force_cast
-        let createAdNavController = self.storyboard?.instantiateViewController(withIdentifier: "NoteViewController") as! UINavigationController
-        createAdNavController.modalPresentationCapturesStatusBarAppearance = true
-        self.present(createAdNavController, animated: true, completion: nil)
+        ((viewControllers?.first as? UINavigationController)?.viewControllers.first as? CalendarViewController)?.show()
     }
 }
 

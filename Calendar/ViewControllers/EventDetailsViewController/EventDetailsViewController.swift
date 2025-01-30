@@ -21,9 +21,27 @@ class EventDetailsViewController: UIViewController {
     var completion: (() -> Void)?
     
     @IBAction func deleteAction(_ sender: Any) {
-        DataBase.share.deleteContext(reminder)
-        completion?()
-        self.navigationController?.popViewController(animated: true)
+//        DataBase.share.deleteContext(reminder)
+//        completion?()
+//        self.navigationController?.popViewController(animated: true)
+        let alert = UIAlertController(title: "Delete Note?",
+                                          message: "This action cannot be undone.",
+                                          preferredStyle: .alert)
+
+            // "Delete" button
+            let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
+                DataBase.share.deleteContext(self.reminder)  // Delete from database
+                self.completion?()
+                self.navigationController?.popViewController(animated: true) // Close screen
+            }
+
+            // "Cancel" button
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+
+            alert.addAction(deleteAction)
+            alert.addAction(cancelAction)
+
+            present(alert, animated: true, completion: nil)
     }
     
     @IBAction func editAction(_ sender: Any) {

@@ -96,7 +96,7 @@ class CalendarPresenter: CalendarPresenterProtocol {
         
     }
     
-    // номер первого дня недели в текущем месяце [первый день недели воскресенье, первый день недели понедельник]
+    // номер первого дня недели в текущем месяце
     func firstWeekDayOfMonth() -> Int {
         dateComponents = DateComponents(year: currentDate.year, month: currentDate.numberOfCurrentMonth, day: 1)
         if let firstDayOfMonth = calendar.date(from: dateComponents) {
@@ -139,34 +139,61 @@ class CalendarPresenter: CalendarPresenterProtocol {
         updateCalendarDays()
         delegate?.reloadData()
     }
+    
+    private func cellTextColor(date: Date) -> UIColor {
+        var color: UIColor!
+        
+        if date.isInCurrentMonth(date: currentDate) {
+            color = .mainDigit
+        } else {
+            color = .weekdayShadow
+        }
+        
+        if date.isWeekend() {
+            if !Date().isDateToday(date: date) {
+                color = .mainPurple
+            } else {
+                color  = .mainDigit
+            }
+            
+            if !date.isInCurrentMonth(date: currentDate) {
+                color =  .weekendShadow
+            }
+        }
+        
+        return color
+    }
 }
 
 private extension CalendarPresenter {
     
     func updateCalendarDays() {
         calendarDay.removeAll()
-        
-        if firstWeekDayOfMonth() > 1 {
-            for _ in 1...firstWeekDayOfMonth() - 1 {
-                let day = CalendarDay(
-                    title: "",
-                    isToday: false,
-                    isActive: false,
-                    date: currentDate
-                )
-                calendarDay.append(day)
+
+        var daysBeforeFirstDayOfMonth = firstWeekDayOfMonth() - 1
+        // количество ячеек в коллекшнвью
+       
+        var currentDateArraySize: Int {
+            if daysBeforeFirstDayOfMonth + currentDate.daysInMonth == 28 {
+                return 28
+            } else  if daysBeforeFirstDayOfMonth + currentDate.daysInMonth <= 35 {
+                return 35
+            } else {
+                return 42
             }
         }
         
-        for i in 0...currentDate.daysInMonth - 1 {
+        for i in -(daysBeforeFirstDayOfMonth)...(currentDateArraySize - daysBeforeFirstDayOfMonth - 1) {
             let date = currentDate.startOfMonth().day(after: i)
             let day = CalendarDay(
                 title: date.stringDay,
                 isToday: Date().isDateToday(date: date),
                 isActive: DataBase.share.getReminders(date: date),
-                date: date
+                date: date, 
+                textColor: cellTextColor(date: date)
             )
             calendarDay.append(day)
         }
+
     }
 }

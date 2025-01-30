@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import UIKit
 
 struct CalendarDay {
     let title: String
     let isToday: Bool
     let isActive: Bool
     let date: Date
+    let textColor: UIColor
 }

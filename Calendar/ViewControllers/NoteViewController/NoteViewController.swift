@@ -48,7 +48,12 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
                     // Если пусто, подсвечиваем красным
             noteTextField.layer.borderColor = UIColor.red.cgColor
         } else {
-            presenter.saveNote(title: noteTextField.text, body: noteTextView.text, date: datePicker.date, time: timePicker.date, type: Int64(eventSegmentControl.selectedSegmentIndex))
+            presenter.saveNote(
+                title: noteTextField.text,
+                body: noteTextView.text,
+                date: datePicker.date,
+                time: timePicker.date,
+                type: Int64(eventSegmentControl.selectedSegmentIndex))
             completion?()
             dismiss(animated: true, completion: nil)
         }
@@ -175,9 +180,10 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     }
     
     // MARK: - UITextViewDelegate
+    
     func textViewDidChange(_ textView: UITextView) {
-            placeholderLabel.isHidden = !textView.text.isEmpty
-        }
+        placeholderLabel.isHidden = !textView.text.isEmpty
+    }
     
     func setupTimeTextField() {
         timeTextField.backgroundColor = .fills
@@ -209,6 +215,10 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(timeDoneTapped))
         toolbar.setItems([doneButton], animated: true)
         toolbar.isUserInteractionEnabled = true
+        
+        // перенос кнопки Done вправо
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        toolbar.setItems([flexibleSpace, doneButton], animated: false)
         
         // Устанавливаем Toolbar как inputAccessoryView для TextField
         timeTextField.inputAccessoryView = toolbar
@@ -247,11 +257,12 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         // Создаем дату, которую нужно установить по умолчанию
         
         let dafaultDate = selectedDate
-        datePicker.date = dafaultDate
+        let startOfDay = Calendar.current.startOfDay(for: dafaultDate)
+        datePicker.date = startOfDay
         let formatter = DateFormatter()
         formatter.timeStyle = .none
         formatter.dateStyle = .long
-        dateTextField.text = formatter.string(from: dafaultDate)
+        dateTextField.text = formatter.string(from: startOfDay)
         dateTextField.font = UIFont(name: "VarelaRound-Regular", size: 17)
                 
         // Устанавливаем DatePicker как inputView для TextField

@@ -26,6 +26,24 @@ extension Date {
         return lastComponents.day ?? 0
     }
     
+    var daysInPreviousMounth: Int {
+        var components = Calendar.current.dateComponents([.month], from: self)
+        components.day = 1
+//        var previousMonth = 0
+//        if let currentMounth = components.month {
+//            if currentMounth > 1 {
+//                previousMonth = currentMounth - 1
+//            } else {
+//                previousMonth = 12
+//            }
+//        }
+        let oneDayInterval = TimeInterval(60 * 60 * 24)
+        let lastDeyOfPreviousMonth = Calendar.current.date(from: components)! - oneDayInterval
+        let lastComponents = Calendar.current.dateComponents([.day], from: lastDeyOfPreviousMonth)
+        print("\(lastComponents.day!)")
+        return lastComponents.day ?? 0
+    }
+    
     var currentMonth: String {
         let dateFormater = DateFormatter()
         dateFormater.dateFormat = "MMMM"
@@ -86,6 +104,18 @@ extension Date {
         let calendar = Calendar.current
         return calendar.isDateInWeekend(self)
     }
+    
+        // проверяет принадлежит ли дата текущему месяцу
+    func isInCurrentMonth(date: Date) -> Bool {
+            let calendar = Calendar.current
+            let currentMonth = calendar.component(.month, from: date)  // Текущий месяц
+            let currentYear = calendar.component(.year, from: date)    // Текущий год
+            
+            let selectedMonth = calendar.component(.month, from: self)   // Месяц выбранной даты
+            let selectedYear = calendar.component(.year, from: self)     // Год выбранной даты
+            
+            return currentMonth == selectedMonth && currentYear == selectedYear
+        }
     
     //    func timeToSeconds(date: Date) -> Int {
     //        // Получаем текущий календарь
