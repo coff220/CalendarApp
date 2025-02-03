@@ -46,10 +46,16 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     
     @IBAction func previousButtonAction(_ sender: Any) {
         presenter.previousMonthDidTap()
+            // анимация лейбла
+//        UIView.transition(with: monthLabel, duration: 0.3, options: .transitionCrossDissolve, animations: nil, completion: nil)
+
     }
     
     @IBAction func nextButtonAction(_ sender: Any) {
         presenter.nextMonthDidTap()
+            // анимация лейбла
+//        UIView.transition(with: monthLabel, duration: 0.3, options: .transitionCrossDissolve, animations: nil, completion: nil)
+
     }
     
     override func viewDidLoad() {
@@ -64,15 +70,20 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         eventsTableView.delegate = self
         eventsTableView.register(UINib(nibName: "EventsTableViewCell", bundle: nil), forCellReuseIdentifier: "EventsTableViewCell")
         
-        // Подписываемся на уведомление смены дня
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshForNewDay), name: NSNotification.Name.NSCalendarDayChanged, object: nil)
-    }
-    @objc func refreshForNewDay() {
-        print("Day changed!")
-        dateCollectionView.reloadData() // Обновляем коллекцию
-    }
-    deinit {
-        NotificationCenter.default.removeObserver(self) // Удаляем наблюдателя
+//        // Подписываемся на уведомление смены дня
+//        NotificationCenter.default.addObserver(self, 
+//                                               selector: #selector(refreshForNewDay), 
+//                                               name: NSNotification.Name.NSCalendarDayChanged,
+//                                               object: nil)
+//    }
+//    @objc func refreshForNewDay() {
+//        print("Day changed!")
+//        DispatchQueue.main.sync {
+//            dateCollectionView.reloadData() // Обновляем коллекцию
+//        }
+//    }
+//    deinit {
+//        NotificationCenter.default.removeObserver(self) // Удаляем наблюдателя
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -90,7 +101,7 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         
         monthLabel.text = presenter.monthYearText()
         monthLabel.textColor = .mainDigit
-        monthLabel.font = UIFont(name: "VarelaRound-Regular", size: 25)
+        monthLabel.font = UIFont(name: "VarelaRound-Regular", size: 21)
         
         eventsLabel.textColor = .mainDigit
         eventsLabel.font = UIFont(name: "VarelaRound-Regular", size: 21)
@@ -98,8 +109,10 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         
         NoEventsImageView.image = UIImage(named: "NoEvents")
         
+        // убираем скрол CollectionView
+        dateCollectionView.isScrollEnabled = false
+
         for days in 0..<presenter.weekDays().count {
-            print(presenter.weekDays())
             let label = weekDaysStackView.arrangedSubviews[days] as? UILabel
             label?.text = presenter.weekDays()[days]
             label?.font = UIFont(name: "VarelaRound-Regular", size: 17)
@@ -135,15 +148,6 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
             }
         }, completion: nil)
     }
-    
-//    // Обработчик свайпов
-//    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
-//        if gesture.direction == .left {
-//            presenter.nextMonthDidTap()
-//        } else if gesture.direction == .right {
-//            presenter.previousMonthDidTap()
-//        }
-//    }
     
     func backgroundImage() {
         // Устанавливаем картинку из assets на фон
@@ -240,6 +244,7 @@ extension CalendarViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+// MARK: TableView
 extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if !DataBase.share.fetchTitles().isEmpty {

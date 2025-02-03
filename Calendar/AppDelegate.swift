@@ -40,6 +40,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    // ориентация экрана
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        return .portrait  // Только вертикальная ориентация
+    }
+    
     // MARK: UISceneSession Lifecycle
     
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {

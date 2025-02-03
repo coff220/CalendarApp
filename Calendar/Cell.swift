@@ -10,7 +10,6 @@ import UIKit
 class Cell: UICollectionViewCell {
     
     @IBOutlet weak var dayLabel: UILabel!
-  
     @IBOutlet weak var cellImageView: UIImageView!
     
     func configureWith(day: CalendarDay) {
@@ -26,24 +25,6 @@ class Cell: UICollectionViewCell {
     
         dayLabel.font = UIFont(name: "VarelaRound-Regular", size: 17)
         dayLabel.textColor = day.textColor
-        
-//        if day.date.isInCurrentMonth() {
-//            dayLabel.textColor = .mainDigit
-//        } else {
-//            dayLabel.textColor = .weekdayShadow
-//        }
-//        
-//        if day.date.isWeekend() {
-//            if !day.isToday {
-//                dayLabel.textColor = .mainPurple
-//            } else {
-//                dayLabel.textColor = .mainDigit
-//            }
-//            
-//            if !day.date.isInCurrentMonth() {
-//                dayLabel.textColor = .weekendShadow
-//            }
-//        }
         
         cellImageView.backgroundColor = .clear
         if day.isToday {

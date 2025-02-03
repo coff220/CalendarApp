@@ -190,6 +190,10 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         timeTextField.font = UIFont(name: "VarelaRound-Regular", size: 17)
         timePicker.datePickerMode = .time
         timePicker.preferredDatePickerStyle = .wheels
+        
+        // ввод в текстфилд в реальном времени (без нажатия Done)
+        timePicker.addTarget(self, action: #selector(timeChanged(_:)), for: .valueChanged)
+        
         // Устанавливаем DatePicker как inputView для TextField
         timeTextField.inputView = timePicker
         timeTextField.layer.cornerRadius = 8
@@ -213,6 +217,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         toolbar.sizeToFit()
         
         let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(timeDoneTapped))
+        doneButton.tintColor = .mainPurple
         toolbar.setItems([doneButton], animated: true)
         toolbar.isUserInteractionEnabled = true
         
@@ -235,14 +240,17 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     }
     
     @objc func timeDoneTapped() {
-        // Форматируем выбранное время в текст
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short // Формат: "1:30 PM" или "13:30" (в зависимости от региона)
-        formatter.dateStyle = .none // Убираем отображение даты
-        
-        timeTextField.text = formatter.string(from: timePicker.date)
         timeTextField.resignFirstResponder() // Закрываем DatePicker
     }
+    
+    @objc private func timeChanged(_ sender: UIDatePicker) {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "HH:mm"
+        timeTextField.text = formatter.string(from: sender.date)
+            
+//            // Сохранение (если нужно)
+//            UserDefaults.standard.set(textField.text, forKey: "selectedDate")
+        }
     
     func setupDateTextField() {
         dateTextField.backgroundColor = .fills
@@ -272,24 +280,33 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         let toolbar = UIToolbar()
         toolbar.sizeToFit()
         
+        // ввод в текстфилд в реальном времени (без нажатия Done)
+        datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
+        
         let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneDateTapped))
+        doneButton.tintColor = .mainPurple
         toolbar.setItems([doneButton], animated: true)
         toolbar.isUserInteractionEnabled = true
+        
+        // перенос кнопки Done вправо
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        toolbar.setItems([flexibleSpace, doneButton], animated: false)
         
         // Устанавливаем Toolbar как inputAccessoryView для TextField
         dateTextField.inputAccessoryView = toolbar
     }
     
     @objc func doneDateTapped() {
-        // Форматируем выбранную дату в текст
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long 
-        formatter.timeStyle = .none
-        
-        dateTextField.text = formatter.string(from: datePicker.date)
         dateTextField.resignFirstResponder() // Закрываем DatePicker
         
     }
+    
+    @objc private func dateChanged(_ sender: UIDatePicker) {
+            let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        formatter.timeStyle = .none
+        dateTextField.text = formatter.string(from: sender.date)
+        }
     
     // Метод делегата, вызываемый при попытке изменения текста в textView (скрываем клавиатуру при нажатии на Return)
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
