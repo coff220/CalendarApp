@@ -72,80 +72,17 @@ class DataBase {
         return results
     }
     
-    func fetchTitles() -> [String] {
+    func fetchReminders() -> [Reminder] {
         // Получаем ссылку на контекст Core Data
         let context = persistentContainer.viewContext
         
         // Создаём запрос для сущности "Reminder"
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Reminder")
+        let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
         
         // Выполняем запрос
         do {
-            let titles = try context.fetch(fetchRequest)
-            
-            // Извлекаем массив имен
-            let reminderTitles = titles.compactMap { $0.value(forKey: "title") as? String }
-            return reminderTitles
-        } catch let error as NSError {
-            print("Не удалось извлечь данные. Ошибка: \(error), \(error.userInfo)")
-            return []
-        }
-    }
-    
-    func fetchBodyes() -> [String] {
-        // Получаем ссылку на контекст Core Data
-        let context = persistentContainer.viewContext
-        
-        // Создаём запрос для сущности "Reminder"
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Reminder")
-        
-        // Выполняем запрос
-        do {
-            let bodyes = try context.fetch(fetchRequest)
-            
-            // Извлекаем массив описаний
-            let reminderBodyes = bodyes.compactMap { $0.value(forKey: "body") as? String }
-            return reminderBodyes
-        } catch let error as NSError {
-            print("Не удалось извлечь данные. Ошибка: \(error), \(error.userInfo)")
-            return []
-        }
-    }
-    
-    func fetchDate() -> [Double] {
-        // Получаем ссылку на контекст Core Data
-        let context = persistentContainer.viewContext
-        
-        // Создаём запрос для сущности "Reminder"
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Reminder")
-        
-        // Выполняем запрос
-        do {
-            let dates = try context.fetch(fetchRequest)
-            
-            // Извлекаем массив дат
-            let reminderDates = dates.compactMap { $0.value(forKey: "date") as? Double }
-            return reminderDates
-        } catch let error as NSError {
-            print("Не удалось извлечь данные. Ошибка: \(error), \(error.userInfo)")
-            return []
-        }
-    }
-    
-    func fetchType() -> [Int64] {
-        // Получаем ссылку на контекст Core Data
-        let context = persistentContainer.viewContext
-        
-        // Создаём запрос для сущности "Reminder"
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Reminder")
-        
-        // Выполняем запрос
-        do {
-            let types = try context.fetch(fetchRequest)
-            
-            // Извлекаем массив дат
-            let reminderTypes = types.compactMap { $0.value(forKey: "type") as? Int64 }
-            return reminderTypes
+            let reminders = try context.fetch(fetchRequest)
+            return reminders
         } catch let error as NSError {
             print("Не удалось извлечь данные. Ошибка: \(error), \(error.userInfo)")
             return []

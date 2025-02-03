@@ -8,10 +8,9 @@
 import UIKit
 
 class EventDetailsViewController: UIViewController {
-
+    
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var trashButton: UIButton!
-    
     @IBOutlet weak var typeImageView: UIImageView!
     @IBOutlet weak var eventDetaleLabel: UILabel!
     @IBOutlet weak var discriptionLabel: UILabel!
@@ -19,58 +18,52 @@ class EventDetailsViewController: UIViewController {
     @IBOutlet weak var nameLabel: UILabel!
     
     var completion: (() -> Void)?
+    var reminder = Reminder()
     
     @IBAction func deleteAction(_ sender: Any) {
-//        DataBase.share.deleteContext(reminder)
-//        completion?()
-//        self.navigationController?.popViewController(animated: true)
         let alert = UIAlertController(title: "Delete Note?",
-                                          message: "This action cannot be undone.",
-                                          preferredStyle: .alert)
-
-            // "Delete" button
-            let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-                DataBase.share.deleteContext(self.reminder)  // Delete from database
-                self.completion?()
-                self.navigationController?.popViewController(animated: true) // Close screen
-            }
-
-            // "Cancel" button
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-
-            alert.addAction(deleteAction)
-            alert.addAction(cancelAction)
-
-            present(alert, animated: true, completion: nil)
+                                      message: "This action cannot be undone.",
+                                      preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
+            DataBase.share.deleteContext(self.reminder)
+            self.completion?()
+            self.navigationController?.popViewController(animated: true) // Close screen
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true, completion: nil)
     }
     
     @IBAction func editAction(_ sender: Any) {
         // переход на NoteViewController
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let noteVC = storyboard.instantiateViewController(withIdentifier: "NoteViewController") as? NoteViewController {
-            // Передаем данные во второй экран
-            
-            // Переход на второй экран через push
             navigationController?.pushViewController(noteVC, animated: true)
-            
         }
     }
-    
-    var descriptionText: String?
-    var date: String?
-    var name: String?
-    var reminder = Reminder()
-    var type: Int64 = 0
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         backgroundImage()
         configure()
         
-        discriptionLabel.text = descriptionText
-        dateLabel.text = date
-        nameLabel.text = name
-        typeImageView.image = EventType(rawValue: Int(type))?.image
+        // Преобразование TimeInterval в Date
+        let date = Date(timeIntervalSince1970: reminder.date)
+        
+        // Форматируем дату для отображения
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "d MMMM yyyy HH:mm"
+        dateFormatter.locale = Locale.current
+    
+        discriptionLabel.text = reminder.body
+        dateLabel.text = dateFormatter.string(from: date)
+        nameLabel.text = reminder.title
+        typeImageView.image = EventType(rawValue: Int(reminder.type))?.image
     }
     
     func configure() {
@@ -116,5 +109,5 @@ class EventDetailsViewController: UIViewController {
             ])
         }
     }
-
+    
 }

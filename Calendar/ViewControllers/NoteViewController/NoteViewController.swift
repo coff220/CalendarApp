@@ -302,11 +302,11 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     }
     
     @objc private func dateChanged(_ sender: UIDatePicker) {
-            let formatter = DateFormatter()
+        let formatter = DateFormatter()
         formatter.dateStyle = .long
         formatter.timeStyle = .none
         dateTextField.text = formatter.string(from: sender.date)
-        }
+    }
     
     // Метод делегата, вызываемый при попытке изменения текста в textView (скрываем клавиатуру при нажатии на Return)
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

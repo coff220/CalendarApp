@@ -15,6 +15,8 @@ class DayEventsViewController: UIViewController {
     @IBOutlet weak var eventLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     
+    var reminders = DataBase.share.fetchReminders()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -58,18 +60,21 @@ extension DayEventsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         tableView.separatorStyle = .none  // убрать сеператоры между ячейками
-        return DataBase.share.fetchTitles().count
+        return reminders.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "EventsTableViewCell", for: indexPath) as? EventsTableViewCell else {
             fatalError("Не удалось извлечь кастомную ячейку")
         }
-        cell.eventImage.image = EventType(rawValue: Int(DataBase.share.fetchType()[indexPath.row]))?.image
+        let reminder = reminders[indexPath.row]
+        let type = Int(reminder.type)
+        
+        cell.eventImage.image = EventType(rawValue: type)?.image
         cell.eventImage.setImageColor(color: .mainPurple)
         
-        cell.titleLabel.text = DataBase.share.fetchTitles()[indexPath.row] // Текст из массива
-        let selectedDate = DataBase.share.fetchDate()[indexPath.row]
+        cell.titleLabel.text = reminder.title // Текст из массива
+        let selectedDate = reminder.date
         
         // Преобразование TimeInterval в Date
         let date = Date(timeIntervalSince1970: selectedDate)
@@ -85,50 +90,16 @@ extension DayEventsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedName = DataBase.share.fetchTitles()[indexPath.row]
-        let selectedDiscription = DataBase.share.fetchBodyes()[indexPath.row]
-        let selectedDate = DataBase.share.fetchDate()[indexPath.row]
-        let selectTypeImage = DataBase.share.fetchType()[indexPath.row]
-        
-        // Преобразование TimeInterval в Date
-        let date = Date(timeIntervalSince1970: selectedDate)
-        
-        // Форматируем дату для отображения
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .medium
-        dateFormatter.locale = Locale.current
-        
-        // получить reminders
-        var reminders = [Reminder]()
-        let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
-        
-        do {
-            let reminder = try DataBase.share.persistentContainer.viewContext.fetch(fetchRequest)
-            print(reminder)
-            reminders = reminder
-        } catch {
-            print("Failed to fetch reminder: \(error)")
-        }
-        
-        // Инициализируем SecondViewController
+        let reminder = reminders[indexPath.row]
+     
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let eventVC = storyboard.instantiateViewController(withIdentifier: "EventDetailsViewController") as? EventDetailsViewController {
-            eventVC.hidesBottomBarWhenPushed = true  // убрать Таб Бар с экрана
-            
-            // Передаем данные во второй экран
-            eventVC.name = selectedName
-            eventVC.descriptionText = selectedDiscription
-            eventVC.date = dateFormatter.string(from: date)
-            eventVC.type = selectTypeImage
-            eventVC.reminder = reminders[indexPath.row]
-            
-            // Переход на второй экран через push
+            eventVC.hidesBottomBarWhenPushed = true
+            eventVC.reminder = reminder
             navigationController?.pushViewController(eventVC, animated: true)
         }
     }
     
-    // Высота ячейки
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         62
     }

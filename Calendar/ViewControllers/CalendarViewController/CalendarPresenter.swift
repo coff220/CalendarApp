@@ -29,27 +29,13 @@ class CalendarPresenter: CalendarPresenterProtocol {
     
     private var currentDate = Date()
     private let calendar = Calendar.current
-    private var dateComponents = DateComponents()
-    private let dateFormatter = DateFormatter()
     private var calendarDay: [CalendarDay] = []
-    
-    func isSundayFirstDayOfWeek() -> Bool {
-        let firstWeekday = calendar.firstWeekday
-        switch firstWeekday {
-        case 1:
-            print("Sunday is the first day of the week.")
-            return true
-        case 2:
-            print("Monday is the first day of the week.")
-            return false
-        default:
-            // In some locales it can be something else (e.g., Saturday = 7, etc.)
-            print("The first day of the week is neither Sunday nor Monday. It's day number \(firstWeekday) in this locale.")
-            return true
-        }
-    }
     weak var delegate: CalendarViewControllerProtocol?
     
+    func isSundayFirstDayOfWeek() -> Bool {
+        calendar.firstWeekday == 1 ? true : false
+    }
+  
     func nextMonthDidTap() {
         currentDate = Date.nextMonth(after: currentDate)
         updateCurrentMonth()
@@ -65,56 +51,35 @@ class CalendarPresenter: CalendarPresenterProtocol {
         updateCurrentMonth()
     }
     
-    // количество ячеек в CollectionView
     func countItems() -> Int {
         calendarDay.count
     }
     
-    // текст для monthLabel
     func monthYearText() -> String {
         " \(currentDate.currentMonth) \(currentDate.year) "
     }
     
-    // названия дней недели для weekDaysStackView
     func weekDays() -> [String?] {
-        // Get the standard localized weekday symbols
         let symbols = calendar.shortWeekdaySymbols
-        
-        // "weekdaySymbols" is typically indexed with Sunday=0, Monday=1, etc.
-        // But "calendar.firstWeekday" is typically 1 for Sunday, 2 for Monday, etc.
-        // We can align these indices by shifting the array.
-        
-        // firstWeekday is 1-based; convert to 0-based by subtracting 1
         let firstWeekdayIndex = calendar.firstWeekday - 1
-        
-        // Separate the array into two slices and re-append
         let firstSlice = symbols[firstWeekdayIndex..<symbols.count]
         let secondSlice = symbols[0..<firstWeekdayIndex]
         
-        // Combine into the final array
         return Array(firstSlice) + Array(secondSlice)
-        
     }
     
     // номер первого дня недели в текущем месяце
     func firstWeekDayOfMonth() -> Int {
-        dateComponents = DateComponents(year: currentDate.year, month: currentDate.numberOfCurrentMonth, day: 1)
+        let dateComponents = DateComponents(year: currentDate.year, month: currentDate.numberOfCurrentMonth, day: 1)
         if let firstDayOfMonth = calendar.date(from: dateComponents) {
             let dayOfWeekSunday = calendar.component(.weekday, from: firstDayOfMonth)
-            
-            var dayOfWeakMonday: Int
-            if dayOfWeekSunday == 1 {
-                dayOfWeakMonday = 7
-            } else {
-                dayOfWeakMonday = dayOfWeekSunday - 1
-            }
+            let dayOfWeakMonday = dayOfWeekSunday == 1 ? 7 : dayOfWeekSunday - 1
             
             if isSundayFirstDayOfWeek() {
                 return dayOfWeekSunday
             } else {
                 return dayOfWeakMonday
             }
-            
         } else {
             return 1
         }
@@ -126,21 +91,21 @@ class CalendarPresenter: CalendarPresenterProtocol {
     
     func viewDidLoad() {
         updateCalendarDays()
-        print(currentDate.stringDay)
     }
     
-    // сегодняшнее число
     func today() -> Int {
-        let today = calendar.component(.day, from: currentDate)
-        return today
+        return calendar.component(.day, from: currentDate)
     }
     
     func updateCurrentMonth() {
         updateCalendarDays()
         delegate?.reloadData()
     }
+}
+
+private extension CalendarPresenter {
     
-    private func cellTextColor(date: Date) -> UIColor {
+    func cellTextColor(date: Date) -> UIColor {
         var color: UIColor!
         
         if date.isInCurrentMonth(date: currentDate) {
@@ -163,14 +128,11 @@ class CalendarPresenter: CalendarPresenterProtocol {
         
         return color
     }
-}
-
-private extension CalendarPresenter {
     
     func updateCalendarDays() {
         calendarDay.removeAll()
 
-        var daysBeforeFirstDayOfMonth = firstWeekDayOfMonth() - 1
+        let daysBeforeFirstDayOfMonth = firstWeekDayOfMonth() - 1
         // количество ячеек в коллекшнвью
        
         var currentDateArraySize: Int {
@@ -194,6 +156,5 @@ private extension CalendarPresenter {
             )
             calendarDay.append(day)
         }
-
     }
 }

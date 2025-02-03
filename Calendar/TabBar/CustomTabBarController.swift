@@ -12,29 +12,23 @@ class CustomTabBarController: UITabBarController {
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        tabBar.isTranslucent = false
-      tabBar.tintColor = .white //
+        tabBar.tintColor = .white
         delegate = self
-        
-        // Instantiate view controllers
-      // swiftlint:disable:next force_cast
+
+        // swiftlint:disable:next force_cast
         let homeNav = self.storyboard?.instantiateViewController(withIdentifier: "HomeNav") as! UINavigationController
         
-      // swiftlint:disable:next force_cast
+        // swiftlint:disable:next force_cast
         let settingsNav = self.storyboard?.instantiateViewController(withIdentifier: "SettingsNav") as! UINavigationController
         
-      // swiftlint:disable:next force_cast
+        // swiftlint:disable:next force_cast
         let newPostVC = self.storyboard?.instantiateViewController(withIdentifier: "NoteViewController") as! UINavigationController
         
-        // Create TabBar items
+        
         homeNav.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "home"), selectedImage: UIImage(named: "homeSelected"))
-        
         settingsNav.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "settings"), selectedImage: UIImage(named: "settingsSelected"))
-        
         newPostVC.tabBarItem = UITabBarItem(title: nil, image: nil, selectedImage: nil)
         
-        // Assign viewControllers to tabBarController
         let viewControllers = [homeNav, newPostVC, settingsNav]
         self.setViewControllers(viewControllers, animated: false)
         
@@ -46,7 +40,7 @@ class CustomTabBarController: UITabBarController {
     }
     
     func routeToCreateNewAd() {
-        ((viewControllers?.first as? UINavigationController)?.viewControllers.first as? CalendarViewController)?.show()
+        ((viewControllers?.first as? UINavigationController)?.viewControllers.first as? CalendarViewController)?.showAddEvent()
     }
 }
 
@@ -56,9 +50,7 @@ extension CustomTabBarController: UITabBarControllerDelegate {
         guard let selectedIndex = tabBarController.viewControllers?.firstIndex(of: viewController) else {
             return true
         }
-        
-        // Your middle tab bar item index.
-        // In my case it's 1.
+
         if selectedIndex == 1 {
             return false
         }
@@ -66,22 +58,3 @@ extension CustomTabBarController: UITabBarControllerDelegate {
         return true
     }
 }
-//
-//// MARK: - View Controllers
-//class HomeViewController: UIViewController {
-//    override func viewDidLoad() {
-//        navigationItem.title = "Home"
-//    }
-//}
-//
-//class SettingsViewController: UIViewController {
-//    override func viewDidLoad() {
-//        navigationItem.title = "Settings"
-//    }
-//}
-//
-//class NewPostViewController: UIViewController {
-//    override func viewDidLoad() {
-//        navigationItem.title = "New Post"
-//    }
-//}

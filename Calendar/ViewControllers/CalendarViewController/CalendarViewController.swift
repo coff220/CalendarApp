@@ -14,54 +14,42 @@ protocol CalendarViewControllerProtocol: AnyObject {
 
 class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     
-    @IBOutlet weak var weekDaysStackView: UIStackView!
-    @IBOutlet weak var monthLabel: UILabel!
-    @IBOutlet weak var nextButton: UIButton!
-    @IBOutlet weak var previousButton: UIButton!
-    @IBOutlet weak var dateCollectionView: UICollectionView!
-    @IBOutlet weak var NoEventsImageView: UIImageView!
-    @IBOutlet weak var eventsTableView: UITableView!
-    @IBOutlet weak var eventsLabel: UILabel!
+    @IBOutlet private weak var weekDaysStackView: UIStackView!
+    @IBOutlet private weak var monthLabel: UILabel!
+    @IBOutlet private weak var nextButton: UIButton!
+    @IBOutlet private weak var previousButton: UIButton!
+    @IBOutlet private weak var dateCollectionView: UICollectionView!
+    @IBOutlet private weak var NoEventsImageView: UIImageView!
+    @IBOutlet private weak var eventsTableView: UITableView!
+    @IBOutlet private weak var eventsLabel: UILabel!
     
-    @IBOutlet weak var secondWeekDayLabel: UILabel!
-    @IBOutlet weak var firstWeekDayLabel: UILabel!
-    @IBOutlet weak var thirdWeekDayLabel: UILabel!
-    @IBOutlet weak var fourthWeekDayLabel: UILabel!
-    @IBOutlet weak var fifthWeekDayLabel: UILabel!
-    @IBOutlet weak var sixthWeekDayLabel: UILabel!
-    @IBOutlet weak var seventhWeekDayLabel: UILabel!
+    @IBOutlet private weak var secondWeekDayLabel: UILabel!
+    @IBOutlet private weak var firstWeekDayLabel: UILabel!
+    @IBOutlet private weak var thirdWeekDayLabel: UILabel!
+    @IBOutlet private weak var fourthWeekDayLabel: UILabel!
+    @IBOutlet private weak var fifthWeekDayLabel: UILabel!
+    @IBOutlet private weak var sixthWeekDayLabel: UILabel!
+    @IBOutlet private weak var seventhWeekDayLabel: UILabel!
     
+    var reminders = DataBase.share.fetchReminders()
     var presenter: CalendarPresenterProtocol = CalendarPresenter()
-    
-    func reloadData() {
-        eventsTableView.reloadData()
-        dateCollectionView.reloadData()
-        monthLabel.text =  presenter.monthYearText()
-        //  presenter.updateCurrentMonth()
-    }
-    
+
     @IBAction func todayButtonAction(_ sender: Any) {
         presenter.todayDidTap()
     }
     
     @IBAction func previousButtonAction(_ sender: Any) {
         presenter.previousMonthDidTap()
-            // анимация лейбла
-//        UIView.transition(with: monthLabel, duration: 0.3, options: .transitionCrossDissolve, animations: nil, completion: nil)
-
     }
     
     @IBAction func nextButtonAction(_ sender: Any) {
         presenter.nextMonthDidTap()
-            // анимация лейбла
-//        UIView.transition(with: monthLabel, duration: 0.3, options: .transitionCrossDissolve, animations: nil, completion: nil)
-
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
-        swipe()
+        configureSwipe()
         presenter.delegate = self
         presenter.viewDidLoad()
         dateCollectionView.delegate = self
@@ -69,29 +57,15 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         eventsTableView.dataSource = self
         eventsTableView.delegate = self
         eventsTableView.register(UINib(nibName: "EventsTableViewCell", bundle: nil), forCellReuseIdentifier: "EventsTableViewCell")
-        
-//        // Подписываемся на уведомление смены дня
-//        NotificationCenter.default.addObserver(self, 
-//                                               selector: #selector(refreshForNewDay), 
-//                                               name: NSNotification.Name.NSCalendarDayChanged,
-//                                               object: nil)
-//    }
-//    @objc func refreshForNewDay() {
-//        print("Day changed!")
-//        DispatchQueue.main.sync {
-//            dateCollectionView.reloadData() // Обновляем коллекцию
-//        }
-//    }
-//    deinit {
-//        NotificationCenter.default.removeObserver(self) // Удаляем наблюдателя
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        reminders = DataBase.share.fetchReminders()
         reloadData()
     }
     
-    func configure () {
+    private func configure() {
         backgroundImage()
         eventsLabel.isHidden = true
         
@@ -108,8 +82,7 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         eventsLabel.text = "Events"
         
         NoEventsImageView.image = UIImage(named: "NoEvents")
-        
-        // убираем скрол CollectionView
+
         dateCollectionView.isScrollEnabled = false
 
         for days in 0..<presenter.weekDays().count {
@@ -123,17 +96,16 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
             label.textColor = .mainDigit
         }
         weekDaysStackViewSetup()
-        
     }
     
-    func swipe() {
+    private func configureSwipe() {
         // Добавляем жесты свайпа для collectionView
-            let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
-            swipeLeft.direction = .left
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        swipeLeft.direction = .left
         dateCollectionView.addGestureRecognizer(swipeLeft)
-
-            let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
-            swipeRight.direction = .right
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        swipeRight.direction = .right
         dateCollectionView.addGestureRecognizer(swipeRight)
     }
     
@@ -150,11 +122,10 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     }
     
     func backgroundImage() {
-        // Устанавливаем картинку из assets на фон
         if let backgroundImage = UIImage(named: "darkBG") {
             let backgroundImageView = UIImageView(frame: view.bounds)
             backgroundImageView.image = backgroundImage
-            backgroundImageView.contentMode = .scaleAspectFill // Опционально: чтобы изображение заполнило весь экран
+            backgroundImageView.contentMode = .scaleAspectFill
             backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
             
             // Добавляем изображение как subview
@@ -171,7 +142,7 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         }
     }
     
-    func show() {
+    func showAddEvent() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let navigation = storyboard.instantiateViewController(identifier: "NoteViewController") as? UINavigationController,
         let vc = navigation.viewControllers.first as? NoteViewController else {
@@ -179,6 +150,8 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         }
         
         vc.completion = {
+            self.reminders = DataBase.share.fetchReminders()
+            self.eventsTableView.reloadData()
             self.presenter.updateCurrentMonth()
         }
         present(navigation, animated: true, completion: nil)
@@ -192,6 +165,14 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
             sixthWeekDayLabel.textColor = .mainPurple
             seventhWeekDayLabel.textColor = .mainPurple
         }
+    }
+    
+    // MARK: - CalendarViewControllerProtocol
+    
+    func reloadData() {
+        eventsTableView.reloadData()
+        dateCollectionView.reloadData()
+        monthLabel.text =  presenter.monthYearText()
     }
 }
 
@@ -211,7 +192,6 @@ extension CalendarViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let navigation = storyboard.instantiateViewController(identifier: "NoteViewController") as? UINavigationController,
         let vc = navigation.viewControllers.first as? NoteViewController else {
@@ -219,8 +199,6 @@ extension CalendarViewController: UICollectionViewDataSource {
         }
         
         let selectedDate = presenter.item(at: indexPath.row)
-//        let startOfDay = Calendar.current.startOfDay(for: selectedDate.date)
-//        vc.update(date: startOfDay)
         vc.update(date: selectedDate.date)
         vc.completion = {
             self.presenter.updateCurrentMonth()
@@ -231,7 +209,6 @@ extension CalendarViewController: UICollectionViewDataSource {
 
 extension CalendarViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
         return CGSize(width: collectionView.frame.width / 8, height: collectionView.frame.width / 8)
     }
     
@@ -247,25 +224,25 @@ extension CalendarViewController: UICollectionViewDelegateFlowLayout {
 // MARK: TableView
 extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if !DataBase.share.fetchTitles().isEmpty {
+        if !reminders.isEmpty {
             NoEventsImageView.isHidden = true
             eventsLabel.isHidden = false
         } else {
             NoEventsImageView.isHidden = false
         }
         tableView.separatorStyle = .none  // убрать сеператоры между ячейками
-        return DataBase.share.fetchTitles().count
+        return reminders.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "EventsTableViewCell", for: indexPath) as? EventsTableViewCell else {
             fatalError("Не удалось извлечь кастомную ячейку")
         }
-        cell.eventImage.image = EventType(rawValue: Int(DataBase.share.fetchType()[indexPath.row]))?.image
+        cell.eventImage.image = EventType(rawValue: Int(reminders[indexPath.row].type))?.image
         cell.eventImage.setImageColor(color: .mainPurple)
         
-        cell.titleLabel.text = DataBase.share.fetchTitles()[indexPath.row] // Текст из массива
-        let selectedDate = DataBase.share.fetchDate()[indexPath.row]
+        cell.titleLabel.text = reminders[indexPath.row].title // Текст из массива
+        let selectedDate = reminders[indexPath.row].date
         
         // Преобразование TimeInterval в Date
         let date = Date(timeIntervalSince1970: selectedDate)
@@ -281,20 +258,20 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedName = DataBase.share.fetchTitles()[indexPath.row]
-        let selectedDiscription = DataBase.share.fetchBodyes()[indexPath.row]
-        let selectedDate = DataBase.share.fetchDate()[indexPath.row]
-        let selectTypeImage = DataBase.share.fetchType()[indexPath.row]
-        
-        // Преобразование TimeInterval в Date
-        let date = Date(timeIntervalSince1970: selectedDate)
-        
-        // Форматируем дату для отображения
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .medium
-        dateFormatter.locale = Locale.current
-        
+//        let selectedName = DataBase.share.fetchTitles()[indexPath.row]
+//        let selectedDiscription = DataBase.share.fetchBodyes()[indexPath.row]
+//        let selectedDate = DataBase.share.fetchDate()[indexPath.row]
+//        let selectTypeImage = DataBase.share.fetchType()[indexPath.row]
+//        
+//        // Преобразование TimeInterval в Date
+//        let date = Date(timeIntervalSince1970: selectedDate)
+//        
+//        // Форматируем дату для отображения
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateStyle = .medium
+//        dateFormatter.timeStyle = .medium
+//        dateFormatter.locale = Locale.current
+//        
         // получить reminders
         var reminders = [Reminder]()
         let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
@@ -313,14 +290,16 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
             eventVC.hidesBottomBarWhenPushed = true  // убрать Таб Бар с экрана
             
             // Передаем данные во второй экран
-            eventVC.name = selectedName
-            eventVC.descriptionText = selectedDiscription
-            eventVC.date = dateFormatter.string(from: date)
-            eventVC.type = selectTypeImage
+//            eventVC.name = selectedName
+//            eventVC.descriptionText = selectedDiscription
+//            eventVC.date = dateFormatter.string(from: date)
+//            eventVC.type = selectTypeImage
             eventVC.reminder = reminders[indexPath.row]
             
             eventVC.completion = {
+                self.reminders = DataBase.share.fetchReminders()
                 self.presenter.updateCurrentMonth()
+                self.eventsTableView.reloadData()
             }
             
             // Переход на второй экран через push

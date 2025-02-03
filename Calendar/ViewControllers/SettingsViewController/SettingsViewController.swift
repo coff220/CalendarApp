@@ -8,7 +8,7 @@
 import UIKit
 
 class SettingsViewController: UIViewController {
-
+    
     @IBOutlet weak var themeNameLabel: UILabel!
     @IBOutlet weak var dayFormatLabel: UILabel!
     @IBOutlet weak var firstWeekDayLabel: UILabel!
@@ -25,11 +25,11 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Установка фонового изображения
-                let backgroundImage = UIImageView(frame: UIScreen.main.bounds)
-                backgroundImage.image = UIImage(named: "eventBG") // Ваше изображение
-                backgroundImage.contentMode = .scaleAspectFill
-                view.insertSubview(backgroundImage, at: 0) // Добавляем на задний план
-    
+        let backgroundImage = UIImageView(frame: UIScreen.main.bounds)
+        backgroundImage.image = UIImage(named: "eventBG") // Ваше изображение
+        backgroundImage.contentMode = .scaleAspectFill
+        view.insertSubview(backgroundImage, at: 0) // Добавляем на задний план
+        config()
     }
     
     func config() {
@@ -60,11 +60,11 @@ class SettingsViewController: UIViewController {
         timeStyleLabel.textColor = .mainPurple
     }
     // цвет текста для всех UILabel на экране
-//    private func updateLabelsTextColor(to color: UIColor) {
-//        for subview in view.subviews {
-//            if let label = subview as? UILabel {
-//                label.textColor = color
-//            }
-//        }
-//    }
+    //    private func updateLabelsTextColor(to color: UIColor) {
+    //        for subview in view.subviews {
+    //            if let label = subview as? UILabel {
+    //                label.textColor = color
+    //            }
+    //        }
+    //    }
 }
