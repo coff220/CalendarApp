@@ -198,12 +198,23 @@ extension CalendarViewController: UICollectionViewDataSource {
             return
         }
         
+        let devc = storyboard.instantiateViewController(withIdentifier: "DayEventsViewController") as? DayEventsViewController
+            
+        let edvc = storyboard.instantiateViewController(withIdentifier: "EventDetailsViewController") as? EventDetailsViewController
+        
         let selectedDate = presenter.item(at: indexPath.row)
         vc.update(date: selectedDate.date)
         vc.completion = {
             self.presenter.updateCurrentMonth()
         }
-        present(navigation, animated: true, completion: nil)
+        
+        if !selectedDate.isActive {
+            present(navigation, animated: true, completion: nil)
+        } else {
+            let remindersForSelectedDate = DataBase.share.fetchDayReminders(for: selectedDate.date)
+            devc!.reminders = remindersForSelectedDate
+            navigationController?.pushViewController(devc!, animated: true)
+        }
     }
 }
 

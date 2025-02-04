@@ -16,13 +16,13 @@ class DayEventsViewController: UIViewController {
     @IBOutlet weak var dateLabel: UILabel!
     
     var reminders = DataBase.share.fetchReminders()
+    var selectedDate = Date()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         backgroundImage()
-        dateLabel.textColor = .mainDigit
-        dateLabel.font = UIFont(name: "VarelaRound-Regular", size: 21)
+        dateLabelSetup()
         eventLabel.textColor = .mainDigit
         eventLabel.font = UIFont(name: "VarelaRound-Regular", size: 21)
         
@@ -30,6 +30,16 @@ class DayEventsViewController: UIViewController {
         eventsTableView.delegate = self
         eventsTableView.register(UINib(nibName: "EventsTableViewCell", bundle: nil), forCellReuseIdentifier: "EventsTableViewCell")
         eventsTableView.backgroundColor = .clear
+    }
+    
+    func dateLabelSetup() {
+        dateLabel.textColor = .mainDigit
+        dateLabel.font = UIFont(name: "VarelaRound-Regular", size: 21)
+        let date = Date(timeIntervalSince1970: reminders[0].date)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "d MMMM yyyy"
+        dateFormatter.locale = Locale.current
+        dateLabel.text = dateFormatter.string(from: date)
     }
     
     func backgroundImage() {

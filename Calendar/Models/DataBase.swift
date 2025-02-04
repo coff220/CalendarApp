@@ -88,4 +88,27 @@ class DataBase {
             return []
         }
     }
+    
+    func fetchDayReminders(for date: Date) -> [Reminder] {
+        let context = persistentContainer.viewContext
+        let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
+        
+        // Создаем начало и конец дня
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: date)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        
+        let startOfDayTimeInterval = startOfDay.timeIntervalSince1970
+        let endOfDayTimeInterval = endOfDay.timeIntervalSince1970
+        // Фильтр по дате
+        fetchRequest.predicate = NSPredicate(format: "date >= %f AND date < %f", startOfDayTimeInterval, endOfDayTimeInterval)
+        
+        do {
+             let reminders = try context.fetch(fetchRequest)
+            return reminders
+        } catch {
+            print("Failed to fetch reminders: \(error)")
+            return []
+        }
+    }
 }
