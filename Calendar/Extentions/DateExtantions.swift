@@ -29,14 +29,7 @@ extension Date {
     var daysInPreviousMounth: Int {
         var components = Calendar.current.dateComponents([.month], from: self)
         components.day = 1
-//        var previousMonth = 0
-//        if let currentMounth = components.month {
-//            if currentMounth > 1 {
-//                previousMonth = currentMounth - 1
-//            } else {
-//                previousMonth = 12
-//            }
-//        }
+        
         let oneDayInterval = TimeInterval(60 * 60 * 24)
         let lastDeyOfPreviousMonth = Calendar.current.date(from: components)! - oneDayInterval
         let lastComponents = Calendar.current.dateComponents([.day], from: lastDeyOfPreviousMonth)
@@ -68,7 +61,7 @@ extension Date {
     
     func startOfMonth() -> Date {
         let interval = Calendar.current.dateInterval(of: .month, for: self)
-        return (interval?.start.toLocalTime())! // Without toLocalTime it give last months last date
+        return (interval?.start.toLocalTime())! 
     }
     
     func toLocalTime() -> Date {
@@ -95,39 +88,24 @@ extension Date {
     }
     
     func isDateToday(date: Date) -> Bool {
-        let calendar = Calendar.current
-        return calendar.isDateInToday(date)
+        return Calendar.current.isDateInToday(date)
     }
     
-    // Проверяет, является ли текущая дата выходным днём.
     func isWeekend() -> Bool {
-        let calendar = Calendar.current
-        return calendar.isDateInWeekend(self)
+        return Calendar.current.isDateInWeekend(self)
     }
     
-        // проверяет принадлежит ли дата текущему месяцу
+    // проверяет принадлежит ли дата текущему месяцу
     func isInCurrentMonth(date: Date) -> Bool {
-            let calendar = Calendar.current
-            let currentMonth = calendar.component(.month, from: date)  // Текущий месяц
-            let currentYear = calendar.component(.year, from: date)    // Текущий год
-            
-            let selectedMonth = calendar.component(.month, from: self)   // Месяц выбранной даты
-            let selectedYear = calendar.component(.year, from: self)     // Год выбранной даты
-            
-            return currentMonth == selectedMonth && currentYear == selectedYear
-        }
-    
-    //    func timeToSeconds(date: Date) -> Int {
-    //        // Получаем текущий календарь
-    //        let calendar = Calendar.current
-    //
-    //        // Извлечение часов и минут
-    //        let hours = calendar.component(.hour, from: date)
-    //        let minutes = calendar.component(.minute, from: date)
-    //
-    //        let seconds = (hours * 3600) + (minutes * 60)
-    //        return seconds
-    //    }
+        let calendar = Calendar.current
+        let currentMonth = calendar.component(.month, from: date)
+        let currentYear = calendar.component(.year, from: date)
+        
+        let selectedMonth = calendar.component(.month, from: self)
+        let selectedYear = calendar.component(.year, from: self)
+        
+        return currentMonth == selectedMonth && currentYear == selectedYear
+    }
     
     static func nextMonth(after date: Date) -> Date {
         let nextMonth = Calendar.current.date(byAdding: .month, value: +1, to: date)

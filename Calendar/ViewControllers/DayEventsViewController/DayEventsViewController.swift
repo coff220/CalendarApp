@@ -43,7 +43,6 @@ class DayEventsViewController: UIViewController {
     }
     
     func backgroundImage() {
-        // Устанавливаем картинку из assets на фон
         if let backgroundImage = UIImage(named: "darkBG") {
             let backgroundImageView = UIImageView(frame: view.bounds)
             backgroundImageView.image = backgroundImage

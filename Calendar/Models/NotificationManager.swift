@@ -42,7 +42,7 @@ class NotificationManager: NSObject {
         
  //    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: date, repeats: false)
         
-      let request = UNNotificationRequest(identifier: "notification", content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: title!, content: content, trigger: trigger)
       center.add(request) { (error) in
         print(String(describing: error?.localizedDescription))
       }

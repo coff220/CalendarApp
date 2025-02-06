@@ -29,6 +29,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     
     private var presenter: NotePresenterProtocol = NotePresenter()
     private var selectedDate = Date()
+    var reminder = Reminder()
     
     var currentDate: Date?
     
@@ -45,7 +46,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         ])
         
         if let text = noteTextField.text, text.isEmpty {
-                    // Если пусто, подсвечиваем красным
+            // Если пусто, подсвечиваем красным
             noteTextField.layer.borderColor = UIColor.red.cgColor
         } else {
             presenter.saveNote(
@@ -147,18 +148,18 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     }
     
     @objc func textFieldTextChanged(_ textField: UITextField) {
-            // Проверяем, введён ли хотя бы один символ
-            if let text = textField.text, !text.isEmpty {
-                textField.layer.borderWidth = 1
-                textField.layer.borderColor = UIColor.border.cgColor // Изменяем цвет бордера
-                
-            }
+        // Проверяем, введён ли хотя бы один символ
+        if let text = textField.text, !text.isEmpty {
+            textField.layer.borderWidth = 1
+            textField.layer.borderColor = UIColor.border.cgColor // Изменяем цвет бордера
+            
         }
+    }
     
-//    // Метод делегата: вызывается, когда начинается редактирование
-//        func textFieldDidBeginEditing(_ textField: UITextField) {
-//            textField.layer.borderColor = UIColor.blue.cgColor // Меняем цвет бордера
-//        }
+    //    // Метод делегата: вызывается, когда начинается редактирование
+    //        func textFieldDidBeginEditing(_ textField: UITextField) {
+    //            textField.layer.borderColor = UIColor.blue.cgColor // Меняем цвет бордера
+    //        }
     
     func setupNoteTextView() {
         noteTextView.backgroundColor = .fills
@@ -244,13 +245,10 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     }
     
     @objc private func timeChanged(_ sender: UIDatePicker) {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "HH:mm"
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
         timeTextField.text = formatter.string(from: sender.date)
-            
-//            // Сохранение (если нужно)
-//            UserDefaults.standard.set(textField.text, forKey: "selectedDate")
-        }
+    }
     
     func setupDateTextField() {
         dateTextField.backgroundColor = .fills
@@ -272,7 +270,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         formatter.dateStyle = .long
         dateTextField.text = formatter.string(from: startOfDay)
         dateTextField.font = UIFont(name: "VarelaRound-Regular", size: 17)
-                
+        
         // Устанавливаем DatePicker как inputView для TextField
         dateTextField.inputView = datePicker
         
@@ -373,15 +371,6 @@ extension NoteViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         toolbar.isUserInteractionEnabled = true
         yearlyTextField.inputAccessoryView = toolbar
     }
-    
-//    // Запрещаем ввод с клавиатуры
-//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//        // Запрещаем ввод текста только в yearlyTextField
-//        if textField == yearlyTextField {
-//            return false
-//        }
-//        return true  // Разрешаем ввод в других полях
-//    }
     
     // Обработка выбора
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {

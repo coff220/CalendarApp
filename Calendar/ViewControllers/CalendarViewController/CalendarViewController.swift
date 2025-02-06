@@ -200,9 +200,10 @@ extension CalendarViewController: UICollectionViewDataSource {
         
         let devc = storyboard.instantiateViewController(withIdentifier: "DayEventsViewController") as? DayEventsViewController
             
-        let edvc = storyboard.instantiateViewController(withIdentifier: "EventDetailsViewController") as? EventDetailsViewController
+        let eventVC = storyboard.instantiateViewController(withIdentifier: "EventDetailsViewController") as? EventDetailsViewController
         
         let selectedDate = presenter.item(at: indexPath.row)
+        vc.reminder = reminders[indexPath.row]
         vc.update(date: selectedDate.date)
         vc.completion = {
             self.presenter.updateCurrentMonth()
@@ -210,10 +211,25 @@ extension CalendarViewController: UICollectionViewDataSource {
         
         if !selectedDate.isActive {
             present(navigation, animated: true, completion: nil)
-        } else {
+            
+        } else if DataBase.share.fetchDayReminders(for: selectedDate.date).count > 1 {
             let remindersForSelectedDate = DataBase.share.fetchDayReminders(for: selectedDate.date)
             devc!.reminders = remindersForSelectedDate
             navigationController?.pushViewController(devc!, animated: true)
+            
+        } else {
+            eventVC?.hidesBottomBarWhenPushed = true  // убрать Таб Бар с экрана
+            let remindersForSelectedDate = DataBase.share.fetchDayReminders(for: selectedDate.date)
+            eventVC!.reminder = remindersForSelectedDate[0]
+            
+            eventVC?.completion = {
+                self.reminders = DataBase.share.fetchReminders()
+                self.presenter.updateCurrentMonth()
+                self.eventsTableView.reloadData()
+            }
+            
+            // Переход на второй экран через push
+            navigationController?.pushViewController(eventVC!, animated: true)
         }
     }
 }
@@ -269,20 +285,6 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let selectedName = DataBase.share.fetchTitles()[indexPath.row]
-//        let selectedDiscription = DataBase.share.fetchBodyes()[indexPath.row]
-//        let selectedDate = DataBase.share.fetchDate()[indexPath.row]
-//        let selectTypeImage = DataBase.share.fetchType()[indexPath.row]
-//        
-//        // Преобразование TimeInterval в Date
-//        let date = Date(timeIntervalSince1970: selectedDate)
-//        
-//        // Форматируем дату для отображения
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateStyle = .medium
-//        dateFormatter.timeStyle = .medium
-//        dateFormatter.locale = Locale.current
-//        
         // получить reminders
         var reminders = [Reminder]()
         let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
@@ -299,12 +301,6 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let eventVC = storyboard.instantiateViewController(withIdentifier: "EventDetailsViewController") as? EventDetailsViewController {
             eventVC.hidesBottomBarWhenPushed = true  // убрать Таб Бар с экрана
-            
-            // Передаем данные во второй экран
-//            eventVC.name = selectedName
-//            eventVC.descriptionText = selectedDiscription
-//            eventVC.date = dateFormatter.string(from: date)
-//            eventVC.type = selectTypeImage
             eventVC.reminder = reminders[indexPath.row]
             
             eventVC.completion = {

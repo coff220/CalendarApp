@@ -43,6 +43,7 @@ class EventDetailsViewController: UIViewController {
         // переход на NoteViewController
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let noteVC = storyboard.instantiateViewController(withIdentifier: "NoteViewController") as? NoteViewController {
+            noteVC.reminder = reminder
             navigationController?.pushViewController(noteVC, animated: true)
         }
     }

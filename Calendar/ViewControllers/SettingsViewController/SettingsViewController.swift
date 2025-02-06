@@ -59,12 +59,4 @@ class SettingsViewController: UIViewController {
         firstWeekDayLabel.textColor = .greySettingsVC
         timeStyleLabel.textColor = .mainPurple
     }
-    // цвет текста для всех UILabel на экране
-    //    private func updateLabelsTextColor(to color: UIColor) {
-    //        for subview in view.subviews {
-    //            if let label = subview as? UILabel {
-    //                label.textColor = color
-    //            }
-    //        }
-    //    }
 }
