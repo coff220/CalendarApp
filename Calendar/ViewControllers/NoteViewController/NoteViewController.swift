@@ -29,7 +29,8 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     
     private var presenter: NotePresenterProtocol = NotePresenter()
     private var selectedDate = Date()
-    var reminder = Reminder()
+    var reminder: Reminder?
+    var headLabelText = ""
     
     var currentDate: Date?
     
@@ -37,6 +38,10 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     
     let options = ["Yearly", "Once"]
     let RepeatPickerView = UIPickerView()
+    var id = ""
+    
+//    var reminders = DataBase.share.fetchReminders()
+//    var reminderIDs: [String] { reminders.map { $0.id! } }
     
     @IBAction func saveNoteTapped(_ sender: Any) {
         
@@ -48,13 +53,27 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         if let text = noteTextField.text, text.isEmpty {
             // Если пусто, подсвечиваем красным
             noteTextField.layer.borderColor = UIColor.red.cgColor
+            return
+        }
+        
+        if let reminder = reminder {
+            presenter.update(
+                title: noteTextField.text,
+                body: noteTextView.text,
+                date: datePicker.date,
+                time: timePicker.date,
+                type: Int64(eventSegmentControl.selectedSegmentIndex),
+                id: id)
+            completion?()
+            dismiss(animated: true, completion: nil)
         } else {
             presenter.saveNote(
                 title: noteTextField.text,
                 body: noteTextView.text,
                 date: datePicker.date,
                 time: timePicker.date,
-                type: Int64(eventSegmentControl.selectedSegmentIndex))
+                type: Int64(eventSegmentControl.selectedSegmentIndex),
+                id: id)
             completion?()
             dismiss(animated: true, completion: nil)
         }
@@ -72,11 +91,21 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         setupSaveButton()
         backgroundImage()
         
+        getID()
+        
         configure()
     }
     
+    func getID() {
+        if reminder != nil {
+            id = (reminder?.id)!
+        } else {
+            id = UUID().uuidString
+        }
+    }
+    
     func configure() {
-        headLabel.text = "Add Event"
+        headLabel.text = headLabelText
         headLabel.font = UIFont(name: "VarelaRound-Regular", size: 17)
         noteTextField.returnKeyType = .next
         noteTextView.returnKeyType = .done
@@ -133,6 +162,9 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         eventSegmentControl.layer.borderWidth = 1
         eventSegmentControl.layer.cornerRadius = 8
         eventSegmentControl.layer.borderColor = UIColor.border.cgColor
+        if reminder != nil {
+            eventSegmentControl.selectedSegmentIndex = Int(reminder!.type)
+        }
     }
     
     func setupNoteTextField() {
@@ -145,6 +177,9 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         
         // Добавляем обработчик события при изменении текста
         noteTextField.addTarget(self, action: #selector(textFieldTextChanged), for: .editingChanged)
+        if reminder != nil {
+            noteTextField.text = reminder?.title
+        }
     }
     
     @objc func textFieldTextChanged(_ textField: UITextField) {
@@ -168,6 +203,10 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         noteTextView.layer.cornerRadius = 8
         noteTextView.font = UIFont(name: "VarelaRound-Regular", size: 17)
         
+        if reminder != nil {
+            noteTextView.text = reminder?.body
+        }
+        
         // Настройка плейсхолдера
         placeholderLabel.text = "Discription (Optional)"
         placeholderLabel.font = UIFont(name: "VarelaRound-Regular", size: 17)
@@ -179,7 +218,6 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         noteTextView.addSubview(placeholderLabel)
         placeholderLabel.isHidden = !noteTextView.text.isEmpty
     }
-    
     // MARK: - UITextViewDelegate
     
     func textViewDidChange(_ textView: UITextView) {
@@ -199,11 +237,18 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         timeTextField.inputView = timePicker
         timeTextField.layer.cornerRadius = 8
         
-        // Устанавливаем время по умолчанию (10:00)
-        let calendar = Calendar.current
-        var components = DateComponents()
-        components.hour = 10
-        components.minute = 0
+        // Устанавливаем время по умолчанию
+        
+            let calendar = Calendar.current
+            var components = DateComponents()
+        if reminder == nil {
+            components.hour = 10
+            components.minute = 0
+        } else {
+            let date = Date(timeIntervalSince1970: reminder!.date)
+            components.hour = calendar.component(.hour, from: date)
+            components.minute = calendar.component(.minute, from: date)
+        }
         if let defaultDate = calendar.date(from: components) {
             timePicker.date = defaultDate
             // Форматируем время и отображаем в TextField
@@ -261,8 +306,12 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
             datePicker.preferredDatePickerStyle = .wheels
         }
         // Создаем дату, которую нужно установить по умолчанию
+        var dafaultDate = selectedDate
         
-        let dafaultDate = selectedDate
+        if reminder != nil {
+            dafaultDate = Date(timeIntervalSince1970: reminder!.date)
+        }
+        
         let startOfDay = Calendar.current.startOfDay(for: dafaultDate)
         datePicker.date = startOfDay
         let formatter = DateFormatter()

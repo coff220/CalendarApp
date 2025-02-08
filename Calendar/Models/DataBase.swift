@@ -40,12 +40,12 @@ class DataBase {
         saveContext()
     }
     
-    func saveReminder (title: String?, body: String?, date: Double, type: Int64) {
+    func saveReminder (title: String?, body: String?, date: Double, type: Int64, id: String) {
         let reminder = Reminder(context: persistentContainer.viewContext)
         reminder.title = title
         reminder.body = body
         reminder.date = date
-        reminder.id = UUID().uuidString  // создаёт уникальный ID
+        reminder.id = id  // UUID().uuidString создаёт уникальный ID
         reminder.type = type
         saveContext()
     }

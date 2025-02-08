@@ -284,7 +284,7 @@
         <!--Note View Controller-->
         <scene sceneID="5Fa-LE-cVK">
             <objects>
-                <viewController id="kGb-Uk-s6i" customClass="NoteViewController" customModule="BroshchersCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NoteViewController2" id="kGb-Uk-s6i" customClass="NoteViewController" customModule="BroshchersCalendar" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="93A-0K-zIc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

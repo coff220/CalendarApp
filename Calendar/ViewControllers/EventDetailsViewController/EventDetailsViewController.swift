@@ -42,9 +42,11 @@ class EventDetailsViewController: UIViewController {
     @IBAction func editAction(_ sender: Any) {
         // переход на NoteViewController
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let noteVC = storyboard.instantiateViewController(withIdentifier: "NoteViewController") as? NoteViewController {
+        if let noteVC = storyboard.instantiateViewController(withIdentifier: "NoteViewController2") as? NoteViewController {
             noteVC.reminder = reminder
-            navigationController?.pushViewController(noteVC, animated: true)
+            noteVC.headLabelText = "Edit Event"
+           // navigationController?.pushViewController(noteVC, animated: true)
+            present(noteVC, animated: true, completion: nil)
         }
     }
 

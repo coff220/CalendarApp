@@ -57,6 +57,7 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         eventsTableView.dataSource = self
         eventsTableView.delegate = self
         eventsTableView.register(UINib(nibName: "EventsTableViewCell", bundle: nil), forCellReuseIdentifier: "EventsTableViewCell")
+        print(reminders.map{$0.title})
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -203,13 +204,14 @@ extension CalendarViewController: UICollectionViewDataSource {
         let eventVC = storyboard.instantiateViewController(withIdentifier: "EventDetailsViewController") as? EventDetailsViewController
         
         let selectedDate = presenter.item(at: indexPath.row)
-        vc.reminder = reminders[indexPath.row]
+        
         vc.update(date: selectedDate.date)
         vc.completion = {
             self.presenter.updateCurrentMonth()
         }
         
         if !selectedDate.isActive {
+            vc.headLabelText = "Add Event"
             present(navigation, animated: true, completion: nil)
             
         } else if DataBase.share.fetchDayReminders(for: selectedDate.date).count > 1 {
