@@ -14,17 +14,6 @@ protocol NotePresenterProtocol: AnyObject {
 }
 
 class NotePresenter: NotePresenterProtocol {
-
-    lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "Model")
-        container.loadPersistentStores { _, error in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        }
-        return container
-    }()
-    
     // для проверки crashmatic
     func crashApp() {
         fatalError("Приложение упало намеренно для тестирования.")
@@ -48,7 +37,7 @@ class NotePresenter: NotePresenterProtocol {
     }
     
     func update(title: String?, body: String?, date: Date, time: Date, type: Int64, id: String) {
-        let context = persistentContainer.viewContext
+        let context = DataBase.share.persistentContainer.viewContext
         let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         
@@ -58,7 +47,7 @@ class NotePresenter: NotePresenterProtocol {
         let minutes = calendar.component(.minute, from: time)
         let hours = calendar.component(.hour, from: time)
         let fullInterval = date.timeIntervalSince1970 + Double(hours * 3600) + Double(minutes * 60)
-    
+        
         do {
             let results = try context.fetch(fetchRequest)
             if let reminder = results.first {
@@ -67,6 +56,7 @@ class NotePresenter: NotePresenterProtocol {
                 reminder.date = fullInterval
                 reminder.type = type
                 try context.save()
+                NotificationCenter.default.post(name: NSNotification.Name("NoteSaved"), object: nil)
             } else {
                 print("Reminder with id \(id) not found")
             }

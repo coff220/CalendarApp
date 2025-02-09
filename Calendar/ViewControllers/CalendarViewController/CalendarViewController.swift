@@ -57,13 +57,19 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         eventsTableView.dataSource = self
         eventsTableView.delegate = self
         eventsTableView.register(UINib(nibName: "EventsTableViewCell", bundle: nil), forCellReuseIdentifier: "EventsTableViewCell")
-        print(reminders.map{$0.title})
+            // print(reminders.map{$0.title})
+        NotificationCenter.default.addObserver(self, selector: #selector(update), name: NSNotification.Name("NoteSaved"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reminders = DataBase.share.fetchReminders()
         reloadData()
+    }
+    
+    @objc func update() {
+            self.reminders = DataBase.share.fetchReminders()
+            self.eventsTableView.reloadData()
     }
     
     private func configure() {
@@ -170,7 +176,7 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     
     // MARK: - CalendarViewControllerProtocol
     
-    func reloadData() {
+     func reloadData() {
         eventsTableView.reloadData()
         dateCollectionView.reloadData()
         monthLabel.text =  presenter.monthYearText()

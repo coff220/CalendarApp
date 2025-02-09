@@ -46,6 +46,7 @@ class EventDetailsViewController: UIViewController {
             noteVC.reminder = reminder
             noteVC.headLabelText = "Edit Event"
            // navigationController?.pushViewController(noteVC, animated: true)
+            self.navigationController?.popViewController(animated: false)
             present(noteVC, animated: true, completion: nil)
         }
     }

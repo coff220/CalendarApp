@@ -64,8 +64,8 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
                 time: timePicker.date,
                 type: Int64(eventSegmentControl.selectedSegmentIndex),
                 id: id)
-            completion?()
-            dismiss(animated: true, completion: nil)
+            
+            dismiss(animated: true)
         } else {
             presenter.saveNote(
                 title: noteTextField.text,

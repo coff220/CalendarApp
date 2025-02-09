@@ -30,6 +30,7 @@ class CalendarPresenter: CalendarPresenterProtocol {
     private var currentDate = Date()
     private let calendar = Calendar.current
     private var calendarDay: [CalendarDay] = []
+    private var reminders = DataBase.share.fetchReminders()
     weak var delegate: CalendarViewControllerProtocol?
     
     func isSundayFirstDayOfWeek() -> Bool {
