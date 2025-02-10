@@ -213,7 +213,9 @@ extension CalendarViewController: UICollectionViewDataSource {
         
         vc.update(date: selectedDate.date)
         vc.completion = {
+            self.reminders = DataBase.share.fetchReminders()
             self.presenter.updateCurrentMonth()
+            self.eventsTableView.reloadData()
         }
         
         if !selectedDate.isActive {
@@ -226,7 +228,7 @@ extension CalendarViewController: UICollectionViewDataSource {
             navigationController?.pushViewController(devc!, animated: true)
             
         } else {
-            eventVC?.hidesBottomBarWhenPushed = true  // убрать Таб Бар с экрана
+           // eventVC?.hidesBottomBarWhenPushed = true  // убрать Таб Бар с экрана
             let remindersForSelectedDate = DataBase.share.fetchDayReminders(for: selectedDate.date)
             eventVC!.reminder = remindersForSelectedDate[0]
             
@@ -258,26 +260,41 @@ extension CalendarViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: TableView
 extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if !reminders.isEmpty {
+        
+//        let calendar = Calendar.current
+//        let startOfDay = calendar.startOfDay(for: Date()) // Получаем начало текущего дня
+//        let now = startOfDay.timeIntervalSince1970
+//        let filteredReminders = reminders.filter { $0.date >= now }
+//        let sortedReminders = filteredReminders.sorted { $0.date < $1.date }
+        
+        if !sortedReminders().isEmpty {
             NoEventsImageView.isHidden = true
             eventsLabel.isHidden = false
         } else {
             NoEventsImageView.isHidden = false
         }
         tableView.separatorStyle = .none  // убрать сеператоры между ячейками
-        return reminders.count
+        return sortedReminders().count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "EventsTableViewCell", for: indexPath) as? EventsTableViewCell else {
             fatalError("Не удалось извлечь кастомную ячейку")
         }
-        cell.eventImage.image = EventType(rawValue: Int(reminders[indexPath.row].type))?.image
+        
+//        let calendar = Calendar.current
+//        let startOfDay = calendar.startOfDay(for: Date()) // Получаем начало текущего дня
+//        let now = startOfDay.timeIntervalSince1970
+//        let filteredReminders = reminders.filter { $0.date >= now }
+//        let sortedReminders = filteredReminders.sorted { $0.date < $1.date }
+        
+        cell.eventImage.image = EventType(rawValue: Int(sortedReminders()[indexPath.row].type))?.image
         cell.eventImage.setImageColor(color: .mainPurple)
         
-        cell.titleLabel.text = reminders[indexPath.row].title // Текст из массива
-        let selectedDate = reminders[indexPath.row].date
+        cell.titleLabel.text = sortedReminders()[indexPath.row].title // Текст из массива
+        let selectedDate = sortedReminders()[indexPath.row].date
         
         // Преобразование TimeInterval в Date
         let date = Date(timeIntervalSince1970: selectedDate)
@@ -294,22 +311,21 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // получить reminders
-        var reminders = [Reminder]()
-        let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
-        
-        do {
-            let reminder = try DataBase.share.persistentContainer.viewContext.fetch(fetchRequest)
-            print(reminder)
-            reminders = reminder
-        } catch {
-            print("Failed to fetch reminder: \(error)")
-        }
+//        var reminders = [Reminder]()
+//        let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
+//        
+//        do {
+//            let reminder = try DataBase.share.persistentContainer.viewContext.fetch(fetchRequest)
+//            reminders = reminder
+//        } catch {
+//            print("Failed to fetch reminder: \(error)")
+//        }
         
         // Инициализируем SecondViewController
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let eventVC = storyboard.instantiateViewController(withIdentifier: "EventDetailsViewController") as? EventDetailsViewController {
-            eventVC.hidesBottomBarWhenPushed = true  // убрать Таб Бар с экрана
-            eventVC.reminder = reminders[indexPath.row]
+           // eventVC.hidesBottomBarWhenPushed = true  // убрать Таб Бар с экрана
+            eventVC.reminder = sortedReminders()[indexPath.row]
             
             eventVC.completion = {
                 self.reminders = DataBase.share.fetchReminders()
@@ -325,5 +341,14 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
     // Высота ячейки
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         62
+    }
+    
+    func sortedReminders() -> [Reminder] {
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: Date()) // Получаем начало текущего дня
+        let now = startOfDay.timeIntervalSince1970
+        let filteredReminders = reminders.filter { $0.date >= now }
+        let sortedReminders = filteredReminders.sorted { $0.date < $1.date }
+        return sortedReminders
     }
 }

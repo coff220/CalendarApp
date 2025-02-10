@@ -40,9 +40,6 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     let RepeatPickerView = UIPickerView()
     var id = ""
     
-//    var reminders = DataBase.share.fetchReminders()
-//    var reminderIDs: [String] { reminders.map { $0.id! } }
-    
     @IBAction func saveNoteTapped(_ sender: Any) {
         
         Analytics.logEvent("button_click", parameters: [

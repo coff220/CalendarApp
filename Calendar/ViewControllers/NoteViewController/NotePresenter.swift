@@ -29,11 +29,11 @@ class NotePresenter: NotePresenterProtocol {
         let fullInterval = date.timeIntervalSince1970 + Double(hours * 3600) + Double(minutes * 60)
         
         let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
-
+        
         print(" \(components)")
         
         DataBase.share.saveReminder(title: title, body: body, date: fullInterval, type: type, id: id)
-        NotificationManager().sendNonitfication(title: title, body: body, date: date, time: time)
+        NotificationManager().sendNotification(id: id, title: title, body: body, date: date, time: time)
     }
     
     func update(title: String?, body: String?, date: Date, time: Date, type: Int64, id: String) {
@@ -56,6 +56,13 @@ class NotePresenter: NotePresenterProtocol {
                 reminder.date = fullInterval
                 reminder.type = type
                 try context.save()
+                
+                // Удаляем старое уведомление
+                NotificationManager.shared.removeNotification(id: id)
+                
+                // Создаем новое уведомление с обновленными данными
+                NotificationManager.shared.sendNotification(id: id, title: title, body: body, date: date, time: time)
+                
                 NotificationCenter.default.post(name: NSNotification.Name("NoteSaved"), object: nil)
             } else {
                 print("Reminder with id \(id) not found")

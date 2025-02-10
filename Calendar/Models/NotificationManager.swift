@@ -20,7 +20,7 @@ class NotificationManager: NSObject {
         center.delegate = self
     }
     
-    func sendNonitfication(title: String?, body: String?, date: Date, time: Date) {
+    func sendNotification(id: String, title: String?, body: String?, date: Date, time: Date) {
         let content = UNMutableNotificationContent()
         content.title = title ?? "event"
         content.body = body ?? ""
@@ -40,13 +40,16 @@ class NotificationManager: NSObject {
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         
- //    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: date, repeats: false)
-        
-        let request = UNNotificationRequest(identifier: title!, content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
       center.add(request) { (error) in
         print(String(describing: error?.localizedDescription))
       }
     }
+    
+    // Метод для удаления уведомления по ID
+        func removeNotification(id: String) {
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id])
+        }
 }
 
 extension NotificationManager: UNUserNotificationCenterDelegate { // подписываемся на делегат для появлениея алерта при включеном приложении
