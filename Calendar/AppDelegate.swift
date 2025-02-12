@@ -10,7 +10,7 @@ import CoreData
 import FirebaseCore
 @UIApplicationMain
 
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     private let notificationManager = NotificationManager()
     

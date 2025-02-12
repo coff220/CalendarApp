@@ -78,7 +78,9 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        dateTextField.delegate = self
+        timeTextField.delegate = self
+        yearlyTextField.delegate = self
         setupYearlyTextField()
         setupTimeTextField()
         setupDateTextField()
@@ -101,6 +103,12 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         }
     }
     
+    // заперт ввода текста вручную в текстфилды
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        print("Попытка ввести: \(string)")
+        return !(textField == dateTextField || textField == timeTextField || textField == yearlyTextField)
+    }
+
     func configure() {
         headLabel.text = headLabelText
         headLabel.font = UIFont(name: "VarelaRound-Regular", size: 17)
@@ -250,7 +258,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
             timePicker.date = defaultDate
             // Форматируем время и отображаем в TextField
             let formatter = DateFormatter()
-            formatter.timeStyle = .short // Формат: "10:00 AM" или "10:00"
+            formatter.timeStyle = .short
             formatter.dateStyle = .none
             timeTextField.text = formatter.string(from: defaultDate)
         }

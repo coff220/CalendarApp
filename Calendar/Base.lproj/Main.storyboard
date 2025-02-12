@@ -245,6 +245,7 @@
                     <navigationItem key="navigationItem" id="cgm-3U-c5e"/>
                     <connections>
                         <outlet property="NoEventsImageView" destination="hz9-iX-AWr" id="sYf-nl-bWw"/>
+                        <outlet property="currentMonthButton" destination="OfE-Sk-whX" id="wTb-wg-uqn"/>
                         <outlet property="dateCollectionView" destination="5he-cw-gbZ" id="rzJ-Md-TPt"/>
                         <outlet property="eventsLabel" destination="ou6-br-8Iu" id="xtd-uk-tzs"/>
                         <outlet property="eventsTableView" destination="Xov-KF-vAP" id="x0D-56-thu"/>

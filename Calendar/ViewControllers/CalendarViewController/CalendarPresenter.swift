@@ -21,6 +21,7 @@ protocol CalendarPresenterProtocol: AnyObject {
     func today() -> Int
     func updateCurrentMonth()
     func isSundayFirstDayOfWeek() -> Bool
+    func isCurrentMonth() -> Bool
     
     var delegate: CalendarViewControllerProtocol? { get set }
 }
@@ -58,6 +59,10 @@ class CalendarPresenter: CalendarPresenterProtocol {
     
     func monthYearText() -> String {
         " \(currentDate.currentMonth) \(currentDate.year) "
+    }
+    
+    func isCurrentMonth() -> Bool {
+        return !isDateInCurrentMonth(currentDate)
     }
     
     func weekDays() -> [String?] {
@@ -101,6 +106,15 @@ class CalendarPresenter: CalendarPresenterProtocol {
     func updateCurrentMonth() {
         updateCalendarDays()
         delegate?.reloadData()
+    }
+    
+    func isDateInCurrentMonth(_ date: Date) -> Bool {
+        let calendar = Calendar.current
+        let currentComponents = calendar.dateComponents([.year, .month], from: Date())
+        let dateComponents = calendar.dateComponents([.year, .month], from: date)
+        
+        return currentComponents.year == dateComponents.year &&
+               currentComponents.month == dateComponents.month
     }
 }
 

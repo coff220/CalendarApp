@@ -31,19 +31,24 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     @IBOutlet private weak var sixthWeekDayLabel: UILabel!
     @IBOutlet private weak var seventhWeekDayLabel: UILabel!
     
+    @IBOutlet private weak var currentMonthButton: UIButton!
+    
     var reminders = DataBase.share.fetchReminders()
     var presenter: CalendarPresenterProtocol = CalendarPresenter()
 
     @IBAction func todayButtonAction(_ sender: Any) {
         presenter.todayDidTap()
+        currentMonthButton.isEnabled = presenter.isCurrentMonth()
     }
     
     @IBAction func previousButtonAction(_ sender: Any) {
         presenter.previousMonthDidTap()
+        currentMonthButton.isEnabled = presenter.isCurrentMonth()
     }
     
     @IBAction func nextButtonAction(_ sender: Any) {
         presenter.nextMonthDidTap()
+        currentMonthButton.isEnabled = presenter.isCurrentMonth()
     }
     
     override func viewDidLoad() {
@@ -59,6 +64,7 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         eventsTableView.register(UINib(nibName: "EventsTableViewCell", bundle: nil), forCellReuseIdentifier: "EventsTableViewCell")
             // print(reminders.map{$0.title})
         NotificationCenter.default.addObserver(self, selector: #selector(update), name: NSNotification.Name("NoteSaved"), object: nil)
+        currentMonthButton.isEnabled = presenter.isCurrentMonth()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -70,6 +76,8 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     @objc func update() {
             self.reminders = DataBase.share.fetchReminders()
             self.eventsTableView.reloadData()
+        self.presenter.updateCurrentMonth()
+        
     }
     
     private func configure() {
@@ -228,7 +236,6 @@ extension CalendarViewController: UICollectionViewDataSource {
             navigationController?.pushViewController(devc!, animated: true)
             
         } else {
-           // eventVC?.hidesBottomBarWhenPushed = true  // убрать Таб Бар с экрана
             let remindersForSelectedDate = DataBase.share.fetchDayReminders(for: selectedDate.date)
             eventVC!.reminder = remindersForSelectedDate[0]
             
@@ -238,7 +245,6 @@ extension CalendarViewController: UICollectionViewDataSource {
                 self.eventsTableView.reloadData()
             }
             
-            // Переход на второй экран через push
             navigationController?.pushViewController(eventVC!, animated: true)
         }
     }
@@ -262,13 +268,7 @@ extension CalendarViewController: UICollectionViewDelegateFlowLayout {
 extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-//        let calendar = Calendar.current
-//        let startOfDay = calendar.startOfDay(for: Date()) // Получаем начало текущего дня
-//        let now = startOfDay.timeIntervalSince1970
-//        let filteredReminders = reminders.filter { $0.date >= now }
-//        let sortedReminders = filteredReminders.sorted { $0.date < $1.date }
-        
+ 
         if !sortedReminders().isEmpty {
             NoEventsImageView.isHidden = true
             eventsLabel.isHidden = false
@@ -283,12 +283,6 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "EventsTableViewCell", for: indexPath) as? EventsTableViewCell else {
             fatalError("Не удалось извлечь кастомную ячейку")
         }
-        
-//        let calendar = Calendar.current
-//        let startOfDay = calendar.startOfDay(for: Date()) // Получаем начало текущего дня
-//        let now = startOfDay.timeIntervalSince1970
-//        let filteredReminders = reminders.filter { $0.date >= now }
-//        let sortedReminders = filteredReminders.sorted { $0.date < $1.date }
         
         cell.eventImage.image = EventType(rawValue: Int(sortedReminders()[indexPath.row].type))?.image
         cell.eventImage.setImageColor(color: .mainPurple)
@@ -310,16 +304,6 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // получить reminders
-//        var reminders = [Reminder]()
-//        let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
-//        
-//        do {
-//            let reminder = try DataBase.share.persistentContainer.viewContext.fetch(fetchRequest)
-//            reminders = reminder
-//        } catch {
-//            print("Failed to fetch reminder: \(error)")
-//        }
         
         // Инициализируем SecondViewController
         let storyboard = UIStoryboard(name: "Main", bundle: nil)

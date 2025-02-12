@@ -19,6 +19,11 @@ class EventDetailsViewController: UIViewController {
     
     var completion: (() -> Void)?
     var reminder = Reminder()
+    var id: String?
+    var eventTitleFromPush: String = ""
+    var eventBodyFromPush: String = ""
+    var eventDateFromPush: TimeInterval = 0.0
+    var eventTimeFromPush: Date = Date()
     
     @IBAction func deleteAction(_ sender: Any) {
         let alert = UIAlertController(title: "Delete Note?",
