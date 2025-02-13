@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class EventDetailsViewController: UIViewController {
     
@@ -18,12 +19,7 @@ class EventDetailsViewController: UIViewController {
     @IBOutlet weak var nameLabel: UILabel!
     
     var completion: (() -> Void)?
-    var reminder = Reminder()
-    var id: String?
-    var eventTitleFromPush: String = ""
-    var eventBodyFromPush: String = ""
-    var eventDateFromPush: TimeInterval = 0.0
-    var eventTimeFromPush: Date = Date()
+    private var reminder = Reminder()
     
     @IBAction func deleteAction(_ sender: Any) {
         let alert = UIAlertController(title: "Delete Note?",
@@ -50,12 +46,12 @@ class EventDetailsViewController: UIViewController {
         if let noteVC = storyboard.instantiateViewController(withIdentifier: "NoteViewController2") as? NoteViewController {
             noteVC.reminder = reminder
             noteVC.headLabelText = "Edit Event"
-           // navigationController?.pushViewController(noteVC, animated: true)
+            // navigationController?.pushViewController(noteVC, animated: true)
             self.navigationController?.popViewController(animated: false)
             present(noteVC, animated: true, completion: nil)
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         backgroundImage()
@@ -68,7 +64,7 @@ class EventDetailsViewController: UIViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "d MMMM yyyy HH:mm"
         dateFormatter.locale = Locale.current
-    
+        
         discriptionLabel.text = reminder.body
         dateLabel.text = dateFormatter.string(from: date)
         nameLabel.text = reminder.title
@@ -97,6 +93,25 @@ class EventDetailsViewController: UIViewController {
         eventDetaleLabel.font = UIFont(name: "VarelaRound-Regular", size: 21)
     }
     
+    func updateWith( reminder: Reminder?, id: String?) {
+        if reminder != nil {
+            self.reminder = reminder!
+        } else {
+            let context = DataBase.share.persistentContainer.viewContext
+            let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "id == %@", id! as CVarArg)
+            do {
+                let results = try context.fetch(fetchRequest)
+                if let fetchedReminder = results.first {
+                    self.reminder = fetchedReminder
+                } else {
+                    print("Reminder with id \(id!) not found")
+                }
+            } catch {
+                print("Failed to fetch reminder: \(error.localizedDescription)")
+            }
+        }
+    }
     func backgroundImage() {
         // Устанавливаем картинку из assets на фон
         if let backgroundImage = UIImage(named: "darkBG") {

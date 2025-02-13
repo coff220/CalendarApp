@@ -111,12 +111,7 @@ extension NotificationManager: UNUserNotificationCenterDelegate { // подпи�
                 
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 if let eventVC = storyboard.instantiateViewController(withIdentifier: "EventDetailsViewController") as? EventDetailsViewController {
-                    eventVC.id = id
-                    eventVC.eventTitleFromPush = title ?? ""
-                    eventVC.eventBodyFromPush = body ?? ""
-                    eventVC.eventDateFromPush = date.timeIntervalSince1970
-                    eventVC.eventTimeFromPush = time
-                    
+                   eventVC.updateWith(reminder: nil, id: id)
                     navController.pushViewController(eventVC, animated: true)
                 }
             }

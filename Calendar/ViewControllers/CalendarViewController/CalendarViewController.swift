@@ -237,8 +237,7 @@ extension CalendarViewController: UICollectionViewDataSource {
             
         } else {
             let remindersForSelectedDate = DataBase.share.fetchDayReminders(for: selectedDate.date)
-            eventVC!.reminder = remindersForSelectedDate[0]
-            
+            eventVC?.updateWith(reminder: remindersForSelectedDate[0], id: nil)
             eventVC?.completion = {
                 self.reminders = DataBase.share.fetchReminders()
                 self.presenter.updateCurrentMonth()
@@ -308,9 +307,7 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         // Инициализируем SecondViewController
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let eventVC = storyboard.instantiateViewController(withIdentifier: "EventDetailsViewController") as? EventDetailsViewController {
-           // eventVC.hidesBottomBarWhenPushed = true  // убрать Таб Бар с экрана
-            eventVC.reminder = sortedReminders()[indexPath.row]
-            
+            eventVC.updateWith(reminder: sortedReminders()[indexPath.row], id: nil)
             eventVC.completion = {
                 self.reminders = DataBase.share.fetchReminders()
                 self.presenter.updateCurrentMonth()

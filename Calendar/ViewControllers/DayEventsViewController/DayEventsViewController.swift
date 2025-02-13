@@ -104,7 +104,8 @@ extension DayEventsViewController: UITableViewDelegate, UITableViewDataSource {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let eventVC = storyboard.instantiateViewController(withIdentifier: "EventDetailsViewController") as? EventDetailsViewController {
             eventVC.hidesBottomBarWhenPushed = true
-            eventVC.reminder = reminder
+//            eventVC.reminder = reminder
+            eventVC.updateWith(reminder: reminder, id: nil)
             navigationController?.pushViewController(eventVC, animated: true)
         }
     }
