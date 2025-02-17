@@ -26,6 +26,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     
     private let datePicker = UIDatePicker()
     private let timePicker = UIDatePicker()
+    private var savedTime = Date()
     
     private var presenter: NotePresenterProtocol = NotePresenter()
     private var selectedDate = Date()
@@ -94,6 +95,21 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         
         configure()
     }
+    
+    private func loadSavedTime() -> Date {
+        let savedTime = UserDefaults.standard.double(forKey: "savedTime") // Получаем TimeInterval
+        if savedTime > 0 {
+            return Date(timeIntervalSince1970: savedTime) // Преобразуем обратно в Date
+        } else {
+            // Если сохранённого времени нет, вернуть 10:00 по умолчанию
+            let calendar = Calendar.current
+            var defaultComponents = DateComponents()
+            defaultComponents.hour = 10
+            defaultComponents.minute = 0
+            return calendar.date(from: defaultComponents) ?? Date()
+        }
+    }
+
     
     func getID() {
         if reminder != nil {
@@ -247,8 +263,10 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
             let calendar = Calendar.current
             var components = DateComponents()
         if reminder == nil {
-            components.hour = 10
-            components.minute = 0
+            let selectedTime = loadSavedTime()
+            components = calendar.dateComponents([.hour, .minute], from: selectedTime)
+//            components.hour = 10
+//            components.minute = 0
         } else {
             let date = Date(timeIntervalSince1970: reminder!.date)
             components.hour = calendar.component(.hour, from: date)

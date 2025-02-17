@@ -60,7 +60,7 @@ class NotificationManager: NSObject {
 extension NotificationManager: UNUserNotificationCenterDelegate { // подписываемся на делегат для появлениея алерта при включеном приложении
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.sound, .alert]) // ф-ция вызывается когда приложение открыто
+        completionHandler([.sound, .alert, .badge]) // ф-ция вызывается когда приложение открыто
         print("ok1")
     }
     
@@ -68,39 +68,14 @@ extension NotificationManager: UNUserNotificationCenterDelegate { // подпи�
         print("ok2") // срабатывает при нажатии на уведомление
         
         let userInfo = response.notification.request.content.userInfo
-        if let noteID = userInfo["noteID"] as? String,
-               let title = userInfo["title"] as? String?,
-               let body = userInfo["body"] as? String?,
-               let date = userInfo["date"] as? Date,
-               let time = userInfo["time"] as? Date {
+        if let noteID = userInfo["noteID"] as? String {
                 
-            openEventDetails(id: noteID, title: title ?? "", body: body ?? "", date: date, time: time)
+            openEventDetails(id: noteID)
             }
         completionHandler()
     }
     
-//    private func openEventDetails(id: String, title: String?, body: String?, date: Date, time: Date) {
-//        DispatchQueue.main.async {
-//            print("Available Scenes: \(UIApplication.shared.connectedScenes)")
-//            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-//               let window = windowScene.windows.first,
-//               let rootVC = window.rootViewController as? UITabBarController {
-//                
-//                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//                if let eventVC = storyboard.instantiateViewController(withIdentifier: "EventDetailsViewController") as? EventDetailsViewController {
-//                    eventVC.id = id
-//                    eventVC.eventTitleFromPush = title ?? ""
-//                    eventVC.eventBodyFromPush = body ?? ""
-//                    eventVC.eventDateFromPush = date.timeIntervalSince1970
-//                    eventVC.eventTimeFromPush = time
-//                    
-//                    rootVC.pushViewController(eventVC, animated: true)
-//                }
-//            }
-//        }
-//    }
-    
-    private func openEventDetails(id: String, title: String?, body: String?, date: Date, time: Date) {
+    private func openEventDetails(id: String) {
         DispatchQueue.main.async {
             print("Available Scenes: \(UIApplication.shared.connectedScenes)")
             

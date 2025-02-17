@@ -21,6 +21,7 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
     @IBOutlet private weak var dateCollectionView: UICollectionView!
     @IBOutlet private weak var NoEventsImageView: UIImageView!
     @IBOutlet private weak var eventsTableView: UITableView!
+  //  @IBOutlet weak var eventsTableViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var eventsLabel: UILabel!
     
     @IBOutlet private weak var secondWeekDayLabel: UILabel!
@@ -65,6 +66,8 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
             // print(reminders.map{$0.title})
         NotificationCenter.default.addObserver(self, selector: #selector(update), name: NSNotification.Name("NoteSaved"), object: nil)
         currentMonthButton.isEnabled = presenter.isCurrentMonth()
+        
+      //  swipeEventsTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -112,7 +115,41 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         }
         weekDaysStackViewSetup()
     }
-    
+//    private func swipeEventsTableView() {
+//        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe2(_:)))
+//            swipeUp.direction = .up
+//        eventsTableView.addGestureRecognizer(swipeUp)
+//
+//            let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe2(_:)))
+//            swipeDown.direction = .down
+//        eventsTableView.addGestureRecognizer(swipeDown)
+//    }
+//    
+//    @objc func handleSwipe2(_ gesture: UISwipeGestureRecognizer) {
+//        if gesture.direction == .up {
+//            expandTableView()
+//        } else if gesture.direction == .down {
+//            collapseTableView()
+//        }
+//    }
+//
+//    func expandTableView() {
+//        eventsTableViewHeightConstraint.constant = UIScreen.main.bounds.height
+//        UIView.animate(withDuration: 0.3) {
+//            self.view.layoutIfNeeded()
+//        }
+//    }
+//
+//    func collapseTableView() {
+//        let labelBottomY = eventsLabel.frame.maxY // Нижняя граница лейбла
+//        let screenHeight = UIScreen.main.bounds.height
+//        let collapsedHeight = screenHeight - labelBottomY - 16 // Учитываем отступ 16pt
+//
+//        eventsTableViewHeightConstraint.constant = collapsedHeight
+//        UIView.animate(withDuration: 0.3) {
+//            self.view.layoutIfNeeded()
+//        }
+//    }
     private func configureSwipe() {
         // Добавляем жесты свайпа для collectionView
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
