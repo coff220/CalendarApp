@@ -32,7 +32,6 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     private var selectedDate = Date()
     var reminder: Reminder?
     var headLabelText = ""
-    
     var currentDate: Date?
     
     var completion: (() -> Void)?
@@ -110,7 +109,6 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         }
     }
 
-    
     func getID() {
         if reminder != nil {
             id = (reminder?.id)!
@@ -212,11 +210,6 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         }
     }
     
-    //    // Метод делегата: вызывается, когда начинается редактирование
-    //        func textFieldDidBeginEditing(_ textField: UITextField) {
-    //            textField.layer.borderColor = UIColor.blue.cgColor // Меняем цвет бордера
-    //        }
-    
     func setupNoteTextView() {
         noteTextView.backgroundColor = .fills
         noteTextView.layer.borderColor = UIColor.border.cgColor
@@ -257,6 +250,8 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         // Устанавливаем DatePicker как inputView для TextField
         timeTextField.inputView = timePicker
         timeTextField.layer.cornerRadius = 8
+        
+        timeTextField.tintColor = .clear  // прозрачный курсор
         
         // Устанавливаем время по умолчанию
         
@@ -343,6 +338,8 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         dateTextField.text = formatter.string(from: startOfDay)
         dateTextField.font = UIFont(name: "VarelaRound-Regular", size: 17)
         
+        dateTextField.tintColor = .clear  // прозрачный курсор
+        
         // Устанавливаем DatePicker как inputView для TextField
         dateTextField.inputView = datePicker
         
@@ -417,10 +414,11 @@ extension NoteViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         yearlyTextField.backgroundColor = .fills
         yearlyTextField.layer.cornerRadius = 8
         yearlyTextField.font = UIFont(name: "VarelaRound-Regular", size: 17)
+        yearlyTextField.tintColor = .clear  // прозрачный курсор
+        
         // Настройка UIPickerView
         RepeatPickerView.delegate = self
         RepeatPickerView.dataSource = self
-        
         // Связываем UIPickerView с UITextField
         yearlyTextField.inputView = RepeatPickerView
         
@@ -441,7 +439,12 @@ extension NoteViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneTapped))
         toolbar.setItems([doneButton], animated: true)
         toolbar.isUserInteractionEnabled = true
+        doneButton.tintColor = .mainPurple
         yearlyTextField.inputAccessoryView = toolbar
+        
+        // перенос кнопки Done вправо
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        toolbar.setItems([flexibleSpace, doneButton], animated: false)
     }
     
     // Обработка выбора

@@ -36,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UINavigationBar.appearance().tintColor = .mainPurple
         
         // Подсоеденяем к FireBase
-        FirebaseApp.configure() //
+        FirebaseApp.configure()
         return true
     }
     

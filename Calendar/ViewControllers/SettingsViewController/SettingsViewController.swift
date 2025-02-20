@@ -14,7 +14,7 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var notificationsLabel: UILabel!
     @IBOutlet weak var settingsLabel: UILabel!
     @IBOutlet weak var notificationSwitch: UISwitch!
-    
+    @IBOutlet weak var lineView: UIView!
     @IBOutlet weak var timeTextField: UITextField!
     
     private var datePicker: UIDatePicker = {
@@ -73,12 +73,18 @@ class SettingsViewController: UIViewController {
         timeTextField.backgroundColor = .clear
         timeTextField.textColor = .mainDigit
         timeTextField.font = UIFont(name: "VarelaRound-Regular", size: 17)
+        
+        // вызывается при возвращении из background
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive),
+                                               name: UIApplication.didBecomeActiveNotification,
+                                               object: nil)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    @objc private func appDidBecomeActive() {
+        print("Приложение снова активно!")
         checkNotificationPermission()
     }
+    
     func backgroundImageSetup() {
         let backgroundImage = UIImageView(frame: UIScreen.main.bounds)
         backgroundImage.image = UIImage(named: "eventBG") // Ваше изображение
@@ -129,17 +135,18 @@ class SettingsViewController: UIViewController {
     func hideNotificationUI() {
         self.notificationSwitch.isHidden = true
         self.notificationsLabel.isHidden = true
+        self.lineView.isHidden = true
     }
     
     private func showSettingsAlert() {
         let alert = UIAlertController(
-            title: "Уведомления отключены",
-            message: "Чтобы включить уведомления, перейдите в настройки.",
+            title: "Notifications are disabled",
+            message: "To enable notifications, go to Settings.",
             preferredStyle: .alert
         )
         
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Настройки", style: .default) { _ in
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Settings", style: .default) { _ in
             if let url = URL(string: UIApplication.openSettingsURLString) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
@@ -160,44 +167,31 @@ extension SettingsViewController {
         // Добавляем Toolbar с кнопками "Готово"
         let toolbar = UIToolbar()
         toolbar.sizeToFit()
-        let doneButton = UIBarButtonItem(title: "Готово", style: .done, target: self, action: #selector(donePressed))
+        toolbar.tintColor = .mainPurple
+        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(donePressed))
         let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         toolbar.setItems([space, doneButton], animated: false)
         
         timeTextField.inputAccessoryView = toolbar
         
         // Устанавливаем 10:00 по умолчанию в datePicker
-                let defaultDate = Calendar.current.date(bySettingHour: 10, minute: 0, second: 0, of: Date())!
-                datePicker.date = defaultDate
+        let defaultDate = Calendar.current.date(bySettingHour: 10, minute: 0, second: 0, of: Date())!
+        datePicker.date = defaultDate
     }
     
-//    @objc private func donePressed() {
-//        let formatter = DateFormatter()
-//        formatter.timeStyle = .short
-//        let selectedTime = formatter.string(from: datePicker.date)
-//        
-//        timeTextField.text = selectedTime
-//        saveTime(selectedTime) // Сохраняем в UserDefaults
-//        view.endEditing(true)
-//    }
-//    
-//    private func saveTime(_ time: String) {
-//        UserDefaults.standard.set(time, forKey: "savedTime")
-//            UserDefaults.standard.synchronize()
-//    }
     private func saveTime(_ time: Date) {
         UserDefaults.standard.set(time.timeIntervalSince1970, forKey: "savedTime")
         UserDefaults.standard.synchronize()
     }
-
-
+    
+    
     @objc private func donePressed() {
         let selectedTime = datePicker.date
         timeTextField.text = formatTime(selectedTime) // Отобразить в TextField
         saveTime(selectedTime) // Сохранить в UserDefaults
         
         // Скрываем клавиатуру (и DatePicker)
-            timeTextField.resignFirstResponder()
+        timeTextField.resignFirstResponder()
     }
     
     
@@ -207,19 +201,6 @@ extension SettingsViewController {
         formatter.locale = Locale.current
         return formatter.string(from: date)
     }
-
-//   private func loadSavedTime() {
-//        if let savedTime = UserDefaults.standard.string(forKey: "savedTime") {
-//                    timeTextField.text = savedTime
-//                } else {
-//                    // Если времени нет, ставим 10:00 по умолчанию
-//                    let formatter = DateFormatter()
-//                    formatter.timeStyle = .short
-//                    let defaultTime = formatter.string(from: datePicker.date)
-//                    timeTextField.text = defaultTime
-//                    saveTime(defaultTime) // Сохраняем 10:00 как дефолтное
-//                }
-//    }
     
     private func loadSavedTime() {
         if let savedTime = UserDefaults.standard.value(forKey: "savedTime") as? TimeInterval {
@@ -238,5 +219,5 @@ extension SettingsViewController {
             }
         }
     }
-
+    
 }

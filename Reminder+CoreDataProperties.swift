@@ -2,12 +2,13 @@
 //  Reminder+CoreDataProperties.swift
 //  BroshchersCalendar
 //
-//  Created by Viacheslav on 18/01/2025.
+//  Created by Viacheslav on 20/02/2025.
 //
 //
 
 import Foundation
 import CoreData
+
 
 extension Reminder {
 
@@ -20,8 +21,10 @@ extension Reminder {
     @NSManaged public var id: String?
     @NSManaged public var title: String?
     @NSManaged public var type: Int64
+    @NSManaged public var repeats: Int64
 
 }
 
-extension Reminder: Identifiable {
+extension Reminder : Identifiable {
+
 }

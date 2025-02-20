@@ -664,9 +664,9 @@
                                 </constraints>
                             </view>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eQO-yd-vXv">
-                                <rect key="frame" x="277" y="199" width="100" height="32"/>
+                                <rect key="frame" x="302" y="199" width="75" height="32"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="769-0L-gxH"/>
+                                    <constraint firstAttribute="width" constant="75" id="769-0L-gxH"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -698,6 +698,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="fEW-Tq-KZC"/>
                     <connections>
+                        <outlet property="lineView" destination="gaS-vc-KYP" id="83O-pA-t52"/>
                         <outlet property="notificationSwitch" destination="ceI-kR-fDS" id="arE-Yf-t7K"/>
                         <outlet property="notificationsLabel" destination="CUG-9O-pWT" id="Wsl-Lj-moa"/>
                         <outlet property="notifyAtLabel" destination="Wfm-oc-8DP" id="QwL-60-9bR"/>

@@ -20,7 +20,7 @@ class NotePresenter: NotePresenterProtocol {
     }
     
     func saveNote(title: String?, body: String?, date: Date, time: Date, type: Int64, id: String) {
-        // crashApp()
+         crashApp()
         var calendar = Calendar.current
         let currentTimeZone = TimeZone.current
         calendar.timeZone = currentTimeZone // calendar.timeZone = .current

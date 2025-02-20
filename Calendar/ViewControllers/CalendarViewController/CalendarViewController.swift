@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import FirebaseCrashlytics
 
 protocol CalendarViewControllerProtocol: AnyObject {
     func reloadData()
@@ -67,7 +68,13 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         NotificationCenter.default.addObserver(self, selector: #selector(update), name: NSNotification.Name("NoteSaved"), object: nil)
         currentMonthButton.isEnabled = presenter.isCurrentMonth()
         
+        scheduleMidnightUpdate()
       //  swipeEventsTableView()
+        
+        // Логируем ошибку в Crashlytics
+       
+                Crashlytics.crashlytics().log("Открыли главный экран")
+            //   fatalError("Тестовый краш Crashlytics")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -115,6 +122,21 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         }
         weekDaysStackViewSetup()
     }
+    
+    func scheduleMidnightUpdate() {
+        let now = Date()
+        let calendar = Calendar.current
+        let midnight = calendar.nextDate(after: now, matching: DateComponents(hour: 0, minute: 0, second: 0), matchingPolicy: .strict)!
+
+        let secondsUntilMidnight = midnight.timeIntervalSince(now)
+
+        Timer.scheduledTimer(withTimeInterval: secondsUntilMidnight, repeats: false) { _ in
+            self.presenter.updateCurrentMonth()
+            self.eventsTableView.reloadData()
+            self.scheduleMidnightUpdate() // Перезапускаем таймер на следующий день
+        }
+    }
+
 //    private func swipeEventsTableView() {
 //        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe2(_:)))
 //            swipeUp.direction = .up
