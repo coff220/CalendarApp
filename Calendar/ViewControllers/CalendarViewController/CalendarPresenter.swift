@@ -7,6 +7,8 @@
 
 import Foundation
 import UIKit
+import CoreData
+import SwiftUI
 
 protocol CalendarPresenterProtocol: AnyObject {
     func nextMonthDidTap()
@@ -97,6 +99,7 @@ class CalendarPresenter: CalendarPresenterProtocol {
     
     func viewDidLoad() {
         updateCalendarDays()
+        
     }
     
     func today() -> Int {
@@ -144,6 +147,49 @@ private extension CalendarPresenter {
         return color
     }
     
+    func isRepeatableDate(date: Date) -> Bool {
+        let timeInterval: TimeInterval = Date().timeIntervalSince1970 // Ваш timestamp
+        let date = date
+        let calendar = Calendar.current
+        let month = calendar.component(.month, from: date)  // Номер месяца (1-12)
+        let day = calendar.component(.day, from: date)      // День месяца (1-31)
+        var rezult = false
+        
+        var array = getRepeatableDates(context: DataBase.share.persistentContainer.viewContext)
+        for i in array {
+            if i.0 == month && i.1 == day {
+                rezult = true
+                return rezult
+            }
+        }
+        return rezult
+    }
+    
+    // получаем массив тюплов (месяц, день) всех событий
+    func getRepeatableDates(context: NSManagedObjectContext) -> [(Int, Int)] {
+        let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
+        // Фильтруем только повторяющиеся события (repeat == true)
+            fetchRequest.predicate = NSPredicate(format: "repeats == %@", NSNumber(value: 0))
+
+            do {
+                let events = try context.fetch(fetchRequest)
+                let calendar = Calendar.current
+                
+                let eventDates: [(Int, Int)] = events.compactMap { event in
+                    let date = Date(timeIntervalSince1970: event.date) // Преобразуем в Date
+                    let month = calendar.component(.month, from: date) // Получаем номер месяца
+                    let day = calendar.component(.day, from: date)     // Получаем число
+                    
+                    return (month, day)
+                }
+                
+                return eventDates
+            } catch {
+                print("Ошибка при загрузке повторяющихся событий: \(error)")
+                return []
+            }
+    }
+    
     func updateCalendarDays() {
         calendarDay.removeAll()
 
@@ -162,11 +208,20 @@ private extension CalendarPresenter {
         
         for i in -(daysBeforeFirstDayOfMonth)...(currentDateArraySize - daysBeforeFirstDayOfMonth - 1) {
             let date = currentDate.startOfMonth().day(after: i)
+            
+            var activeDay = { [self] in
+                if DataBase.share.getReminders(date: date) == true || isRepeatableDate(date: date) == true {
+                    return true
+                } else {
+                    return false
+                }
+            }
             let day = CalendarDay(
                 title: date.stringDay,
                 isToday: Date().isDateToday(date: date),
-                isActive: DataBase.share.getReminders(date: date),
-                date: date, 
+              //  isActive: DataBase.share.getReminders(date: date),
+                isActive: activeDay(),
+                date: date,
                 textColor: cellTextColor(date: date)
             )
             calendarDay.append(day)

@@ -74,7 +74,7 @@ class CalendarViewController: UIViewController, CalendarViewControllerProtocol {
         // Логируем ошибку в Crashlytics
        
                 Crashlytics.crashlytics().log("Открыли главный экран")
-            //   fatalError("Тестовый краш Crashlytics")
+           //   fatalError("Тестовый краш Crashlytics")
     }
     
     override func viewWillAppear(_ animated: Bool) {

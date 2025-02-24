@@ -37,6 +37,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     var completion: (() -> Void)?
     
     let options = ["Yearly", "Once"]
+    var selectedRepeatMetod = 0
     let RepeatPickerView = UIPickerView()
     var id = ""
     
@@ -60,7 +61,8 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
                 date: datePicker.date,
                 time: timePicker.date,
                 type: Int64(eventSegmentControl.selectedSegmentIndex),
-                id: id)
+                id: id,
+                repeats: Int64(selectedRepeatMetod) )
             
             dismiss(animated: true)
         } else {
@@ -70,7 +72,8 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
                 date: datePicker.date,
                 time: timePicker.date,
                 type: Int64(eventSegmentControl.selectedSegmentIndex),
-                id: id)
+                id: id,
+                repeats: Int64(selectedRepeatMetod))
             completion?()
             dismiss(animated: true, completion: nil)
         }
@@ -450,6 +453,7 @@ extension NoteViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     // Обработка выбора
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         yearlyTextField.text = options[row]
+        selectedRepeatMetod = row
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {

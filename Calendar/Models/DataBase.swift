@@ -40,13 +40,14 @@ class DataBase {
         saveContext()
     }
     
-    func saveReminder (title: String?, body: String?, date: Double, type: Int64, id: String) {
+    func saveReminder (title: String?, body: String?, date: Double, type: Int64, id: String, repeats: Int64) {
         let reminder = Reminder(context: persistentContainer.viewContext)
         reminder.title = title
         reminder.body = body
         reminder.date = date
         reminder.id = id  // UUID().uuidStringсоздаёт уникальный ID
         reminder.type = type
+        reminder.repeats = repeats
         saveContext()
     }
     
@@ -66,6 +67,7 @@ class DataBase {
             // Выполняем запрос
             let reminders = try context.fetch(fetchRequest)
             results = !reminders.isEmpty
+            
         } catch let error as NSError {
             print("Ошибка получения данных: \(error), \(error.userInfo)")
         }
@@ -111,4 +113,26 @@ class DataBase {
             return []
         }
     }
+    
+//    // получаем массив тюплов (месяц, день) всех событий
+//    func getEventDates(context: NSManagedObjectContext) -> [(Int, Int)] {
+//        let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
+//        do {
+//            let events = try context.fetch(fetchRequest)
+//            let calendar = Calendar.current
+//            
+//            let eventDates: [(Int, Int)] = events.compactMap { event in
+//                let date = Date(timeIntervalSince1970: event.date) // Преобразуем в Date
+//                let month = calendar.component(.month, from: date) // Получаем номер месяца
+//                let day = calendar.component(.day, from: date)     // Получаем число
+//                
+//                return (month, day)
+//            }
+//            
+//            return eventDates
+//        } catch {
+//            print("Ошибка при загрузке событий: \(error)")
+//            return []
+//        }
+//    }
 }

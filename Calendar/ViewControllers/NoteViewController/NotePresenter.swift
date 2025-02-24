@@ -9,8 +9,8 @@ import Foundation
 import CoreData
 
 protocol NotePresenterProtocol: AnyObject {
-    func saveNote(title: String?, body: String?, date: Date, time: Date, type: Int64, id: String)
-    func update(title: String?, body: String?, date: Date, time: Date, type: Int64, id: String)
+    func saveNote(title: String?, body: String?, date: Date, time: Date, type: Int64, id: String, repeats: Int64)
+    func update(title: String?, body: String?, date: Date, time: Date, type: Int64, id: String, repeats: Int64)
 }
 
 class NotePresenter: NotePresenterProtocol {
@@ -19,8 +19,8 @@ class NotePresenter: NotePresenterProtocol {
         fatalError("Приложение упало намеренно для тестирования.")
     }
     
-    func saveNote(title: String?, body: String?, date: Date, time: Date, type: Int64, id: String) {
-         crashApp()
+    func saveNote(title: String?, body: String?, date: Date, time: Date, type: Int64, id: String, repeats: Int64) {
+        // crashApp()
         var calendar = Calendar.current
         let currentTimeZone = TimeZone.current
         calendar.timeZone = currentTimeZone // calendar.timeZone = .current
@@ -32,11 +32,11 @@ class NotePresenter: NotePresenterProtocol {
         
         print(" \(components)")
         
-        DataBase.share.saveReminder(title: title, body: body, date: fullInterval, type: type, id: id)
+        DataBase.share.saveReminder(title: title, body: body, date: fullInterval, type: type, id: id, repeats: repeats)
         NotificationManager().sendNotification(id: id, title: title, body: body, date: date, time: time)
     }
     
-    func update(title: String?, body: String?, date: Date, time: Date, type: Int64, id: String) {
+    func update(title: String?, body: String?, date: Date, time: Date, type: Int64, id: String, repeats: Int64) {
         let context = DataBase.share.persistentContainer.viewContext
         let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
