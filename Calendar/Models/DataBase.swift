@@ -91,6 +91,32 @@ class DataBase {
         }
     }
     
+    func getYearlyReminders(for date: Date, in context: NSManagedObjectContext) -> [Reminder] {
+        let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
+        
+        do {
+            let reminders = try context.fetch(fetchRequest)
+            let calendar = Calendar.current
+            
+            let targetMonth = calendar.component(.month, from: date)
+            let targetDay = calendar.component(.day, from: date)
+
+            // Фильтруем заметки, оставляя только те, у которых совпадает месяц и день
+            let filteredReminders = reminders.filter { reminder in
+                let reminderDate = Date(timeIntervalSince1970: reminder.date)
+                let reminderMonth = calendar.component(.month, from: reminderDate)
+                let reminderDay = calendar.component(.day, from: reminderDate)
+                
+                return reminderMonth == targetMonth && reminderDay == targetDay && reminder.repeats == 0
+            }
+
+            return filteredReminders
+        } catch {
+            print("Ошибка при загрузке заметок: \(error)")
+            return []
+        }
+    }
+    
     func fetchDayReminders(for date: Date) -> [Reminder] {
         let context = persistentContainer.viewContext
         let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
@@ -106,33 +132,14 @@ class DataBase {
         fetchRequest.predicate = NSPredicate(format: "date >= %f AND date < %f", startOfDayTimeInterval, endOfDayTimeInterval)
         
         do {
-             let reminders = try context.fetch(fetchRequest)
-            return reminders
+            let reminders = try context.fetch(fetchRequest)
+            let onceReminders = reminders.filter { $0.repeats == 1 }
+            
+            let yearlyReminders = getYearlyReminders(for: date, in: DataBase.share.persistentContainer.viewContext)
+            return onceReminders + yearlyReminders
         } catch {
             print("Failed to fetch reminders: \(error)")
             return []
         }
     }
-    
-//    // получаем массив тюплов (месяц, день) всех событий
-//    func getEventDates(context: NSManagedObjectContext) -> [(Int, Int)] {
-//        let fetchRequest: NSFetchRequest<Reminder> = Reminder.fetchRequest()
-//        do {
-//            let events = try context.fetch(fetchRequest)
-//            let calendar = Calendar.current
-//            
-//            let eventDates: [(Int, Int)] = events.compactMap { event in
-//                let date = Date(timeIntervalSince1970: event.date) // Преобразуем в Date
-//                let month = calendar.component(.month, from: date) // Получаем номер месяца
-//                let day = calendar.component(.day, from: date)     // Получаем число
-//                
-//                return (month, day)
-//            }
-//            
-//            return eventDates
-//        } catch {
-//            print("Ошибка при загрузке событий: \(error)")
-//            return []
-//        }
-//    }
 }

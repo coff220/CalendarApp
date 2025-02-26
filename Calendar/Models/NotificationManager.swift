@@ -43,7 +43,7 @@ class NotificationManager: NSObject {
         dateComponents.hour = hour
         dateComponents.minute = minutes
         
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         
         let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
         center.add(request) { (error) in
