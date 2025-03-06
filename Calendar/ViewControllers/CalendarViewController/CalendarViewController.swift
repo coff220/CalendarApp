@@ -384,11 +384,126 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func sortedReminders() -> [Reminder] {
+        //        let calendar = Calendar.current
+        //        let startOfDay = calendar.startOfDay(for: Date()) // Получаем начало текущего дня
+        //        let now = startOfDay.timeIntervalSince1970
+        //        let filteredReminders = reminders.filter { $0.date >= now }
+        //        let sortedReminders = filteredReminders.sorted { $0.date < $1.date }
+        //        return sortedReminders
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: Date()) // Получаем начало текущего дня
         let now = startOfDay.timeIntervalSince1970
-        let filteredReminders = reminders.filter { $0.date >= now }
-        let sortedReminders = filteredReminders.sorted { $0.date < $1.date }
-        return sortedReminders
+        let yearlyRemaiders = reminders.filter { $0.type == 0 }
+        let onceRemaiders = reminders.filter { $0.type == 1 }
+        
+        let currentMonthreminders = filterYearlyRemindersForCurrentMonth(from: yearlyRemaiders) + getOnceRemindersForCurrentMonth(from: onceRemaiders)
+        
+        let currentMonthUpcomingReminders = getUpcomingReminders(from: currentMonthreminders)
+        
+        let nextMounthReminders = filterYearlyRemindersForNextMonth(from: yearlyRemaiders) + getOnceRemindersForNextMonth(from: onceRemaiders)
+        
+        
+        return currentMonthUpcomingReminders + nextMounthReminders
+        
     }
+    
+    func filterYearlyRemindersForCurrentMonth(from reminders: [Reminder]) -> [Reminder] {
+        let calendar = Calendar.current
+        let now = Date()
+
+        let currentMonth = calendar.component(.month, from: now)
+
+        return reminders.filter { reminder in
+            let reminderDate = Date(timeIntervalSince1970: reminder.date)
+            let reminderMonth = calendar.component(.month, from: reminderDate)
+
+            return reminderMonth == currentMonth
+        }
+    }
+    
+    func filterYearlyRemindersForNextMonth(from reminders: [Reminder]) -> [Reminder] {
+        let calendar = Calendar.current
+        let now = Date()
+
+        let currentMonth = calendar.component(.month, from: now)
+        let nextMonth = (currentMonth % 12) + 1  // Следующий месяц (с учётом декабря)
+
+        return reminders.filter { reminder in
+            let reminderDate = Date(timeIntervalSince1970: reminder.date)
+            let reminderMonth = calendar.component(.month, from: reminderDate)
+
+            return reminderMonth == nextMonth
+        }
+    }
+    
+    func getOnceRemindersForCurrentMonth(from reminders: [Reminder]) -> [Reminder] {
+        let calendar = Calendar.current
+        let now = Date()
+
+        let currentYear = calendar.component(.year, from: now)
+        let currentMonth = calendar.component(.month, from: now)
+
+        let filteredReminders = reminders.filter { reminder in
+            let reminderDate = Date(timeIntervalSince1970: reminder.date)
+            let reminderYear = calendar.component(.year, from: reminderDate)
+            let reminderMonth = calendar.component(.month, from: reminderDate)
+
+            return reminderYear == currentYear && reminderMonth == currentMonth
+        }
+
+        return filteredReminders.filter { $0.type == 1 }
+    }
+    
+    func getOnceRemindersForNextMonth(from reminders: [Reminder]) -> [Reminder] {
+        let calendar = Calendar.current
+        let now = Date()
+
+        // Определяем следующий месяц и год
+        var nextMonthComponents = calendar.dateComponents([.year, .month], from: now)
+        nextMonthComponents.month! += 1
+
+        // Если следующий месяц - январь, увеличиваем год
+        if nextMonthComponents.month! > 12 {
+            nextMonthComponents.month = 1
+            nextMonthComponents.year! += 1
+        }
+
+        let nextMonth = nextMonthComponents.month!
+        let nextYear = nextMonthComponents.year!
+
+        let filteredReminders = reminders.filter { reminder in
+            let reminderDate = Date(timeIntervalSince1970: reminder.date)
+            let reminderYear = calendar.component(.year, from: reminderDate)
+            let reminderMonth = calendar.component(.month, from: reminderDate)
+
+            return reminderYear == nextYear && reminderMonth == nextMonth
+        }
+
+        return filteredReminders.filter { $0.type == 1 }
+    }
+    
+    
+    func getUpcomingReminders(from reminders: [Reminder]) -> [Reminder] {
+        let calendar = Calendar.current
+        let now = Date()
+        
+        let todayDay = calendar.component(.day, from: now) // Получаем текущее число
+
+        // Фильтруем reminders, оставляя только те, у которых число >= сегодняшнего
+        let upcomingReminders = reminders.filter { reminder in
+            let reminderDate = Date(timeIntervalSince1970: reminder.date)
+            let reminderDay = calendar.component(.day, from: reminderDate)
+            
+            return reminderDay >= todayDay
+        }
+
+        // Сортируем **по дню месяца** (от меньшего к большему)
+        return upcomingReminders.sorted {
+            let day1 = calendar.component(.day, from: Date(timeIntervalSince1970: $0.date))
+            let day2 = calendar.component(.day, from: Date(timeIntervalSince1970: $1.date))
+            return day1 < day2
+        }
+    }
+
+
 }

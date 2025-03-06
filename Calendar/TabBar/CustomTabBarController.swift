@@ -24,7 +24,6 @@ class CustomTabBarController: UITabBarController {
         // swiftlint:disable:next force_cast
         let newPostVC = self.storyboard?.instantiateViewController(withIdentifier: "NoteViewController") as! UINavigationController
         
-        
         homeNav.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "home"), selectedImage: UIImage(named: "homeSelected"))
         settingsNav.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "settings"), selectedImage: UIImage(named: "settingsSelected"))
         newPostVC.tabBarItem = UITabBarItem(title: nil, image: nil, selectedImage: nil)

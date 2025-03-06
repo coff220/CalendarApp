@@ -155,7 +155,7 @@ private extension CalendarPresenter {
         let day = calendar.component(.day, from: date)      // День месяца (1-31)
         var rezult = false
         
-        var array = getRepeatableDates(context: DataBase.share.persistentContainer.viewContext)
+        let array = getRepeatableDates(context: DataBase.share.persistentContainer.viewContext)
         for i in array {
             if i.0 == month && i.1 == day {
                 rezult = true
@@ -209,7 +209,7 @@ private extension CalendarPresenter {
         for i in -(daysBeforeFirstDayOfMonth)...(currentDateArraySize - daysBeforeFirstDayOfMonth - 1) {
             let date = currentDate.startOfMonth().day(after: i)
             
-            var activeDay = { [self] in
+            let activeDay = { [self] in
                 if DataBase.share.getReminders(date: date) == true || isRepeatableDate(date: date) == true {
                     return true
                 } else {

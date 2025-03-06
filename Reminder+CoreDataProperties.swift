@@ -24,6 +24,6 @@ extension Reminder {
 
 }
 
-extension Reminder : Identifiable {
+extension Reminder: Identifiable {
 
 }
