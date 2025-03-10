@@ -419,6 +419,7 @@
                         <outlet property="noteTextField" destination="TCd-Rv-Mgd" id="WSy-OC-Rd8"/>
                         <outlet property="noteTextView" destination="cFX-AO-eDg" id="zFM-DX-Ttz"/>
                         <outlet property="saveButton" destination="vZF-ew-HtR" id="nhG-St-FCZ"/>
+                        <outlet property="saveButtonTopConstraint" destination="eiu-rc-Ql3" id="Ryv-Po-ssS"/>
                         <outlet property="timeTextField" destination="5xz-fg-PUd" id="eOi-lb-pCA"/>
                         <outlet property="yearlyTextField" destination="vwP-e2-Y5r" id="skX-08-VKl"/>
                     </connections>

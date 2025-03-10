@@ -402,7 +402,6 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         
         let nextMounthReminders = filterYearlyRemindersForNextMonth(from: yearlyRemaiders) + getOnceRemindersForNextMonth(from: onceRemaiders)
         
-        
         return currentMonthUpcomingReminders + nextMounthReminders
         
     }
@@ -482,7 +481,6 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         return filteredReminders.filter { $0.type == 1 }
     }
     
-    
     func getUpcomingReminders(from reminders: [Reminder]) -> [Reminder] {
         let calendar = Calendar.current
         let now = Date()
@@ -504,6 +502,4 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
             return day1 < day2
         }
     }
-
-
 }
