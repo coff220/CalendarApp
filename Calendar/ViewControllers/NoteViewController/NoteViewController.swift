@@ -31,7 +31,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     private var presenter: NotePresenterProtocol = NotePresenter()
     private var selectedDate = Date()
     var reminder: Reminder?
-    var headLabelText = ""
+    var headLabelText = "Add Event"
     var currentDate: Date?
     
     var completion: (() -> Void)?

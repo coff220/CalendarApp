@@ -17,7 +17,7 @@ class SettingsViewController: UIViewController, MFMailComposeViewControllerDeleg
     @IBOutlet weak var notificationSwitch: UISwitch!
     @IBOutlet weak var lineView: UIView!
     @IBOutlet weak var timeTextField: UITextField!
-    @IBOutlet weak var supportBatton: UIButton!
+    @IBOutlet weak var supportLabel: UILabel!
     
     private var datePicker: UIDatePicker = {
         let picker = UIDatePicker()
@@ -25,27 +25,6 @@ class SettingsViewController: UIViewController, MFMailComposeViewControllerDeleg
         picker.preferredDatePickerStyle = .wheels // Стиль крутящихся колес
         return picker
     }()
-    
-    @IBAction func sapportTicket(_ sender: Any) {
-        if MFMailComposeViewController.canSendMail() {
-                    let mailComposeVC = MFMailComposeViewController()
-                    mailComposeVC.mailComposeDelegate = self
-                    mailComposeVC.setToRecipients(["coff220@gmail.com"]) // Замените на свой email
-                    mailComposeVC.setSubject("Вопрос в техподдержку")
-                    mailComposeVC.setMessageBody("Здравствуйте, у меня возник вопрос...", isHTML: false)
-                    
-                    present(mailComposeVC, animated: true)
-                } else {
-                    // Если почта не настроена, открываем почтовый клиент
-                    if let emailURL = URL(string: "mailto:support@yourapp.com") {
-                        UIApplication.shared.open(emailURL)
-                    }
-                }
-    }
-    // Закрываем контроллер почты после отправки или отмены
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-            controller.dismiss(animated: true)
-        }
     
     @IBAction func notificationsSwitchChanged(_ sender: UISwitch) {
         let center = UNUserNotificationCenter.current()
@@ -93,7 +72,7 @@ class SettingsViewController: UIViewController, MFMailComposeViewControllerDeleg
         checkNotificationPermission()
         setupDatePicker()
         loadSavedTime()
-        setupSupportBatton()
+        setupSupportLabel()
         timeTextField.backgroundColor = .clear
         timeTextField.textColor = .mainDigit
         timeTextField.font = UIFont(name: "VarelaRound-Regular", size: 17)
@@ -126,11 +105,33 @@ class SettingsViewController: UIViewController, MFMailComposeViewControllerDeleg
         settingsLabel.font = UIFont(name: "VarelaRound-Regular", size: 21)
     }
     
-    func setupSupportBatton() {
-        supportBatton.setTitle("Support", for: .normal)
-        supportBatton.setTitleColor(.mainDigit, for: .normal)
-        supportBatton.backgroundColor = .mainPurple
-        supportBatton.layer.cornerRadius = 12
+    func setupSupportLabel() {
+        supportLabel.text = "Support"
+        supportLabel.textColor = .mainDigit
+        supportLabel.isUserInteractionEnabled = true // Включаем взаимодействие
+        // Добавляем Gesture Recognizer
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(labelTapped))
+        supportLabel.addGestureRecognizer(tapGesture)
+    }
+    @objc func labelTapped() {
+        if MFMailComposeViewController.canSendMail() {
+            let mailComposeVC = MFMailComposeViewController()
+            mailComposeVC.mailComposeDelegate = self
+            mailComposeVC.setToRecipients(["coff220@gmail.com"]) // Замените на свой email
+            mailComposeVC.setSubject("Вопрос в техподдержку")
+            mailComposeVC.setMessageBody("Здравствуйте, у меня возник вопрос...", isHTML: false)
+            
+            present(mailComposeVC, animated: true)
+        } else {
+            // Если почта не настроена, открываем почтовый клиент
+            if let emailURL = URL(string: "mailto:support@yourapp.com") {
+                UIApplication.shared.open(emailURL)
+            }
+        }
+    }
+    // Закрываем контроллер почты после отправки или отмены
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
     }
     
     private func checkNotificationPermission() {
