@@ -21,6 +21,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var timeTextField: UITextField!
     @IBOutlet weak var grabberView: UIView!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     let placeholderLabel = UILabel()
     
@@ -40,6 +41,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     var selectedRepeatMetod = 0
     let RepeatPickerView = UIPickerView()
     var id = ""
+    
     
     @IBAction func saveNoteTapped(_ sender: Any) {
         
@@ -84,6 +86,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         dateTextField.delegate = self
         timeTextField.delegate = self
         yearlyTextField.delegate = self
+        noteTextView.delegate = self
         setupYearlyTextField()
         setupTimeTextField()
         setupDateTextField()
@@ -96,8 +99,40 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         getID()
         
         configure()
+        
+        // закрываем клавиатуру по тапу на экран
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+            view.addGestureRecognizer(tapGesture)
     }
     
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        NotificationCenter.default.addObserver(self, 
+                                               selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        
+        NotificationCenter.default.addObserver(self, 
+                                               selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
+    }
+
+    @objc func keyboardWillShow(notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame.origin.y, right: 0)
+    }
+
+    @objc func keyboardWillHide(notification: Notification) {
+        scrollView.contentInset = .zero
+        scrollView.scrollIndicatorInsets = .zero
+    }
+
     private func loadSavedTime() -> Date {
         let savedTime = UserDefaults.standard.double(forKey: "savedTime") // Получаем TimeInterval
         if savedTime > 0 {
@@ -235,6 +270,15 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         noteTextView.addSubview(placeholderLabel)
         placeholderLabel.isHidden = !noteTextView.text.isEmpty
     }
+    
+//    func textViewDidBeginEditing(_ textView: UITextView) {
+//            // Вручную вызываем ту же логику, что и для клавиатуры
+//            moveViewForKeyboard(isShowing: true)
+//        }
+//        
+//        func textViewDidEndEditing(_ textView: UITextView) {
+//            moveViewForKeyboard(isShowing: false)
+//        }
     // MARK: - UITextViewDelegate
     
     func textViewDidChange(_ textView: UITextView) {
