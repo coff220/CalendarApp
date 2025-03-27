@@ -8,6 +8,7 @@
 import UIKit
 import CoreData
 import FirebaseCore
+import CloudKit
 @UIApplicationMain
 
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -52,5 +53,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
+    }
+    
+    // для icloud
+    class PersistenceController {
+        static let shared = PersistenceController()
+
+        let container: NSPersistentCloudKitContainer
+
+        init() {
+            container = NSPersistentCloudKitContainer(name: "Reminder") // Название .xcdatamodeld
+
+            let storeDescription = container.persistentStoreDescriptions.first
+            storeDescription?.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+            storeDescription?.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+
+            container.loadPersistentStores { storeDescription, error in
+                if let error = error {
+                    fatalError("Ошибка загрузки хранилища: \(error)")
+                }
+            }
+            
+            container.viewContext.automaticallyMergesChangesFromParent = true
+        }
     }
 }

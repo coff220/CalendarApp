@@ -42,7 +42,6 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     let RepeatPickerView = UIPickerView()
     var id = ""
     
-    
     @IBAction func saveNoteTapped(_ sender: Any) {
         
         Analytics.logEvent("button_click", parameters: [
@@ -79,8 +78,9 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
             completion?()
             dismiss(animated: true, completion: nil)
         }
+        PersistenceController.shared.saveContext()
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         dateTextField.delegate = self
@@ -101,8 +101,8 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         configure()
         
         // закрываем клавиатуру по тапу на экран
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-            view.addGestureRecognizer(tapGesture)
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+//            view.addGestureRecognizer(tapGesture)
     }
     
     @objc func dismissKeyboard() {
@@ -122,10 +122,16 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
                                                name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
     }
-
+    
     @objc func keyboardWillShow(notification: Notification) {
         guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-        scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame.origin.y, right: 0)
+     //   scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame.origin.y - 34, right: 0)
+        scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame.height + 146, right: 0)
+        
+        if noteTextView.isFirstResponder {
+            scrollView.layoutIfNeeded()
+            scrollView.setContentOffset(CGPoint(x: 0, y: -scrollView.contentInset.top + 35), animated: true)
+        }
     }
 
     @objc func keyboardWillHide(notification: Notification) {
